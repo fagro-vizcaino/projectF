@@ -1,0 +1,45 @@
+﻿@page "/config/tax"
+@inherits TaxesContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Impuestos"
+              Subtitle="Define los impuestos que manejas en tu negocio"
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<TaxesList Taxes="Elements"
+              OnClickDrawerEdit="OpenDrawerForEdit"
+              OnClickDelete="Delete" />
+<div>
+    <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Impuesto" : "Crear Impuesto")}")' OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+
+                <FluentValidator></FluentValidator>
+                <div class="mb-4">
+                    <FLabel Value="Nombre" LabelFor="Name" />
+                    <FInputText @bind-Value="_model.Name" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-6">
+                    <FLabel Value="Valor" LabelFor="Percentage" />
+                    <FInputDecimal @bind-Value="_model.Percentvalue" />
+                    <FCustomValidationMessage For="@(() => _model.Percentvalue)" Class="mt-2 font-semibold text-red-600" />
+                    <span>Ejemplo: 10, seria igual a 10% en impuestos</span>
+                </div>
+                <FDivider />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    @($"{(IsEditing ? "Editar" : "Guardar")}")
+                </button>
+            </EditForm>
+        </Template>
+
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+}

@@ -1,0 +1,9 @@
+﻿@typeparam TValue
+@inherits ValidationMessageBase<TValue>
+
+@foreach (var message in ValidationMessages)
+{
+    <div class="@Class">
+        @message
+    </div>
+}

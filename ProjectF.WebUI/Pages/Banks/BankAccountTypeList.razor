@@ -1,0 +1,44 @@
+﻿@using ProjectF.WebUI.Models
+
+
+@if (Elements.Length > 0)
+{
+    <Table DataSource="Elements">
+        <Column @bind-Field="@context.Name" Title="Tipo cuenta" Sortable />
+
+        <ActionColumn Title="Acción">
+            <Space>
+                <SpaceItem>
+                    <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />
+                </SpaceItem>
+            </Space>
+            <Space>
+                <SpaceItem>
+                    <Popconfirm Placement="@PlacementType.Top"
+                                Title="@("Estas seguro de borrar este tipo cuenta")"
+                                OkText="Sí"
+                                CancelText="No"
+                                OnConfirm="()=> OnClickDelete.InvokeAsync(context.Id)">
+                        <Button Shape="circle" Icon="delete" Danger />
+                    </Popconfirm>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+}
+else
+{
+    <Empty />
+}
+
+
+@code {
+    [Parameter]
+    public BankAccountType[] Elements { get; set; }
+
+    [Parameter]
+    public EventCallback<BankAccountType> OnClickDrawerEdit { get; set; }
+
+    [Parameter]
+    public EventCallback<long> OnClickDelete { get; set; }
+}

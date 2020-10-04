@@ -1,0 +1,46 @@
+﻿@page "/config/paymentterm"
+@inherits PaymentTermContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Terminos de pagos"
+              Subtitle="Define los terminos de pago (a 30 dias, 15 dias) que manejas en tu negocio"
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<PaymentTermList Elements="Elements"
+           OnClickDrawerEdit="OpenDrawerForEdit"
+           OnClickDelete="Delete" />
+<div>
+    <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar termino pago" : "Crear termino pago")}")' OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+
+                <FluentValidator></FluentValidator>
+                <div class="mb-4">
+                    <FLabel Value="Descripcion" LabelFor="Description" />
+                    <FInputText @bind-Value="_model.Description" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Description)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-6">
+                    <FLabel Value="Número de dias" LabelFor="DayValue" />
+                   
+                    <FInputInt @bind-Value="_model.DayValue" />
+                    <FCustomValidationMessage For="@(() => _model.DayValue)" Class="mt-2 font-semibold text-red-600" />
+                    <span class="text-gray-500">Ejemplo: a 10 dias, a 15 dias o 30 dias</span>
+                </div>
+                <FDivider />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    @($"{(IsEditing ? "Editar" : "Guardar")}")
+                </button>
+            </EditForm>
+        </Template>
+
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+}

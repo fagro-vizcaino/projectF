@@ -1,0 +1,15 @@
+﻿<label class="@DefaultCssClass" for="@LabelFor">
+    @Value
+</label>
+@code {
+    string _defaultClass = "block text-gray-700 text-sm font-bold mb-2";
+
+    [Parameter] public string CssClass { get; set;}
+    [Parameter] public string Value { get; set;}
+    [Parameter] public string LabelFor { get; set;}
+
+
+    string DefaultCssClass => string.IsNullOrEmpty(CssClass)
+        ? _defaultClass
+        : CssClass;
+}

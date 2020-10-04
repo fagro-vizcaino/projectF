@@ -1,0 +1,65 @@
+﻿@page "/banks"
+@inherits BankContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Cuenta Bancarias"
+              Subtitle="Define las cuentas bancarias de tu negocio"
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<BankList Elements="Elements"
+              OnClickDrawerEdit="OpenDrawerForEdit"
+              OnClickDelete="Delete" />
+<div>
+    <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Cuenta Bancaria" : "Crear Cuenta Bancaria")}")' OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+
+                <FluentValidator></FluentValidator>
+                <div class="mb-4">
+                    <FLabel Value="Tipo Cuenta" LabelFor="Name" />
+                    <div class="inline-block relative w-full">
+                        <FInputSelect @bind-Value="_model.BankAccountTypeId">
+                            <option value="0">Seleccione una tipo cuenta</option>
+                            @foreach (var type in BankAccountTypes)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </FInputSelect>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                        <FCustomValidationMessage For="@(() => _model.BankAccountTypeId)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                 </div>
+                    <div class="mb-4">
+                        <FLabel Value="Nombre Cuenta" LabelFor="AccountName" />
+                        <FInputText @bind-Value="_model.AccountName" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.AccountName)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div class="mb-4">
+                        <FLabel Value="Numero Cuenta" LabelFor="AccountNumber" />
+                        <FInputText @bind-Value="_model.AccountNumber" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.AccountName)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div class="mb-4">
+                        <FLabel Value="Balance Inicial" LabelFor="InitialBalance" />
+                        <FInputDecimal @bind-Value="_model.InitialBalance" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.InitialBalance)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <FDivider />
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        @($"{(IsEditing ? "Editar" : "Guardar")}")
+                    </button>
+</EditForm>
+        </Template>
+
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+}

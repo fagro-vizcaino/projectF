@@ -1,0 +1,12 @@
+﻿@inherits InputText
+
+<input @attributes="AdditionalAttributes"
+       class="@(CssClass == "invalid"
+                ? _textInputCss + "border border-red-500"
+                : $"{CssClass} {_textInputCss}")"
+       @bind="@CurrentValue"
+       type="text"/>
+
+@code {
+    string _textInputCss = "block appearance-none w-full border border-gray-400 round py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
+}
