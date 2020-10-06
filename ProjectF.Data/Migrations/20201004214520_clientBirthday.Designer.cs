@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectF.Data.Context;
 
 namespace ProjectF.Data.Migrations
 {
     [DbContext(typeof(_AppDbContext))]
-    partial class _AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201004214520_clientBirthday")]
+    partial class clientBirthday
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

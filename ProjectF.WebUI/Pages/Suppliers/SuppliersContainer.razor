@@ -1,0 +1,83 @@
+﻿@page "/suppliers"
+@inherits SupplierContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Suplidor"
+              Subtitle="Define a quienes te proveen de mercacia o servicos"
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<SuppliersList Elements="Elements"
+              OnClickDrawerEdit="OpenDrawerForEdit"
+              OnClickDelete="Delete" />
+<div>
+    <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Suplidor" : "Crear Suplidor")}")' OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+                <FluentValidator></FluentValidator>
+                <div class="mb-4">
+                    <FLabel Value="Nombre" LabelFor="Name" />
+                    <FInputText @bind-Value="_model.Name" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Email" LabelFor="Email" />
+                    <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Télefono" LabelFor="Phone" />
+                    <FInputText @bind-Value="_model.Phone" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Phone)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Télefono" LabelFor="Phone" />
+                    <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Phone)" Class="mt-2 font-semibold tWext-red-600" />
+                </div>
+                <div class="mb-6">
+                    <FLabel Value="Es Formal ?" LabelFor="ShowOn" />
+                    <Switch @bind-Value="_model.IsIndependent" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Casa o Apartamento" LabelFor="HomeOrApartment" />
+                    <FTextArea @bind-Value="_model.HomeOrApartment" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Calle" LabelFor="HomeOrApartment" />
+                    <FTextArea @bind-Value="_model.HomeOrApartment" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="País" LabelFor="País" />
+                    <div class="inline-block relative w-full">
+                        <FInputSelect @bind-Value="_model.SelectedCountry">
+                            <option value="0">Seleccione el país</option>
+                            @foreach (var type in Countries)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </FInputSelect>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                        <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+                <FDivider />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    @($"{(IsEditing ? "Editar" : "Guardar")}")
+                </button>
+            </EditForm>
+        </Template>
+
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+}

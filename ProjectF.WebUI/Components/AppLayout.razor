@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-
+@inject NavigationManager NavigationManager
 @code
 {
     bool collapsed;
@@ -32,13 +32,42 @@
                 <MenuItem Key="8">Option 8</MenuItem>
             </SubMenu>
             <SubMenu Key="3" Title="@inventory">
-                <MenuItem Key="5">Option 5</MenuItem>
-                <MenuItem Key="6">Option 6</MenuItem>
-                <MenuItem Key="7">Option 7</MenuItem>
-                <MenuItem Key="8">Option 8</MenuItem>
+                <MenuItem Key="5" RouterLink="/categories">
+                    <span>
+                        <i class="fab fa-buffer"></i>
+                        Categoria
+                    </span>
+                </MenuItem>
+                <MenuItem Key="6" RouterLink="/werehouses">
+                    <span>
+                        <i class="fas fa-warehouse"></i>
+                        Almacen
+                    </span>
+                </MenuItem>
+
+                <MenuItem Key="74" RouterLink="/suppliers">
+                    <span>
+                        <i class="fas fa-truck-moving"></i>
+                        Suplidor
+                    </span>
+                </MenuItem>
+
+                <MenuItem Key="13" RouterLink="/products">
+                    <span>
+                        <i class="fas fa-tags"></i>
+                        Productos
+                    </span>
+                </MenuItem>
+                
+
             </SubMenu>
             <SubMenu Key="4" Title="@clients">
-                <MenuItem Key="5">Option 5</MenuItem>
+                <MenuItem Key="5" RouterLink="/clients">
+                    <span>
+                        <i class="fas fa-users"></i>
+                        Listado
+                    </span>
+                </MenuItem>
                 <MenuItem Key="6">Option 6</MenuItem>
                 <MenuItem Key="7">Option 7</MenuItem>
                 <MenuItem Key="8">Option 8</MenuItem>
@@ -57,19 +86,24 @@
                 <MenuItem Key="8">Option 8</MenuItem>
             </SubMenu>
 
-            <SubMenu Key="7" Title="@finance">
-                <MenuItem Key="5">Option 5</MenuItem>
+            <SubMenu Key="9" Title="@finance">
+                <MenuItem Key="5" RouterLink="/banks">
+                    <span>
+                        <i class="fas fa-university"></i>
+                        Banco
+                    </span>
+                </MenuItem>
                 <MenuItem Key="6">Option 6</MenuItem>
-                <MenuItem Key="7">Option 7</MenuItem>
-                <MenuItem Key="8">Option 8</MenuItem>
             </SubMenu>
 
-            <SubMenu Key="8" Title="@config">
-                <MenuItem Key="5">Option 5</MenuItem>
-                <MenuItem Key="6">Option 6</MenuItem>
-                <MenuItem Key="7">Option 7</MenuItem>
-                <MenuItem Key="8">Option 8</MenuItem>
-            </SubMenu>
+            <MenuItem Key="setting">
+                <MenuLink Href="/settings">
+                    <Template>
+                        <Icon Type="setting" Theme="outline"></Icon>
+                        Configuración
+                    </Template>
+                </MenuLink>
+            </MenuItem>
         </Menu>
     </Sider>
     <Layout Class="site-layout">
@@ -109,7 +143,8 @@
     }
 </style>
 
-@code{
+@code
+{
 
     string menu = "SubMenu";
 
@@ -124,7 +159,7 @@ RenderFragment bill =@<span>
 </span>;
 
 RenderFragment inventory =@<span>
-    <Icon Type="shopping-cart" Theme="outline" Style="font-size:12px"/>
+    <Icon Type="shopping-cart" Theme="outline" Style="font-size:12px" />
     <span>Inventario</span>
 </span>;
 
@@ -154,9 +189,13 @@ RenderFragment finance =@<span>
     <span>Finanzas</span>
 </span>;
 
-void OnCollapse(bool isCollapsed)
-{
-Console.WriteLine($"Collapsed: {isCollapsed}");
-}
+    void OnCollapse(bool isCollapsed)
+    {
+        Console.WriteLine($"Collapsed: {isCollapsed}");
+    }
 
+    void GoToSetting()
+    {
+        NavigationManager.NavigateTo("/settings");
+    }
 }

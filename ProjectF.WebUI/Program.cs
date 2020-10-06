@@ -33,6 +33,10 @@ namespace ProjectF.WebUI
                 => client.BaseAddress = new Uri(baseUrl));
             builder.Services.AddHttpClient<IBaseDataService<Country>, CountryDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
+            builder.Services.AddHttpClient<IBaseDataService<Client>, ClientDataService>(client
+                => client.BaseAddress = new Uri(baseUrl));
+            builder.Services.AddHttpClient<IBaseDataService<Supplier>, SupplierDataService>(client
+                => client.BaseAddress = new Uri(baseUrl));
 
 
             builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
@@ -42,6 +46,7 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<Bank>, BankValidator>();
             builder.Services.AddTransient<IValidator<BankAccountType>, BankAccountTypeValidator>();
             builder.Services.AddTransient<IValidator<Client>, ClientValidator>();
+            builder.Services.AddTransient<IValidator<Supplier>, SupplierValidator>();
 
             builder.Services.AddTransient<IFMessage, FMessage>();
 
