@@ -1,0 +1,107 @@
+﻿@page "/products"
+@inherits ProductContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Producto"
+              Subtitle="Define los productos o servicios que tu negocio maneja"
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<ProductsList Elements="Elements"
+              OnClickDrawerEdit="OpenDrawerForEdit"
+              OnClickDelete="Delete" />
+<div>
+    <Drawer Closable="true" Width="455" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Producto" : "Crear Producto")}")' OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+                <FluentValidator></FluentValidator>
+                <div class="mb-4">
+                    <FLabel Value="Nombre" LabelFor="Name" />
+                    <FInputText @bind-Value="_model.Name" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Categoría" LabelFor="CategoryId" />
+                    <div class="inline-block relative w-full">
+                        <FInputSelect @bind-Value="_model.CategoryId">
+                            <option value="0">Seleccione una Categoria</option>
+                            @foreach (var type in Categories)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </FInputSelect>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                        <FCustomValidationMessage For="@(() => _model.CategoryId)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Almacen" LabelFor="WerehouseId" />
+                    <div class="inline-block relative w-full">
+                        <FInputSelect @bind-Value="_model.WerehouseId">
+                            <option value="0">Seleccione un Almance</option>
+                            @foreach (var type in Werehouses)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </FInputSelect>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                        <FCustomValidationMessage For="@(() => _model.WerehouseId)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+                <div class="inline-grid gap-x-2 grid-cols-4">
+                    <div>
+                        <FLabel Value="Precio" LabelFor="Price" />
+                        <FInputDecimal @bind-Value="_model.Price" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Price)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div>
+                        <FLabel Value="Precio 2" LabelFor="Price" />
+                        <FInputDecimal @bind-Value="_model.Price2" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Price)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+
+                    <div>
+                        <FLabel Value="Precio 3" LabelFor="Price 3" />
+                        <FInputDecimal @bind-Value="_model.Price3" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Price)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div>
+                        <FLabel Value="Precio 4" LabelFor="Price" />
+                        <FInputDecimal @bind-Value="_model.Price" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Price4)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Referencia" LabelFor="Reference" />
+                    <FInputText @bind-Value="_model.Reference" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Reference)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-6">
+                    <FLabel Value="Es Servicio ?" LabelFor="IsService" />
+                    <Switch @bind-Value="_model.IsService" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Descripcion" LabelFor="Description" />
+                    <FTextArea @bind-Value="_model.Description" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Description)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <FDivider />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    @($"{(IsEditing ? "Editar" : "Guardar")}")
+                </button>
+            </EditForm>
+        </Template>
+
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+}

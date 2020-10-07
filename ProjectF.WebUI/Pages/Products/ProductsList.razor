@@ -1,0 +1,54 @@
+﻿@using ProjectF.WebUI.Models
+
+
+@if (Elements.Length > 0)
+{
+<Table DataSource="Elements">
+    <Column @bind-Field="@context.Name" Title="Nombre" Sortable />
+    <Column @bind-Field="@context.Cost" Title="Costo" Format="N2" />
+    <Column @bind-Field="@context.CategoryId" Title="Categoría" >
+       @(context.Category?.Name)    
+    </Column>
+    <Column @bind-Field="@context.WerehouseId" Title="Almacen">
+        @(context.Werehouse?.Name)
+    </Column>
+    <Column @bind-Field="@context.IsService" Title="Servicio">
+        @(context.IsService ? "Si" : "No")
+    </Column>
+    <Column @bind-Field="@context.Price" Title="Precio" Format="N2" Style="text-align: right"/>
+    <ActionColumn Title="Acción" Style="text-align: right">
+        <Space>
+            <SpaceItem>
+                <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />
+            </SpaceItem>
+        </Space>
+        <Space>
+            <SpaceItem>
+                <Popconfirm Placement="@PlacementType.Top"
+                            Title="@("Estas seguro de borrar este impuesto")"
+                            OkText="Sí"
+                            CancelText="No"
+                            OnConfirm="()=> OnClickDelete.InvokeAsync(context.Id)">
+                    <Button Shape="circle" Icon="delete" Danger />
+                </Popconfirm>
+            </SpaceItem>
+        </Space>
+    </ActionColumn>
+</Table>
+}
+else
+{
+    <Empty />
+}
+
+
+@code {
+    [Parameter]
+    public Product[] Elements { get; set; }
+
+    [Parameter]
+    public EventCallback<Product> OnClickDrawerEdit { get; set; }
+
+    [Parameter]
+    public EventCallback<long> OnClickDelete { get; set; }
+}

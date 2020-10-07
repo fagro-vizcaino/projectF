@@ -38,6 +38,9 @@ namespace ProjectF.WebUI
             builder.Services.AddHttpClient<IBaseDataService<Supplier>, SupplierDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
 
+            builder.Services.AddHttpClient<IBaseDataService<Product>, ProductDataService>(client
+                => client.BaseAddress = new Uri(baseUrl));
+
 
             builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
             builder.Services.AddTransient<IValidator<Werehouse>, WerehouseValidator>();
@@ -47,6 +50,8 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<BankAccountType>, BankAccountTypeValidator>();
             builder.Services.AddTransient<IValidator<Client>, ClientValidator>();
             builder.Services.AddTransient<IValidator<Supplier>, SupplierValidator>();
+            builder.Services.AddTransient<IValidator<Product>, ProductValidator>();
+
 
             builder.Services.AddTransient<IFMessage, FMessage>();
 

@@ -36,7 +36,7 @@ namespace ProjectF.Api.Features.Product
                     Right: p => Ok(FromDto(_productOperation.EntityToDto(p))));
 
 
-        [HttpGet("{id}", Name = "GetProduct")]
+        [HttpGet("{id}")]
         public IActionResult GetProduct(long id)
             => _productOperation
                 .GetByKey(id)
