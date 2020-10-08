@@ -37,8 +37,9 @@ namespace ProjectF.WebUI
                 => client.BaseAddress = new Uri(baseUrl));
             builder.Services.AddHttpClient<IBaseDataService<Supplier>, SupplierDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
-
             builder.Services.AddHttpClient<IBaseDataService<Product>, ProductDataService>(client
+                => client.BaseAddress = new Uri(baseUrl));
+            builder.Services.AddHttpClient<IBaseDataService<Invoice>, InvoiceDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
 
 

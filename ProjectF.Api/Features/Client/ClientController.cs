@@ -52,6 +52,14 @@ namespace ProjectF.Api.Features.ContactClient
             return NotFound();
         }
 
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(long id)
+         => _clientCrudHandler.Delete(id)
+         .Match<ActionResult>(
+             Left: err => BadRequest(err.Message),
+             Right: c => NoContent());
+
         //[HttpGet]
         //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )
         //{

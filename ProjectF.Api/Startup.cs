@@ -17,7 +17,7 @@ using ProjectF.Application.Werehouses;
 using ProjectF.Application.Products;
 using ProjectF.Application.Invoice;
 using ProjectF.Application.Clients;
-using ProjectF.Application.Supplier;
+using ProjectF.Application.Suppliers;
 using ProjectF.Application.PaymentTerms;
 using ProjectF.Application.Banks;
 using ProjectF.Application.Taxes;

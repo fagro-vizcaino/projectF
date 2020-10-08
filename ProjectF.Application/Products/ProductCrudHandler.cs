@@ -68,7 +68,6 @@ namespace ProjectF.Application.Products
         public Either<Error, Product> Find(params object[] valueKeys)
             => _productRepository.Find(valueKeys).Match(Some: t => t,
              None: Left<Error, Product>(Error.New("couldn't find Product type")));
-          
 
         public Either<Error, Product> GetByKey(long id)
         {
@@ -94,6 +93,11 @@ namespace ProjectF.Application.Products
                , product.Price);
 
         //Missing Pagination
+        public Either<Error, Product> Delete(long id)
+          => Find(id)
+            .Bind(Delete)
+            .Bind(Save)
+            .MapLeft(errors => Error.New(string.Join("; ", errors)));
 
         Either<Error, Product> CreateEntity(ProductDto productDto)
         {
@@ -210,6 +214,19 @@ namespace ProjectF.Application.Products
             {
                 _productRepository.Save();
                 return product;
+            }
+            catch (Exception ex)
+            {
+                return Error.New($"{ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        Either<Error, Product> Delete(Product supplier)
+        {
+            try
+            {
+                _productRepository.Delete(supplier);
+                return supplier;
             }
             catch (Exception ex)
             {

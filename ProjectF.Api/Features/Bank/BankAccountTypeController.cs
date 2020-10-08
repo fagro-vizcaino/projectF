@@ -54,6 +54,13 @@ namespace ProjectF.Api.Features.Bank
             return NotFound();
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult Delete(long id)
+         => _bankAccountTypeCrudHandler.Delete(id)
+         .Match<ActionResult>(
+             Left: err => BadRequest(err.Message),
+             Right: c => NoContent());
+
         //[HttpGet]
         //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )
         //{

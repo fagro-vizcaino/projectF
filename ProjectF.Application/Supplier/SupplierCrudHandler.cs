@@ -5,8 +5,9 @@ using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Suppliers;
+using System;
 
-namespace ProjectF.Application.Supplier
+namespace ProjectF.Application.Suppliers
 {
     public class SupplierCrudHandler
     {
@@ -19,7 +20,7 @@ namespace ProjectF.Application.Supplier
             _countryRepository = countryRepository;
         }
 
-        public Either<Error, Data.Entities.Suppliers.Supplier> Create(SupplierDto supplierDto)
+        public Either<Error, Supplier> Create(SupplierDto supplierDto)
             => ValidateCode(supplierDto)
             .Bind(ValidateName)
             .Bind(ValidateEmail)
@@ -30,7 +31,6 @@ namespace ProjectF.Application.Supplier
             .Bind(Add)
             .Bind(Save);
 
-
         public Either<Error, SupplierDto> Update(long id, SupplierDto supplierDto)
             => ValidateIsCorrectUpdate(id, supplierDto)
             .Bind(ValidateCode)
@@ -38,7 +38,6 @@ namespace ProjectF.Application.Supplier
             .Bind(s => Find(s.Id))
             .Bind(s => UpdateEntity(supplierDto, s))
             .Bind(Update);
-
 
         public IEnumerable<SupplierDto> FindAll()
             => _supplierRepository.FindAll()
@@ -55,7 +54,7 @@ namespace ProjectF.Application.Supplier
                     , s.Country
                     , s.IsIndependent));
 
-        public Either<Error, Data.Entities.Suppliers.Supplier> Find(long key)
+        public Either<Error, Supplier> Find(long key)
         {
             var supplier = _supplierRepository.GetByKeys(key);
             if (supplier == null)
@@ -64,7 +63,13 @@ namespace ProjectF.Application.Supplier
             return supplier;
         }
 
-        public SupplierDto EntityToDto(Data.Entities.Suppliers.Supplier supplier)
+        public Either<Error, Supplier> Delete(long id)
+          => Find(id)
+            .Bind(Delete)
+            .Bind(Save)
+            .MapLeft(errors => Error.New(string.Join("; ", errors)));
+
+        public SupplierDto EntityToDto(Supplier supplier)
            => new SupplierDto(supplier.Id
                     , supplier.Code.Value
                     , supplier.Name.Value
@@ -79,7 +84,6 @@ namespace ProjectF.Application.Supplier
                     , supplier.IsIndependent);
 
         //Missing Pagination
-
         Either<Error, SupplierDto> ValidateIsCorrectUpdate(long id, SupplierDto supplierDto)
         {
             if (id == supplierDto.Id) return supplierDto;
@@ -126,7 +130,7 @@ namespace ProjectF.Application.Supplier
             return nSupplier;
         }
 
-        Either<Error, Data.Entities.Suppliers.Supplier> CreateEntity(SupplierDto supplierDto)
+        Either<Error, Supplier> CreateEntity(SupplierDto supplierDto)
         {
             var code = new Code(supplierDto.Code);
             var name = new Name(supplierDto.Name);
@@ -147,7 +151,7 @@ namespace ProjectF.Application.Supplier
             return supplier;
         }
 
-        Either<Error, Data.Entities.Suppliers.Supplier> UpdateEntity(SupplierDto supplierDto, Data.Entities.Suppliers.Supplier supplier)
+        Either<Error, Supplier> UpdateEntity(SupplierDto supplierDto, Supplier supplier)
         {
             var code = new Code(supplierDto.Code);
             var name = new Name(supplierDto.Name);
@@ -168,7 +172,7 @@ namespace ProjectF.Application.Supplier
             return supplier;
         }
 
-        Either<Error, Data.Entities.Suppliers.Supplier> Add(Data.Entities.Suppliers.Supplier supplier)
+        Either<Error, Supplier> Add(Supplier supplier)
         {
             try
             {
@@ -181,7 +185,7 @@ namespace ProjectF.Application.Supplier
             }
         }
 
-        Either<Error, Data.Entities.Suppliers.Supplier> Save(Data.Entities.Suppliers.Supplier supplier)
+        Either<Error, Supplier> Save(Supplier supplier)
         {
             try
             {
@@ -194,7 +198,7 @@ namespace ProjectF.Application.Supplier
             }
         }
 
-        Either<Error, SupplierDto> Update(Data.Entities.Suppliers.Supplier supplier)
+        Either<Error, SupplierDto> Update(Supplier supplier)
         {
             try
             {
@@ -202,6 +206,19 @@ namespace ProjectF.Application.Supplier
                 return EntityToDto(supplier);
             }
             catch (System.Exception ex)
+            {
+                return Error.New($"{ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        Either<Error, Supplier> Delete(Supplier supplier)
+        {
+            try
+            {
+                _supplierRepository.Delete(supplier);
+                return supplier;
+            }
+            catch (Exception ex)
             {
                 return Error.New($"{ex.Message}\n{ex.StackTrace}");
             }

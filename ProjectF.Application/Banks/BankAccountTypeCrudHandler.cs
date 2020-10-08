@@ -38,6 +38,13 @@ namespace ProjectF.Application.Banks
                 BankAccountTypeNameMustNotExist(bankAccountDto))
             .Map(a => bankAccountDto);
 
+        public Either<Error, BankAccountType> Delete(long id)
+          => Find(id)
+            .Bind(Delete)
+            .Bind(Save)
+            .ToEither()
+            .MapLeft(errors => Error.New(string.Join("; ", errors)));
+
         public IEnumerable<BankAccountTypeDto> GetAll()
           => _bankAccountTypeRepository.GetAll().Map(b => (BankAccountTypeDto)b);
 
@@ -89,6 +96,19 @@ namespace ProjectF.Application.Banks
             {
                 _bankAccountTypeRepository.Save();
                 return bank;
+            }
+            catch (Exception ex)
+            {
+                return Error.New($"{ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        Validation<Error, BankAccountType> Delete(BankAccountType bankAccountType)
+        {
+            try
+            {
+                _bankAccountTypeRepository.Delete(bankAccountType);
+                return bankAccountType;
             }
             catch (Exception ex)
             {
