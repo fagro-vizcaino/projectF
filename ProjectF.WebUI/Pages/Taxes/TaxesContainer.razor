@@ -4,14 +4,16 @@
 @using AntDesign.core
 @using ProjectF.WebUI.Components.Common
 
-<SectionTitle Title="Impuestos"
-              Subtitle="Define los impuestos que manejas en tu negocio"
-              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+<div class="transition-opacity">
+    <SectionTitle Title="Impuestos"
+                  Subtitle="Define los impuestos que manejas en tu negocio"
+                  OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
 
-<TaxesList Elements="Elements"
-              OnClickDrawerEdit="OpenDrawerForEdit"
-              OnClickDelete="Delete" />
-<div>
+    <TaxesList Elements="Elements"
+               OnClickDrawerEdit="OpenDrawerForEdit"
+               OnClickDelete="Delete" />
+
+
     <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Impuesto" : "Crear Impuesto")}")' OnClose="CloseDrawer">
         <Template style="height:90%">
             <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
@@ -37,6 +39,8 @@
 
     </Drawer>
 </div>
+
+
 
 
 @code{
