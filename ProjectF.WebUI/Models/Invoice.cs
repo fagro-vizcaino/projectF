@@ -14,6 +14,7 @@ namespace ProjectF.WebUI.Models
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
         public PaymentTerm PaymentTerm { get; set; }
+        public long PaymentTermId { get; set; }
         public string Notes { get; set; }
         public string TermAndConditions { get; set; }
         public string Footer { get; set; }
