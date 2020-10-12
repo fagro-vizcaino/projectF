@@ -1,13 +1,11 @@
 ﻿@inherits Microsoft.AspNetCore.Components.Forms.InputText
 
-<input class="@(CssClass == "invalid"
+<textarea class="@(CssClass == "invalid"
                 ? _textInputCss + "border border-red-500"
                 : $"{CssClass} {_textInputCss}")"
        @bind="@CurrentValue"
-       rows="4" 
-       cols="50"
-       type="text" />
+       rows="4" />
 
 @code {
-    string _textInputCss = "block appearance-none w-full border border-gray-400 round py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
+    string _textInputCss = "w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none leading-tight focus:shadow-outline";
 }

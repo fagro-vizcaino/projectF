@@ -3,146 +3,293 @@
 @inherits InvoiceContainerHandler
 @using AntDesign.core
 @inject NavigationManager NavigationManager
-@*<Row Justify="space-between">
-        <Col Span="12">
-            <h4 class="font-semibold text-lg">Facturacion</h4>
-        </Col>
-        <Col Span="12" class="justify-end">
-            <button @click="" class="rounded-full h-12 w-12 flex items-center justify-center text-gray-500 mr-5 hover:bg-gray-200">
-                 <i class="fas fa-times fa-2x"></i>
-            </button>
-        </Col>
-    </Row>*@
 
-<div class="flex mb-4 py-2 bg-white shadow-xs rounded">
-    <div class="w-3/4 h-8 px-4 sm:px-6 items-center">
-        <h4 class="font-semibold text-lg">Facturacion</h4>
-    </div>
-    <div class="w-1/4 px-4 sm:px-6 md:flex items-center justify-end">
-        <button @onclick="GoToDashboard" class="rounded-full h-10 w-10 flex items-center justify-center text-gray-500 hover:bg-gray-200">
-            <i class="fas fa-times fa-2x"></i>
-        </button>
-    </div>
-</div>
-<EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" OnInvalidSubmit="OnFinishFailed">
-    <div class="flex mb-4 bg-white shadow-xs rounded">
-        <div class="w-3/4 px-4 py-5 sm:px-6 items-center">
-            <div class="w-full max-w-lg">
-                <div class="flex flex-wrap -mx-1 mb-1">
-                    <div class="w-full md:w-1/2 px-2 mb-1 md:mb-0">
-                        <div class="mb-2">
-                            <label class="block text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                                Cliente
-                            </label>
-                            <Select ShowSearch
-                                    Style="width:100%"
-                                    Placeholder="Select a person"
-                                    OptionFilterProp="children">
-                                <SelectOption Value="jack">Jack</SelectOption>
-                                <SelectOption Value="lucy">Lucy</SelectOption>
-                                <SelectOption Value="tom">Tom</SelectOption>
-                            </Select>
-                        </div>
-                        <div class="mb-2">
-                            <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
-                                Rnc
-                            </label>
-                            <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                            <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
-                        <div class="mb-2">
-                            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                                Termino de pago
-                            </label>
-                            <div class="mb-4">
-                                <div class="inline-block relative w-full">
-                                    <FInputSelect @bind-Value="_model.PaymentTermId">
-                                        <option value="0">Termino de pago</option>
-                                        @foreach (var type in PaymentTerms)
-                                        {
-                                            <option value="@type.Id">@type.Description</option>
-                                        }
-                                    </FInputSelect>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+<div class="flex flex-col min-h-screen">
+    <div class="flex-grow">
+        <div class="flex mb-4 py-2 bg-white shadow-xs rounded">
+            <div class="w-3/4 h-8 px-4 sm:px-6 items-center">
+                <h4 class="font-semibold text-lg">Facturacion</h4>
+            </div>
+            <div class="w-1/4 px-4 sm:px-6 md:flex items-center justify-end">
+                <button @onclick="GoToDashboard" class="rounded-full h-10 w-10 flex items-center justify-center text-gray-500 hover:bg-gray-200">
+                    <i class="fas fa-times fa-2x"></i>
+                </button>
+            </div>
+        </div>
+
+        <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" OnInvalidSubmit="OnFinishFailed">
+
+
+            <div class="flex mb-4 bg-white shadow-xs rounded">
+                <div class="w-3/4 px-4 py-4 sm:px-6 items-center">
+                    <div class="w-full max-w-lg">
+                        <div class="flex flex-wrap -mx-1 mb-1">
+                            <div class="w-full md:w-1/2 px-2 mb-1 md:mb-0">
+                                <div class="mb-2">
+                                    <label class="block text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                                        Cliente
+                                    </label>
+                                    <Select ShowSearch
+                                            Style="width:100%"
+                                            Placeholder="Select a person"
+                                            OptionFilterProp="children">
+                                        <SelectOption Value="jack">Jack</SelectOption>
+                                        <SelectOption Value="lucy">Lucy</SelectOption>
+                                        <SelectOption Value="tom">Tom</SelectOption>
+                                    </Select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
+                                        Rnc
+                                    </label>
+                                    <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                                    <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold text-red-600" />
+                                </div>
+                                <div class="mb-2">
+                                    <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                        Termino de pago
+                                    </label>
+                                    <div class="mb-4">
+                                        <div class="inline-block relative w-full">
+                                            <FInputSelect @bind-Value="_model.PaymentTermId">
+                                                <option value="0">Termino de pago</option>
+                                                @foreach (var type in PaymentTerms)
+                                                {
+                                                    <option value="@type.Id">@type.Description</option>
+                                                }
+                                            </FInputSelect>
+                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                            </div>
+                                            <FCustomValidationMessage For="@(() => _model.PaymentTermId)" Class="mt-2 font-semibold text-red-600" />
+                                        </div>
                                     </div>
-                                    <FCustomValidationMessage For="@(() => _model.PaymentTermId)" Class="mt-2 font-semibold text-red-600" />
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/2 px-3">
+                                <div class="mb-2">
+                                    <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                        Email
+                                    </label>
+                                    <FInputText @bind-Value="_model.Client.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                                    <FCustomValidationMessage For="@(() => _model.Client.Email)" Class="mt-2 font-semibold text-red-600" />
+                                </div>
+                                <div class="mb-2">
+                                    <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                        Fecha
+                                    </label>
+                                    <DatePicker @bind-Value="_model.Created" />
+                                    <FCustomValidationMessage For="@(() => _model.Created)" Class="mt-2 font-semibold text-red-600" />
+                                </div>
+                                <div class="mb-2">
+                                    <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
+                                        Vencimiento
+                                    </label>
+                                    <DatePicker @bind-Value="_model.DueDate" />
+                                    <FCustomValidationMessage For="@(() => _model.DueDate)" Class="mt-2 font-semibold text-red-600" />
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3">
-                        <div class="mb-2">
-                            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                                Email
-                            </label>
-                            <FInputText @bind-Value="_model.Client.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                            <FCustomValidationMessage For="@(() => _model.Client.Email)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
-                        <div class="mb-2">
-                            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                                Fecha
-                            </label>
-                            <DatePicker @bind-Value="_model.Created" />
-                            <FCustomValidationMessage For="@(() => _model.Created)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
-                        <div class="mb-2">
-                            <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
-                                Vencimiento
-                            </label>
-                            <DatePicker @bind-Value="_model.DueDate" />
-                            <FCustomValidationMessage For="@(() => _model.DueDate)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-wrap -mx-1 mb-1">
-                    <div class="w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                            Password
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="******************">
-                        <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
-                    </div>
-                </div>
-                <div class="flex flex-wrap -mx-3 mb-2">
-                    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
-                            City
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque">
-                    </div>
-                    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-                            State
-                        </label>
-                        <div class="relative">
-                            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                <option>New Mexico</option>
-                                <option>Missouri</option>
-                                <option>Texas</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        @*<div class="flex flex-wrap -mx-1 mb-1">
+                                <div class="w-full px-3">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                                        Password
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="******************">
+                                    <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
+                                </div>
                             </div>
+                            <div class="flex flex-wrap -mx-3 mb-2">
+                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+                                        City
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque">
+                                </div>
+                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                        State
+                                    </label>
+                                    <div class="relative">
+                                        <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                                            <option>New Mexico</option>
+                                            <option>Missouri</option>
+                                            <option>Texas</option>
+                                        </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
+                                        Zip
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="90210">
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+                <div class="flex-col w-1/4 px-2 sm:px-6 md:flex items-end justify-start">
+                    <p class="mt-2 max-w-2xl text-sm leading-5 text-gray-500">
+                        Balance pendiente
+                    </p>
+                    <h4 class="font-semibold text-3xl">$0.00</h4>
+                </div>
+            </div>
+            <div class="flex mb-2 py-2 bg-white shadow-xs rounded antialiased">
+                <div class="w-full px-5">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-gray-600">
+                                <th class="px-4 py-2 w-1/3">Producto/Item</th>
+                                <th class="px-4 py-2 w-2/5">Descripcion</th>
+                                <th class="table-cell px-4 py-2 text-right w-1/12">Cant.</th>
+                                <th class="table-cell px-4 py-2 text-center w-1/12">Impuesto</th>
+                                <th class="table-cell px-4 py-2 text-right w-1/12">Monto</th>
+                                <th class="px-4 py-2 w-1/12 justify-center"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-indigo-100">
+                                <td class="border px-4 py-2">
+                                    Batida naranja
+                                </td>
+                                <td class="border px-4 py-2">
+                                    Era salchisa de jamon
+                                </td>
+                                <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">1</td>
+                                <td class="border table-cell px-4 py-2 text-center w-1/12">
+                                    <i class="fas fa-check text-green-600" />
+                                </td>
+                                <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">45.25</td>
+                                <td class="px-2 py-2 justify-center">
+                                    <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-indigo-100">
+                                <td class="border px-4 py-2">
+                                    Jugo de zapote
+                                </td>
+                                <td class="border px-4 py-2">
+                                    Con carnation pero de la vieja
+                                </td>
+                                <td class="border table-cell tracking-wide px-4 py-2 text-right w-1/12">1</td>
+                                <td class="border table-cell text-center w-1/12">
+                                    <i class="fas fa-check text-green-600" />
+                                </td>
+                                <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">112.66</td>
+                                <td class="px-2 py-2 justify-center">
+                                    <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-indigo-100">
+                                <td class="border px-4 py-2">
+                                    Locrio de lechon
+                                </td>
+                                <td class="border px-4 py-2">
+                                    Chicharon fresco al ajillo, fresco.
+                                </td>
+                                <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">1</td>
+                                <td class="border table-cell text-center w-1/12">
+                                    <i class="fas fa-check text-green-600" />
+                                </td>
+                                <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">185.00</td>
+                                <td class="px-2 py-2 justify-center">
+                                    <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-full flex flex-wrap py-2 bg-white shadow-xs rounded antialiased justify-between">
+                <div class="w-1/3">
+                    <button class="ml-2 bg-white hover:bg-indigo-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow">Nueva Linea</button>
+                    <button class="ml-4 bg-white hover:bg-indigo-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow">Limpiar Linea</button>
+                    <div class="ml-2 mt-2 flex-col">
+                        <span class="text-gray-700 text-xs font-bold">Notas</span>
+                        <textarea class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" rows="5"
+                                  placeholder="Gracias por hacer negocios con nosotros, Dios te guarde"/>
+                    </div>
+                </div>
+                <div class="flex justify-between ">
+                    <div class="flex flex-col pt-1 px-10 items-end">
+                        <div class="py-4 font-semibold text-lg">
+                            Subtotal
+                        </div>
+                        <div class="py-4 font-semibold text-base text-gray-700">
+                            Impuesto
+                        </div>
+                        <div class="py-4 font-semibold text-lg text-gray-700">
+                            Descuento
+                        </div>
+                        <div class="py-4 font-bold text-2xl tracking-wide">
+                            Total
                         </div>
                     </div>
-                    <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
-                            Zip
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="90210">
+                    <div class="flex flex-col mr-5 pt-1 px-10 items-end">
+                        <div class="py-4 proportional-nums font-bold text-lg">
+                            $1,250.00
+                        </div>
+                        <div class="py-4 proportional-nums font-semibold text-lg text-gray-700">
+                            $120.45
+                        </div>
+                        <div class="py-4 proportional-nums font-semibold text-lg text-gray-900">
+                            $10.20
+                        </div>
+                        <div class="py-4 proportional-nums font-bold text-xl ">
+                            $1,340.45
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="flex-col w-1/4 px-2 sm:px-6 md:flex items-end justify-start">
-            <p class="mt-2 max-w-2xl text-sm leading-5 text-gray-500">
-                Balance pendiente
-            </p>
-            <h4 class="font-semibold text-3xl">$0.00</h4>
+        </EditForm>
+    </div>
+
+    <div class="py-5 bg-black opacity-75">
+        <div class="flex justify-between">
+            <div>
+                <button class="ml-2 bg-black opacity-75 hover:bg-gray-700 text-white font-semibold py-1 px-4 border border-white rounded-full shadow">Cancelar</button>
+                <button class="ml-2 mr-2 bg-black opacity-75 hover:bg-gray-700 text-white font-semibold py-1 px-4 border border-white rounded-full shadow">Limpar</button>
+            </div>
+            <div>
+                <a href="#hover" class="no-underline hover:underline text-indigo-600 text-sm">Impresion Previa</a>
+            </div>
+            <div>
+                <button class="ml-2 bg-black opacity-75 text-white font-semibold py-1 px-4 border border-white rounded-full shadow hover:bg-gray-700">Guardar</button>
+                <Dropdown Placement="@PlacementType.TopRight" Trigger="@(new TriggerType[] { TriggerType.Click })">
+                    <Overlay>
+                        <div class="origin-bottom-right mt-2 mr-3 w-56 rounded-md shadow-lg">
+                            <div class="rounded-md bg-white shadow-xs">
+                                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                    <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                    Guardar y Enviar
+                                    </a>
+                                    <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                    Guardar e Imprimir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </Overlay>
+                    <ChildContent>
+                        <button class="ml-2 mr-2 bg-indigo-600 opacity-75 text-white font-semibold py-1 px-4 border border-white rounded-full shadow hover:bg-indigo-900">Mas Opciones</button>
+                    </ChildContent>
+                </Dropdown>
+            </div>
         </div>
     </div>
-</EditForm>
+</div>
+
+
+
 @code {
 
     void GoToDashboard()
