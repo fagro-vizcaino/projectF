@@ -18,116 +18,104 @@
         </div>
 
         <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" OnInvalidSubmit="OnFinishFailed">
-
-
             <div class="flex mb-4 bg-white shadow-xs rounded">
                 <div class="w-3/4 px-4 py-4 sm:px-6 items-center">
-                    <div class="w-full max-w-lg">
-                        <div class="flex flex-wrap -mx-1 mb-1">
-                            <div class="w-full md:w-1/2 px-2 mb-1 md:mb-0">
-                                <div class="mb-2">
-                                    <label class="block text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                                        Cliente
-                                    </label>
-                                    <Select ShowSearch
-                                            Style="width:100%"
-                                            Placeholder="Select a person"
-                                            OptionFilterProp="children">
-                                        <SelectOption Value="jack">Jack</SelectOption>
-                                        <SelectOption Value="lucy">Lucy</SelectOption>
-                                        <SelectOption Value="tom">Tom</SelectOption>
-                                    </Select>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
-                                        Rnc
-                                    </label>
-                                    <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                                    <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold text-red-600" />
-                                </div>
-                                <div class="mb-2">
-                                    <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                                        Termino de pago
-                                    </label>
-                                    <div class="mb-4">
-                                        <div class="inline-block relative w-full">
-                                            <FInputSelect @bind-Value="_model.PaymentTermId">
-                                                <option value="0">Termino de pago</option>
-                                                @foreach (var type in PaymentTerms)
-                                                {
-                                                    <option value="@type.Id">@type.Description</option>
-                                                }
-                                            </FInputSelect>
-                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-                                            </div>
-                                            <FCustomValidationMessage For="@(() => _model.PaymentTermId)" Class="mt-2 font-semibold text-red-600" />
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="flex w-3/4 justify-between">
+                        <div class="flex-col w-1/3 mr-5">
+                            <div class="mb-2">
+                                <label class="block text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                                    Cliente
+                                </label>
+                                <Select ShowSearch
+                                        Style="width:100%"
+                                        Placeholder="Seleccione un cliente"
+                                        OnChange="OnChangeClient"
+                                        OptionFilterProp="children">
+                                    @foreach (var customer in Clients)
+                                    {
+                                        <SelectOption Value="@customer.Id.ToString()">@customer.Name</SelectOption>
+                                    }
+                                </Select>
                             </div>
-                            <div class="w-full md:w-1/2 px-3">
-                                <div class="mb-2">
-                                    <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                                        Email
-                                    </label>
-                                    <FInputText @bind-Value="_model.Client.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                                    <FCustomValidationMessage For="@(() => _model.Client.Email)" Class="mt-2 font-semibold text-red-600" />
-                                </div>
-                                <div class="mb-2">
-                                    <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                                        Fecha
-                                    </label>
-                                    <DatePicker @bind-Value="_model.Created" />
-                                    <FCustomValidationMessage For="@(() => _model.Created)" Class="mt-2 font-semibold text-red-600" />
-                                </div>
-                                <div class="mb-2">
-                                    <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
-                                        Vencimiento
-                                    </label>
-                                    <DatePicker @bind-Value="_model.DueDate" />
-                                    <FCustomValidationMessage For="@(() => _model.DueDate)" Class="mt-2 font-semibold text-red-600" />
-                                </div>
+                            <div class="mb-2">
+                                <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
+                                    RNC
+                                </label>
+                                <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                                <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold text-red-600" />
                             </div>
-                        </div>
-                        @*<div class="flex flex-wrap -mx-1 mb-1">
-                                <div class="w-full px-3">
-                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                                        Password
-                                    </label>
-                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="******************">
-                                    <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap -mx-3 mb-2">
-                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
-                                        City
-                                    </label>
-                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque">
-                                </div>
-                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-                                        State
-                                    </label>
-                                    <div class="relative">
-                                        <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                            <option>New Mexico</option>
-                                            <option>Missouri</option>
-                                            <option>Texas</option>
-                                        </select>
+                            <div class="mb-2">
+                                <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                    Termino de pago
+                                </label>
+                                <div class="mb-4">
+                                    <div class="inline-block relative w-full">
+                                        <FInputSelect @bind-Value="_model.PaymentTermId">
+                                            <option value="0">Seleccione un Termino Pago</option>
+                                            @foreach (var type in PaymentTerms)
+                                            {
+                                                <option value="@type.Id">@type.Description</option>
+                                            }
+                                        </FInputSelect>
                                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                                         </div>
+                                        <FCustomValidationMessage For="@(() => _model.PaymentTermId)" Class="mt-2 font-semibold text-red-600" />
                                     </div>
                                 </div>
-                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
-                                        Zip
-                                    </label>
-                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="90210">
-                                </div>
-                            </div>*@
+                            </div>
+                        </div>
+                        <div class="flex-col w-1/3 mr-1">
+                            <div class="mb-2">
+                                <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                    Email
+                                </label>
+                                <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                                <FCustomValidationMessage For="@(() => _model.Client.Email)" Class="mt-2 font-semibold text-red-600" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                    Fecha
+                                </label>
+                                <DatePicker @bind-Value="_model.Created" />
+                                <FCustomValidationMessage For="@(() => _model.Created)" Class="mt-2 font-semibold text-red-600" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
+                                    Vencimiento
+                                </label>
+                                <DatePicker @bind-Value="_model.DueDate" />
+                                <FCustomValidationMessage For="@(() => _model.DueDate)" Class="mt-2 font-semibold text-red-600" />
+                            </div>
+                        </div>
+                        <div class="flex-col w-1/3 flex-col w-1/3 self-center">
+                            <div class="flex flex-col items-end">
+                                <Dropdown Placement="@PlacementType.BottomRight" Trigger="@(new TriggerType[] { TriggerType.Click })">
+                                    <Overlay>
+                                        <div class="origin-bottom-right rounded-md shadow-lg">
+                                            <div class="rounded-md bg-white shadow-xs">
+                                                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                                    <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                                        Credito Fiscal
+                                                    </a>
+                                                    <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                                        Consumidor Final
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Overlay>
+                                    <ChildContent>
+                                        <button class="ml-2 mr-2 text-gray-600 font-semibold py-1 px-4 border border-white rounded shadow hover:text-gray-900" type="button">
+                                            Tipo Comprobante
+                                            <i class="ml-2 fas fa-caret-down text-gray-900"></i>
+                                        </button>
+                                    </ChildContent>
+                                </Dropdown>
+                                <input class="mt-2 appearance-none block w-5/6 bg-gray-200 border rounded py-3 px-4 mb-3 text-right text-base font-semibold leading-tight focus:outline-none focus:bg-white" 
+                                       id="grid-first-name" type="text" placeholder="1545" disabled>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="flex-col w-1/4 px-2 sm:px-6 md:flex items-end justify-start">
@@ -137,78 +125,7 @@
                     <h4 class="font-semibold text-3xl">$0.00</h4>
                 </div>
             </div>
-            <div class="flex mb-2 py-2 bg-white shadow-xs rounded antialiased">
-                <div class="w-full px-5">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="text-gray-600">
-                                <th class="px-4 py-2 w-1/3">Producto/Item</th>
-                                <th class="px-4 py-2 w-2/5">Descripcion</th>
-                                <th class="table-cell px-4 py-2 text-right w-1/12">Cant.</th>
-                                <th class="table-cell px-4 py-2 text-center w-1/12">Impuesto</th>
-                                <th class="table-cell px-4 py-2 text-right w-1/12">Monto</th>
-                                <th class="px-4 py-2 w-1/12 justify-center"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="hover:bg-gray-100">
-                                <td class="border px-4 py-2">
-                                    Batida naranja
-                                </td>
-                                <td class="border px-4 py-2">
-                                    Era salchisa de jamon
-                                </td>
-                                <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">1</td>
-                                <td class="border table-cell px-4 py-2 text-center w-1/12">
-                                    <i class="fas fa-check text-green-600" />
-                                </td>
-                                <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">45.25</td>
-                                <td class="px-2 py-2 justify-center">
-                                    <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
-                                        <i class="far fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-100">
-                                <td class="border px-4 py-2">
-                                    Jugo de zapote
-                                </td>
-                                <td class="border px-4 py-2">
-                                    Con carnation pero de la vieja
-                                </td>
-                                <td class="border table-cell tracking-wide px-4 py-2 text-right w-1/12">1</td>
-                                <td class="border table-cell text-center w-1/12">
-                                    <i class="fas fa-check text-green-600" />
-                                </td>
-                                <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">112.66</td>
-                                <td class="px-2 py-2 justify-center">
-                                    <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
-                                        <i class="far fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-100">
-                                <td class="border px-4 py-2">
-                                    Locrio de lechon
-                                </td>
-                                <td class="border px-4 py-2">
-                                    Chicharon fresco al ajillo, fresco.
-                                </td>
-                                <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">1</td>
-                                <td class="border table-cell text-center w-1/12">
-                                    <i class="fas fa-check text-green-600" />
-                                </td>
-                                <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">185.00</td>
-                                <td class="px-2 py-2 justify-center">
-                                    <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
-                                        <i class="far fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <InvoiceLines Products="Products"/>
             <div class="w-full flex flex-wrap py-2 bg-white shadow-xs rounded antialiased justify-between">
                 <div class="w-1/3">
                     <button class="ml-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow">Nueva Linea</button>

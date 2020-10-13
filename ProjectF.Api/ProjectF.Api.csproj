@@ -19,11 +19,10 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1" />
   </ItemGroup>
 <ItemGroup>
-    <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />
-    <ProjectReference Include="..\ProjectF.Data\ProjectF.Data.csproj" />
+  <Folder Include="Features\Home\" />
 </ItemGroup>
 <ItemGroup>
-  <Folder Include="Features\Home\" />
+  <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />
 </ItemGroup>
 
 </Project>

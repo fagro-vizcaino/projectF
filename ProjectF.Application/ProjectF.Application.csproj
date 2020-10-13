@@ -10,11 +10,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\ProjectF.Data\ProjectF.Data.csproj" />
+    <Folder Include="Common\" />
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Common\" />
+    <ProjectReference Include="..\ProjectF.Data\ProjectF.Data.csproj" />
   </ItemGroup>
 
 </Project>

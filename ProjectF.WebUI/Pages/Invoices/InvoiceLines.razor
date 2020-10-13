@@ -1,0 +1,107 @@
+﻿@inherits InvoiceLinesHandler
+@using AntDesign.core
+
+<div class="flex mb-2 py-2 bg-white shadow-xs rounded antialiased">
+    <div class="w-full px-5">
+        <table class="w-full">
+            <thead>
+                <tr class="text-gray-600">
+                    <th class="px-4 py-2 w-1/3">Producto/Item</th>
+                    <th class="px-4 py-2 w-2/5">Descripcion</th>
+                    <th class="table-cell px-4 py-2 text-right w-1/12">Cant.</th>
+                    <th class="table-cell px-4 py-2 text-center w-1/12">Impuesto</th>
+                    <th class="table-cell px-4 py-2 text-right w-1/12">Monto</th>
+                    <th class="px-4 py-2 w-1/12 justify-center"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hover:bg-gray-100">
+                    <td class="border px-4 py-2">
+                        <AutoComplete OnSelectionChange="OnSelectionChange">
+                            <ChildContent>
+                                <AutoCompleteSearch Placeholder="Buscar producto" @bind-Value="@ProductLineId" />
+                            </ChildContent>
+                            <AutoCompleteOptions>
+                                @foreach (var pro in Products.Where(p => p.Name.Contains(ProductLineId ?? "", StringComparison.InvariantCultureIgnoreCase)))
+                                {
+                                    <AutoCompleteOption Value="pro" Label="@pro.Name">
+                                        <div class="bg-gray-100 px-8 py-6 flex items-center border-b border-gray-300">
+                                            <div class="flex ml-4">
+                                                <i class="fas fa-tag fa-lg  w-10 h-10 object-cover rounded object-top" />
+                                                <div class="flex flex-col pl-4">
+                                                    <h2 class="font-medium text-sm">@pro.Name</h2>
+                                                    <h3 class="text-gray-500 text-sm">@pro.Description</h3>
+                                                </div>
+                                            </div>
+                                            <div class="text-gray-900 flex font-semibold proportional-nums items-center ml-auto py-2 leading-none">
+                                                <span class="text-sm text-gray-500">$</span>
+                                                <span>@pro.Price</span>
+                                            </div>
+                                        </div>
+                                    </AutoCompleteOption>
+                                }
+                            </AutoCompleteOptions>
+                        </AutoComplete>
+                    </td>
+                    <td class="border px-4 py-2">
+                        <FInputText @bind-Value="LineProduct.Description" />
+                    </td>
+                    <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">
+                        <FInputInt @bind-Value="Qty" />
+                    </td>
+                    <td class="border table-cell px-4 py-2 text-center w-1/12">
+                        <i class="fas fa-check text-green-600" />
+                    </td>
+                    <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">
+                        <FInputDecimal @bind-Value="LineProduct.Price" />
+                    </td>
+                    <td class="px-2 py-2 justify-center">
+                        <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+                @*<tr class="hover:bg-gray-100">
+                        <td class="border px-4 py-2">
+                            Jugo de zapote
+                        </td>
+                        <td class="border px-4 py-2">
+                            Con carnation pero de la vieja
+                        </td>
+                        <td class="border table-cell tracking-wide px-4 py-2 text-right w-1/12">1</td>
+                        <td class="border table-cell text-center w-1/12">
+                            <i class="fas fa-check text-green-600" />
+                        </td>
+                        <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">112.66</td>
+                        <td class="px-2 py-2 justify-center">
+                            <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-100">
+                        <td class="border px-4 py-2">
+                            Locrio de lechon
+                        </td>
+                        <td class="border px-4 py-2">
+                            Chicharon fresco al ajillo, fresco.
+                        </td>
+                        <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">1</td>
+                        <td class="border table-cell text-center w-1/12">
+                            <i class="fas fa-check text-green-600" />
+                        </td>
+                        <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">185.00</td>
+                        <td class="px-2 py-2 justify-center">
+                            <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>*@
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+}

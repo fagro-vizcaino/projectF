@@ -10,6 +10,7 @@ namespace ProjectF.WebUI.Models
         public string Code { get; set; }
         public string Ncf { get; set; }
         public string Rnc { get; set; }
+        public string Email { get;set;}
         public Client Client { get; set; }
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
