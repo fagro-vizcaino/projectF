@@ -1,0 +1,74 @@
+﻿@using ProjectF.WebUI.Pages.Products;
+@using AntDesign;
+@using OneOf;
+
+<Select OptionLabelProp="label"
+        Style="width: 100%"
+        ShowSearch
+        Placeholder="Seleccione un producto"
+        AllowClear="true"
+        OptionFilterProp="children"
+        OnChange="OnChange"
+        FilterOption="FilterOption">
+    @foreach (var item in ProductsDataSource)
+    {
+        <SelectOption Value="@item.Id.ToString()" Label="@item.Name">
+            <div class="bg-gray-100 px-8 py-6 flex items-center border-b border-gray-300">
+                <div class="flex ml-4">
+                    <div class="bg-gray-200 text-center">
+                        <i class="fas fa-tag fa-lg  w-10 h-10 object-cover rounded object-top" />
+                    </div>
+                    <div class="flex flex-col pl-4">
+                        <h2 class="font-medium text-sm">@item.Name</h2>
+                        <h3 class="text-gray-500 text-sm">@item.Description</h3>
+                    </div>
+                </div>
+                <div class="text-gray-900 flex font-semibold proportional-nums items-center ml-auto py-2 leading-none">
+                    <span class="text-sm text-gray-500">$</span>
+                    <span>@item.Price</span>
+                </div>
+            </div>
+
+        </SelectOption>
+    }
+</Select>
+
+@code {
+
+    [Parameter]
+    public string DefaultValue { get; set; }
+
+    [Parameter]
+    public Product[] ProductsDataSource { get; set; }
+
+    [Parameter]
+    public Func<string, SelectOption, bool> FilterOption { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnChangeCallBack { get; set; }
+
+    private void OnChange(OneOf<string, IEnumerable<string>, LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
+    {
+        Console.WriteLine($"selected: ${value}");
+        OnChangeCallBack.InvokeAsync(value.Value.ToString());
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine("invoice line product On initialize async executing");
+
+        return base.OnInitializedAsync();
+    }
+    protected override Task OnParametersSetAsync()
+    {
+        Console.WriteLine("On parameter change InvoiceLineProduct");
+        return base.OnParametersSetAsync();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine("On After render change InvoiceLineProduct");
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+}

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ProjectF.WebUI.Models
+namespace ProjectF.WebUI.Pages
 {
     public class BankValidator : AbstractValidator<Bank>
     {

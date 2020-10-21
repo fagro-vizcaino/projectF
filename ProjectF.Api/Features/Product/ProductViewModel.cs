@@ -1,7 +1,9 @@
 ﻿using ProjectF.Api.Features.Category;
+using ProjectF.Api.Features.Tax;
 using ProjectF.Api.Features.Werehouses;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Products;
+using ProjectF.Data.Entities.Taxes;
 using ProjectF.Data.Entities.Werehouses;
 
 namespace ProjectF.Api.Features.Product
@@ -15,12 +17,14 @@ namespace ProjectF.Api.Features.Product
         public string Reference { get; set; }
         public CategoryViewModel Category { get; set; }
         public WerehouseViewModel Werehouse { get; set; }
+        public TaxViewModel Tax { get; set;}
         public bool IsService { get; set; }
         public decimal Cost { get; set; }
         public decimal Price { get; set; }
         public decimal Price2 { get; set; }
         public decimal Price3 { get; set; }
         public decimal Price4 { get; set; }
+
         public ProductDto ToDto()
         {
             var category = new Data.Entities.Categories.Category(
@@ -32,6 +36,8 @@ namespace ProjectF.Api.Features.Product
                 , new Name(Werehouse.Name)
                 , Werehouse.Location);
 
+            var tax = new Data.Entities.Taxes.Tax(new Name(Tax.Name), Tax.PercentValue);
+
             return new ProductDto(Id
                , Code
                , Name
@@ -41,6 +47,8 @@ namespace ProjectF.Api.Features.Product
                , Category.Id
                , werehouse
                , Werehouse.Id
+               , Tax.Id
+               , tax
                , IsService
                , Cost
                , Price);
@@ -64,6 +72,13 @@ namespace ProjectF.Api.Features.Product
                 Location = productDto.Werehouse.Location,
             };
 
+            var tax = new TaxViewModel()
+            {
+                Id           = productDto.Tax.Id,
+                Name         = productDto.Tax.Name.Value,
+                PercentValue = productDto.Tax.PercentValue
+            };
+
             return new ProductViewModel()
             {
                 Id          = productDto.Id,
@@ -73,6 +88,7 @@ namespace ProjectF.Api.Features.Product
                 Reference   = productDto.Reference,
                 Category    = category,
                 Werehouse   = werehouse,
+                Tax         = tax,
                 IsService   = productDto.IsService,
                 Cost        = productDto.Cost,
                 Price       = productDto.Price,

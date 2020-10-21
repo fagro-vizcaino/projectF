@@ -31,11 +31,16 @@ namespace ProjectF.WebUI.Pages.Products
         public IBaseDataService<Werehouse> WerehouseDataService { get; set; }
         public Werehouse[] Werehouses { get; set; } = Array.Empty<Werehouse>();
 
+        [Inject]
+        public IBaseDataService<Tax> TaxDataService { get; set; }
+        public Tax[] Taxes { get; set; } = Array.Empty<Tax>();
+
         protected override async Task OnInitializedAsync()
         {
             Elements = (await DataService.GetAll()).ToArray();
             Categories = (await CategoryDataService.GetAll()).ToArray();
             Werehouses = (await WerehouseDataService.GetAll()).ToArray();
+            Taxes= (await TaxDataService.GetAll()).ToArray();
         }
 
         public Product GetNewModelOrEdit(Product product = null)

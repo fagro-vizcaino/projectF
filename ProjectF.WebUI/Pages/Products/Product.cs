@@ -1,4 +1,5 @@
-﻿namespace ProjectF.WebUI.Models
+﻿using ProjectF.WebUI.Models;
+namespace ProjectF.WebUI.Pages.Products
 {
     public class Product : FEntity
     {
@@ -8,8 +9,10 @@
         public string Reference { get; set; }
         public Category Category { get; set; }
         public long CategoryId { get; set; }
-        public Werehouse Werehouse { get; set; }
         public long WerehouseId { get; set; }
+        public Werehouse Werehouse { get; set; }
+        public long TaxId { get; set; }
+        public Tax Tax { get; set; }
         public bool IsService { get; set; }
         public decimal Cost { get; set; }
         public decimal Price { get; set; }

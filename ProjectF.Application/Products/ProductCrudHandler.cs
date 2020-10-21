@@ -17,14 +17,17 @@ namespace ProjectF.Application.Products
         readonly ProductRepository _productRepository;
         readonly CategoryRepository _categoryRepository;
         readonly WerehouseRepository _werehouseRepository;
+        readonly TaxRepository _taxRepository;
 
         public ProductCrudHandler(ProductRepository productRepository,
             CategoryRepository categoryRepository,
-            WerehouseRepository werehouseRepository)
+            WerehouseRepository werehouseRepository,
+            TaxRepository taxRepository)
         {
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
+            _productRepository   = productRepository;
+            _categoryRepository  = categoryRepository;
             _werehouseRepository = werehouseRepository;
+            _taxRepository       = taxRepository;
         }
 
         public Either<Error, Product> Create(ProductDto productDto)
@@ -34,6 +37,8 @@ namespace ProjectF.Application.Products
                .Bind(SetCategory)
                .Bind(ValidateWerehouse)
                .Bind(SetWerehouse)
+               .Bind(ValidateTax)
+               .Bind(SetTax)
                .Bind(CreateEntity)
                .Bind(Add)
                .Bind(Save);
@@ -61,6 +66,8 @@ namespace ProjectF.Application.Products
                    ct.Category.Id,
                    ct.Werehouse,
                    ct.Werehouse.Id,
+                   ct.Tax?.Id ?? 0,
+                   ct.Tax,
                    ct.IsService,
                    ct.Cost,
                    ct.Price));
@@ -88,6 +95,8 @@ namespace ProjectF.Application.Products
                , product.Category.Id
                , product.Werehouse
                , product.Werehouse.Id
+               , product.Tax.Id
+               , product.Tax
                , product.IsService
                , product.Cost
                , product.Price);
@@ -112,6 +121,7 @@ namespace ProjectF.Application.Products
                 , reference
                 , productDto.Category
                 , productDto.Werehouse
+                , productDto.Tax
                 , productDto.IsService
                 , productDto.Cost
                 , productDto.Price
@@ -171,6 +181,21 @@ namespace ProjectF.Application.Products
                 : Right<Error, ProductDto>(dto);
         }
 
+        Either<Error, ProductDto> ValidateTax(ProductDto productDto)
+            => productDto.Tax == null
+            ? Error.New("tax is required")
+            : Right<Error, ProductDto>(productDto);
+
+        Either<Error, ProductDto> SetTax(ProductDto productDto)
+        {
+            var dto = _taxRepository.Find(productDto.TaxId)
+                .Match(t => productDto.With(tax: t), () => productDto);
+
+            return dto.Tax == null 
+                ? Error.New("couldn't find to tax")
+                : Right<Error, ProductDto>(dto);
+        }
+
         Either<Error, Product> UpdateEntity(ProductDto productDto, Product product)
         {
             var code = new Code(productDto.Code);
@@ -185,6 +210,7 @@ namespace ProjectF.Application.Products
                 , reference
                 , productDto.Category
                 , productDto.Werehouse
+                , productDto.Tax
                 , productDto.IsService
                 , productDto.Cost
                 , productDto.Price

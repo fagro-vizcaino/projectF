@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectF.WebUI.Models
+namespace ProjectF.WebUI.Pages.Products
 {
     public class ProductValidator : AbstractValidator<Product>
     {
@@ -14,6 +14,16 @@ namespace ProjectF.WebUI.Models
                 .WithMessage("Nombre es requerido")
                 .MaximumLength(60)
                 .WithMessage("Máximo Carateres (60) excedido");
+
+
+            RuleFor(p => p.CategoryId).NotEmpty()
+                .WithMessage("Categoria es requerida");
+
+            RuleFor(p => p.WerehouseId).NotEmpty()
+                .WithMessage("Almacen es requerida");
+
+            RuleFor(p => p.TaxId).NotEmpty()
+                .WithMessage("Impuesto es requerida");
         }
     }
 }

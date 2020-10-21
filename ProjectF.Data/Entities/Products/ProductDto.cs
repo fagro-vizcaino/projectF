@@ -1,4 +1,5 @@
 ﻿using ProjectF.Data.Entities.Categories;
+using ProjectF.Data.Entities.Taxes;
 using ProjectF.Data.Entities.Werehouses;
 using System.Security.Principal;
 
@@ -13,8 +14,10 @@ namespace ProjectF.Data.Entities.Products
         public string Reference { get; }
         public Category Category { get; }
         public long CategoryId { get; }
+        public long WerehouseId { get; }
         public Werehouse Werehouse { get; }
-        public long WerehouseId { get;  }
+        public long TaxId { get;}
+        public Taxes.Tax Tax { get;}
         public bool IsService { get; }
         public decimal Cost { get; set; }
         public decimal Price { get; set; }
@@ -28,6 +31,8 @@ namespace ProjectF.Data.Entities.Products
             long categoryId,
             Werehouse werehouse,
             long werehouseId,
+            long taxId,
+            Tax tax,
             bool isService,
             decimal cost,
             decimal price)
@@ -44,6 +49,8 @@ namespace ProjectF.Data.Entities.Products
             Price       = price;
             WerehouseId = werehouseId;
             CategoryId  = categoryId;
+            TaxId       = taxId;
+            Tax         = tax;
         }
 
 
@@ -58,7 +65,9 @@ namespace ProjectF.Data.Entities.Products
             , decimal? cost             = null
             , decimal? price            = null
             , long? categoryId          = null
-            , long? werehouseId         = null)
+            , long? werehouseId         = null
+            , long? taxId               = null
+            , Tax? tax                 = null)
                                         => 
             new ProductDto(id ?? this.Id, 
                 code ?? this.Code,
@@ -69,6 +78,8 @@ namespace ProjectF.Data.Entities.Products
                 categoryId ?? this.CategoryId,
                 werehouse ?? this.Werehouse,
                 werehouseId ?? this.WerehouseId,
+                taxId ?? this.TaxId,
+                tax ?? this.Tax,
                 isService ?? this.IsService,
                 cost ?? this.Cost,
                 price ?? this.Price);
