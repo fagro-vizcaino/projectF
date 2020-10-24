@@ -29,6 +29,7 @@ namespace ProjectF.WebUI.Pages.Invoices
             NewOrEditOperation = GetNewModelOrEdit;
         }
 
+        public InvoiceLines Lines { get; set; }
         [Inject]
         public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
         public PaymentTerm[] PaymentTerms { get; set; } = System.Array.Empty<PaymentTerm>();
@@ -44,8 +45,8 @@ namespace ProjectF.WebUI.Pages.Invoices
         protected override async Task OnInitializedAsync()
         {
             PaymentTerms = (await PaymentTermDataService.GetAll()).ToArray();
-            Clients      = (await ClientDataService.GetAll()).ToArray();
-            Products     = (await ProductDataService.GetAll()).ToArray();
+            Clients = (await ClientDataService.GetAll()).ToArray();
+            Products = (await ProductDataService.GetAll()).ToArray();
         }
 
         public Invoice GetNewModelOrEdit(Invoice tax = null)
@@ -60,23 +61,27 @@ namespace ProjectF.WebUI.Pages.Invoices
             : new Invoice { Id = 0, Code = GenerateCode };
 
 
-        protected void OnChangeClient(OneOf<string, IEnumerable<string>, 
+        protected void OnChangeClient(OneOf<string, IEnumerable<string>,
             LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
         {
-            var client = GetSelectedClient(value.Value.ToString());   
+            var client = GetSelectedClient(value.Value.ToString());
             SetRncFromSelectedClient(client);
             SetEmailFromSelectedClient(client);
             StateHasChanged();
         }
-        
+
         Client GetSelectedClient(string clientId)
             => Clients.FirstOrDefault(c => c.Id == parseLong(clientId).Match(i => i, () => 0));
 
-        void SetRncFromSelectedClient(Client client)
-            =>(_model.Rnc) = (client.Rnc);
+        protected void ClearLines() => Lines.ClearLines();
 
-        void SetEmailFromSelectedClient(Client client)
+        void SetRncFromSelectedClient(Client client) 
+            => (_model.Rnc) = (client.Rnc);
+
+        void SetEmailFromSelectedClient(Client client) 
             => (_model.Email) = (client.Email);
+
+
 
     }
 }
