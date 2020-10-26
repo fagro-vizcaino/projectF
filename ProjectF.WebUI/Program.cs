@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectF.WebUI.Services;
 using ProjectF.WebUI.Models;
+using ProjectF.WebUI.Pages.Products;
+using ProjectF.WebUI.Pages;
 using FluentValidation;
 using ProjectF.WebUI.Components.Common;
 

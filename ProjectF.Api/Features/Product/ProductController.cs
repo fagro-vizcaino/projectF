@@ -23,7 +23,7 @@ namespace ProjectF.Api.Features.Product
             .Match<ActionResult>(
                   Left: err => BadRequest(err.Message),
                   Right: p => CreatedAtRoute(nameof(GetProduct),
-                      new { id = FromDto(_productOperation.EntityToDto(p)).Id },
+                      new { p.Id },
                       FromDto(_productOperation.EntityToDto(p))));
 
         [HttpPut("{id}")]
@@ -34,7 +34,7 @@ namespace ProjectF.Api.Features.Product
                     Left: err => BadRequest(err.Message),
                     Right: p => Ok(FromDto(_productOperation.EntityToDto(p))));
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetProduct")]
         public IActionResult GetProduct(long id)
             => _productOperation
                 .GetByKey(id)
