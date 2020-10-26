@@ -59,7 +59,6 @@ namespace ProjectF.WebUI.Components.Common
         protected void CloseDrawer()
             => (IsDrawerVisible, IsEditing) = (false, false);
 
-
         protected override async Task OnInitializedAsync()
             => await GetAll();
 
