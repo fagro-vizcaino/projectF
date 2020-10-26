@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using OneOf;
 using Microsoft.JSInterop;
+using ProjectF.WebUI.Pages.Products;
+using System.Text.Json;
 
 namespace ProjectF.WebUI.Pages.Invoices
 {
@@ -17,8 +19,9 @@ namespace ProjectF.WebUI.Pages.Invoices
     {
         [Parameter]
         public Product[] ProductDataSource { get; set; }
-        public string ProductLineId { get; set; }
         public List<InvoiceLine> InvoiceLines { get; set; }
+        [Parameter]
+        public EventCallback<List<InvoiceLine>> OnLineChanged { get; set; }
 
         [Inject]
         public IJSRuntime jSRuntime { get; set; }
@@ -44,37 +47,36 @@ namespace ProjectF.WebUI.Pages.Invoices
             OneOf<SelectOption, IEnumerable<SelectOption>> option, InvoiceLine line)
         {
             var product = GetProduct(value.Value.ToString());
-                
             line.Product = product;
             line.Qty     = 1;
             line.IsEmpty = false;
             InvoiceLines.Add(GetEmptyLine());
-            StateHasChanged();
+            OnLineChanged.InvokeAsync(InvoiceLines.ToList());
         }
 
         public void ClearLines()
         {
             InvoiceLines.RemoveAll(l => l.Index >= 0);
+            InvoiceLines.ForEach( l => l.CurrentSelect.ClearAll());
             UpdateEmptyLines();
             ((IJSInProcessRuntime)jSRuntime).InvokeVoid("removeLine");
-        }
-
-        protected void SaveLine(InvoiceLine line)
-        {
-            line.IsEmpty = false;
-            Console.WriteLine($"save line {Serialize(line)}");
-            InvoiceLines.Add(GetEmptyLine());
+            OnLineChanged.InvokeAsync(InvoiceLines.ToList());
         }
 
         protected void Remove(InvoiceLine line)
         {
             if (line.IsEmpty) return;
             line.IsDelete = true;
+            line.CurrentSelect.ClearAll();
             ((IJSInProcessRuntime)jSRuntime).InvokeVoid("removeLine");   
+            OnLineChanged.InvokeAsync(InvoiceLines.ToList());
         }
 
         InvoiceLine GetEmptyLine()
-            => new InvoiceLine() { Product = new Product(), IsEmpty = true, Index = InvoiceLines.Count + 1 };
+            => new InvoiceLine() { 
+                Product = new Product() { Tax = new Tax() }
+                , IsEmpty = true
+                , Index = (InvoiceLines?.Count ?? 0) + 1 };
 
         void UpdateEmptyLines()
         {

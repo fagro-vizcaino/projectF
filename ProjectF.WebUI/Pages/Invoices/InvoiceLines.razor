@@ -18,9 +18,11 @@
                 {
                     <tr class="hover:bg-gray-100" id="@item.Index">
                         <td class="border px-4 py-2">
-                            @*<FInputText @bind-Value="item.Product.Name" />*@
                             <Select OptionLabelProp="label"
                                     Style="width: 100%"
+                                    DefaultValue=@(item.OptionValue)
+                                    @ref="item.CurrentSelect"
+                                    Value="@item.OptionValue"
                                     ShowSearch
                                     Placeholder="Seleccione un producto/servicio"
                                     OptionFilterProp="children"
@@ -55,20 +57,18 @@
                             <FInputInt @bind-Value="item.Qty" />
                         </td>
                         <td class="border table-cell px-4 py-2 text-center w-1/12">
-                            <span>@item.Product.Tax</span>
+                            <span>@($"{item.Product.Tax.Percentvalue} %")</span>
                         </td>
                         <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">
                             <FInputDecimal @bind-Value="item.Product.Price" />
                         </td>
                         <td class="px-2 py-2 justify-center">
                             <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600"
-                                    @onclick=" _ => Remove(item)" @onclick:preventDefault="true">
+                                    @onclick=" _ => Remove(item)"
+                                    @onclick:preventDefault="true" 
+                                    @onclick:stopPropagation="true">
                                 <i class="far fa-trash-alt"></i>
                             </button>
-                            @*<button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600"
-                                        @onclick="() => SaveLine(item)" @onclick:preventDefault="true" @onclick:stopPropagation="true">
-                                    <i class="far fa-save-alt"></i>
-                                </button>*@
                         </td>
                     </tr>
                 }
