@@ -1,4 +1,4 @@
-﻿using ProjectF.WebUI.Models;
+﻿using ProjectF.WebUI.Pages.Invoices;
 using System.Net.Http;
 
 namespace ProjectF.WebUI.Services

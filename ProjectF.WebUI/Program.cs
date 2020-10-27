@@ -6,6 +6,7 @@ using ProjectF.WebUI.Services;
 using ProjectF.WebUI.Models;
 using ProjectF.WebUI.Pages.Products;
 using ProjectF.WebUI.Pages;
+using ProjectF.WebUI.Pages.Invoices;
 using FluentValidation;
 using ProjectF.WebUI.Components.Common;
 

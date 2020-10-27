@@ -41,9 +41,9 @@
             </NavLink>
         </li>
         <li class="my-px">
-            <a href="#"
+            <NavLink href="/sales"
                class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 hover:bg-gray-100">
-                <span class="flex items-center justify-center text-lg text-gray-400">
+                <span class="flex items-center justify-center text-lg @IsActiveLink("sales") text-gray-400">
                     <svg fill="none"
                          stroke-linecap="round"
                          stroke-linejoin="round"
@@ -55,12 +55,12 @@
                     </svg>
                 </span>
                 <span class="ml-3">Ventas</span>
-            </a>
+            </NavLink>
         </li>
         <li class="my-px">
-            <a href="#"
+            <NavLink href="/clients"
                class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 hover:bg-gray-100">
-                <span class="flex items-center justify-center text-lg text-gray-400">
+                <span class="flex items-center justify-center text-lg @IsActiveLink("clients") text-gray-400">
                     <svg fill="none"
                          stroke-linecap="round"
                          stroke-linejoin="round"
@@ -72,8 +72,8 @@
                     </svg>
                 </span>
                 <span class="ml-3">Clientes</span>
-                <span class="flex items-center justify-center text-sm text-gray-500 font-semibold bg-gray-200 h-6 px-2 rounded-full ml-auto">1k</span>
-            </a>
+                @*<span class="flex items-center justify-center text-sm text-gray-500 font-semibold bg-gray-200 h-6 px-2 rounded-full ml-auto">1k</span>*@
+            </NavLink>
         </li>
         <li class="my-px">
             <span class="flex font-medium text-sm text-gray-400 px-4 my-4 uppercase">Pagos</span>

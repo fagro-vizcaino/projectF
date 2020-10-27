@@ -343,8 +343,8 @@ namespace ProjectF.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
 
                     b.Property<long?>("InvoiceHeaderId")
                         .HasColumnType("bigint");
