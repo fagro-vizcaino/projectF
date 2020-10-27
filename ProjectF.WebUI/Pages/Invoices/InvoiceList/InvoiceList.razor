@@ -1,0 +1,267 @@
+﻿@inherits InvoiceListHandler
+<div>
+    <span>hello stats</span>
+</div>
+<div class="bg-white rounded-md shadow py-1 px-1 mt-10">
+    <div class="-mb-2 py-4 flex flex-wrap flex-grow justify-between">
+        <div class="flex items-center py-2">
+            <div class="relative inline-block text-left py-1 px-4 ml-3">
+                <label class="block text-gray-500 text-sm font-bold mb-2" for="password">
+                    Estatus
+                </label>
+                <div>
+                    <span class="rounded-md shadow-sm">
+                        <button @onclick="() => DropDownStatusOpen = !DropDownStatusOpen"
+                                type="button"
+                                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">
+                            Todos
+                            <span class="relative">
+                                <i class="-mr-2 ml-2 h-5 w-5 text-black fas fa-chevron-down"></i>
+                            </span>
+                        </button>
+                    </span>
+                </div>
+                @if (DropDownStatusOpen)
+                {
+                    <div id="me" class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg">
+                        <div class="rounded-md bg-white shadow-xs">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">
+                                    Vencidos
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">
+                                    Pagados
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">
+                                    Parciales
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="relative inline-block text-left py-1 px-4 ml-3">
+                <label class="block text-gray-500 text-sm font-bold mb-2" for="password">
+                    Fechas
+                </label>
+                <div>
+                    <span class="rounded-md shadow-sm">
+                        <button @onclick="() => DropDownDateOpen = !DropDownDateOpen"
+                                type="button"
+                                class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">
+                            Ultimos 30 dias
+                            <span class="relative">
+                                <i class="-mr-2 ml-2 h-5 w-5 text-black fas fa-chevron-down"></i>
+                            </span>
+                        </button>
+                    </span>
+                </div>
+                @if (DropDownDateOpen)
+                {
+                    <div id="me" class="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg">
+                        <div class="rounded-md bg-white shadow-xs">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">
+                                    Ultimos 3 meses
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">
+                                    Ultimos 12 meses
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">
+                                    Rango de fechas
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="flex items-center py-3 mr-5">
+            <button class="py-2 px-4 capitalize tracking-wide bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-500 focus:outline-none">
+                Crear Factura
+            </button>
+
+            <span class="border"></span>
+
+            <div class="relative">
+                <button @onclick="() => DropDownOpen = !DropDownOpen" class="relative z-10 block bg-indigo-600 rounded p-2 hover:bg-indigo-400 focus:outline-none focus:bg-indigo-800">
+                    <i class="text-white fas fa-chevron-down"></i>
+                </button>
+
+                @*<div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>*@
+                @if (DropDownOpen)
+                {
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-20">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Exportar CSV <span class="text-gray-600"><i class="fas fa-file-csv"></i></span></a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Exportar Excel <span class="text-gray-600"><i class="fas fa-file-excel"></i></span></a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="align-middle inline-block w-full">
+        <table class="min-w-full">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-200 text-left text-xs leading-4 text-gray-800 uppercase tracking-wider">
+                    <th class="px-2 py-3 text-left font-medium">
+                        <input class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" type="checkbox" />
+                    </th>
+                    <th class="px-4 py-3 text-left font-medium">
+                        Fecha
+                    </th>
+                    <th class="px-3 py-3 text-center font-medium">
+                        Nro
+                    </th>
+                    <th class="px-7 py-3 text-left font-medium">
+                        Cliente
+                    </th>
+                    <th class="px-4 py-3 text-right font-medium">
+                        Monto
+                    </th>
+                    <th class="px-6 py-3 text-left font-medium">
+                        Estatus
+                    </th>
+                    <th class="px-4 py-3 text-right font-medium">
+                        Acción
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+                <tr>
+                    <td class="px-2 py-4 whitespace-no-wrap border-b border-gray-200">
+                        <input class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" type="checkbox" />
+                    </td>
+                    <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
+                        <div class="text-sm leading-5 text-gray-900">
+                            @DateTime.Now.ToString("dd/MM/yyyy")
+                        </div>
+                    </td>
+                    <td class="px-3 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
+                        <span class="text-sm leading-5 font-medium text-gray-900">
+                            1
+                        </span>
+                    </td>
+                    <td class="px-7 py-4 whitespace-no-wrap border-b border-gray-200">
+                        <div class="text-sm leading-5 text-gray-900">
+                            Le Jonh Doe le Apple
+                        </div>
+                    </td>
+                    <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200 text-right">
+                        <span class="inline-flex text-xs leading-5 font-semibold rounded-full proportional-nums">
+                            3,320.00
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+                        Pendiente a 22/12/2020
+                    </td>
+                    <td class="px-4 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                        <a href="#"
+                           class="text-indigo-600 hover:text-indigo-400 focus:outline-none focus:underline">
+                            <i class="text-gray-300 fas fa-pen mx-3"></i>
+                            Crear Pago
+                        </a>
+                    </td>
+                </tr>
+
+                @*<tr class="bg-gray-100">
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <input class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" type="checkbox" />
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <div class="text-sm leading-5 text-gray-900">
+                                {{page.name}}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full"
+                                         src="https://via.placeholder.com/400x400"
+                                         alt="" />
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm leading-5 font-medium text-gray-900">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <div class="text-sm leading-5 text-gray-900">
+                                {{page.slug}}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                Inactive
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+                            {{page.created_at}}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                            <a href="#"
+                               class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">
+                                Show
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <input class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" type="checkbox" />
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <div class="text-sm leading-5 text-gray-900">
+                                {{page.name}}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full"
+                                         src="https://via.placeholder.com/400x400"
+                                         alt="" />
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm leading-5 font-medium text-gray-900">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <div class="text-sm leading-5 text-gray-900">
+                                {{page.slug}}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                draft
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+                            {{page.created_at}}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                            <a href="#"
+                               class="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">
+                                Crear un pago
+                                <i class="fa fas-edit"></i>
+                            </a>
+                        </td>
+                    </tr>*@
+            </tbody>
+            <!-- BODY end -->
+        </table>
+    </div>
+    @*<a href="#" class="flex font-semibold text-indigo-600 text-sm mt-10">
+
+            <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" /></svg>
+            Continue Shopping
+        </a>*@
+</div>
+
