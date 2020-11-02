@@ -9,6 +9,7 @@ using ProjectF.WebUI.Pages;
 using ProjectF.WebUI.Pages.Invoices;
 using FluentValidation;
 using ProjectF.WebUI.Components.Common;
+using ProjectF.WebUI.Pages.Invoices.List;
 
 namespace ProjectF.WebUI
 {
@@ -43,6 +44,8 @@ namespace ProjectF.WebUI
             builder.Services.AddHttpClient<IBaseDataService<Product>, ProductDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
             builder.Services.AddHttpClient<IBaseDataService<Invoice>, InvoiceDataService>(client
+                => client.BaseAddress = new Uri(baseUrl));
+            builder.Services.AddHttpClient<IBaseDataService<InvoiceMainList>, InvoiceListDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
 
 

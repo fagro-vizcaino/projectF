@@ -10,7 +10,8 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
 {
     public class InvoiceLine
     {
-        public int Index { get; set; }
+        public long Index { get; set; }
+        public long Id { get; set; }
         public Product Product { get; set; }
         public Select CurrentSelect { get; set; }
         public int Qty { get; set; }
@@ -19,4 +20,5 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public string OptionValue { get; set; }
 
     }
+
 }

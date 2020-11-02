@@ -1,6 +1,5 @@
 ﻿using LanguageExt;
 using static LanguageExt.Prelude;
-using ProjectF.WebUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using LanguageExt.Common;
+using ProjectF.WebUI.Pages.Invoices.List;
+using ProjectF.WebUI.Services.Common;
 
 namespace ProjectF.WebUI.Services
 {
@@ -21,7 +21,6 @@ namespace ProjectF.WebUI.Services
         public _BaseDataService(string serviceUrl, HttpClient httpClient)
             => (baseUrl, _httpClient) = ($"{httpClient.BaseAddress}{serviceUrl}", httpClient);
         
-
         public async Task<Option<T>> Add(T element)
         {
             var elementJson =
@@ -72,6 +71,26 @@ namespace ProjectF.WebUI.Services
             return Enumerable.Empty<T>();
 
         }
+
+        public virtual async Task<IEnumerable<T>> Get(RequestQueryParametersBase requestQuery)
+        {
+            try
+            {
+                var queryParameters = (requestQuery.GetRequestQueryString() ?? "");
+                Console.WriteLine($"request query: {baseUrl}{queryParameters}");
+                var result = await _httpClient.GetFromJsonAsync<IEnumerable<T>>($"{baseUrl}{queryParameters}");
+                Console.WriteLine($"Items from {JsonSerializer.Serialize(result)}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //Todo: Log propertly errors
+                Console.WriteLine($"Error log:\n{ex.Message}\n{ex.StackTrace}");
+            }
+            return Enumerable.Empty<T>();
+
+        }
+
 
         public async Task<T> GetDetails(long elementId)
         {

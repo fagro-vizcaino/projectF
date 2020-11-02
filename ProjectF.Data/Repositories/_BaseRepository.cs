@@ -29,11 +29,10 @@ namespace ProjectF.Data.Repositories
         public virtual async Task<Option<T>> GetAsync(int id) =>
            await _context.Set<T>().FindAsync(id);
 
-        public virtual Option<T> Get(long id) => _context.Set<T>().Find(id);   
+        public virtual Option<T> Get(long id) => _context.Set<T>().Find(id);
 
         public virtual ValueTask<T> FindAsync(params object[] keyValues)
             => _context.Set<T>().FindAsync(keyValues);
-
 
         public virtual IEnumerable<T> GetAll()
            => _context.Set<T>().Select(c => c).AsEnumerable();
@@ -43,6 +42,14 @@ namespace ProjectF.Data.Repositories
 
         public IEnumerable<T> Filter(Expression<Func<T, bool>> predicate)
             => _context.Set<T>().Where(predicate).AsEnumerable();
+
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) 
+            => !trackChanges 
+            ? _context.Set<T>()
+               .Where(expression)
+               .AsNoTracking() 
+            : _context.Set<T>()
+               .Where(expression);
 
         public void Delete(T element)
         {

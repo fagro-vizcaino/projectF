@@ -48,6 +48,7 @@ namespace ProjectF.Api
             services.AddScoped<ProductCrudHandler>();
             services.AddScoped<ProductRepository>();
             services.AddScoped<InvoiceCrudHandler>();
+            services.AddScoped<InvoiceMainListHandler>();
             services.AddScoped<InvoiceRepository>();
             services.AddScoped<ClientCrudHandler>();
             services.AddScoped<ClientRepository>();

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 
 namespace ProjectF.Application.Invoice
 {
@@ -103,10 +104,12 @@ namespace ProjectF.Application.Invoice
                             d.TaxPercent)
                     )));
 
+        public Task<Either<Error, InvoiceHeader>> FindAsync(params object[] valueKeys)
+            => _invoiceRepository.FindByAsync(valueKeys);
+
         public Either<Error, InvoiceHeader> Find(params object[] valueKeys)
-            => _invoiceRepository.Find(valueKeys).Match(Some: i => i,
+            => _invoiceRepository.FindBy(valueKeys).Match(Some: i => i,
                 None: Left<Error, InvoiceHeader>(Error.New("No records found")));
-            
 
         public InvoiceHeaderDto EntityToDto(InvoiceHeader invoice)
              => new InvoiceHeaderDto(invoice.Id,
@@ -119,9 +122,9 @@ namespace ProjectF.Application.Invoice
                  invoice.DueDate,
                  invoice.PaymentTerm?.Id ?? 0,
                  invoice.PaymentTerm,
-                 invoice.Notes.Value,
-                 invoice.TermAndConditions.Value,
-                 invoice.Footer.Value,
+                 invoice.Notes?.Value ?? string.Empty,
+                 invoice.TermAndConditions?.Value ?? string.Empty,
+                 invoice.Footer?.Value ?? string.Empty,
                  invoice.Discount,
                  invoice.SubTotal,
                  invoice.TaxTotal,
@@ -166,13 +169,11 @@ namespace ProjectF.Application.Invoice
            ? invoiceDto
            : Left<Error, InvoiceHeaderDto>(Error.New("paymentTerm shouldn't be null"));
 
-           Either<Error, InvoiceHeaderDto> SetPaymentTerm(InvoiceHeaderDto invoiceDto)
+        Either<Error, InvoiceHeaderDto> SetPaymentTerm(InvoiceHeaderDto invoiceDto)
             => _paymentTermRepository.Find(invoiceDto.PaymentTermId)
                 .Match(Some: p => invoiceDto.With(paymentTerm: p),
                    None: () => Left<Error, InvoiceHeaderDto>(Error.New("couldn't find payment term")));
-            
-
-
+        
         Either<Error, InvoiceHeaderDto> ValidateNotes(InvoiceHeaderDto invoiceDto)
           => GeneralText.Of(invoiceDto.Notes)
               .Match<Either<Error, InvoiceHeaderDto>>(

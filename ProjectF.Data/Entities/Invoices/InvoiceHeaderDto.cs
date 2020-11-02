@@ -22,7 +22,6 @@ namespace ProjectF.Data.Entities.Invoices
         public string TermAndConditions { get; }
         public string Footer { get; }
         public decimal Discount { get; }
-        public decimal Subtotal { get; }
         public decimal SubTotal { get; }
         public decimal Total { get; }
         public decimal TaxTotal { get; }
@@ -67,7 +66,7 @@ namespace ProjectF.Data.Entities.Invoices
             TermAndConditions = termAndConditions;
             Footer            = footer;
             Discount          = discount;
-            Subtotal          = subtotal;
+            SubTotal          = subtotal;
             TaxTotal          = taxTotal;
             Total             = total;
             _invoiceDetails   = invoiceDetails.ToList();
@@ -107,7 +106,7 @@ namespace ProjectF.Data.Entities.Invoices
                 , termAndConditions ?? this.TermAndConditions
                 , footer ?? this.Footer
                 , discount ?? this.Discount
-                , subTotal ?? this.Subtotal
+                , subTotal ?? this.SubTotal
                 , taxTotal ?? this.TaxTotal
                 , total ?? this.Total
                 , invoiceDetails ?? this._invoiceDetails);
@@ -148,12 +147,11 @@ namespace ProjectF.Data.Entities.Invoices
             termAndConditions  = TermAndConditions;
             footer             = Footer;
             discount           = Discount;
-            subTotal           = Subtotal;
+            subTotal           = SubTotal;
             taxTotal           = TaxTotal;
             total              = Total;
             invoiceDetails     = _invoiceDetails;
             systemCreated      = SystemCreated;
-
 
         }
 

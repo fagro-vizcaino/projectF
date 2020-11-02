@@ -1,5 +1,7 @@
 ﻿@layout BlankLayout
 @page "/invoices"
+@page "/invoices/edit/{Id:int}"
+@using static ProjectF.WebUI.Services.Common.DisplayFormatter;
 @inherits InvoiceContainerHandler
 @inject NavigationManager NavigationManager
 
@@ -128,8 +130,9 @@
                 </div>
             </div>
             <InvoiceLines ProductDataSource="ProductsData"
+                          InvoiceLines="Lines"
                           @ref="InvoiceLinesRef"
-                          OnLineChanged="OnLineChandedHandler" />
+                          OnLineChanged="OnLineChandedHandler"/>
             <div class="w-full flex flex-wrap py-2 bg-white shadow-xs rounded antialiased justify-between">
                 <div class="w-1/3">
 
@@ -140,7 +143,7 @@
                     </button>
                     <div class="ml-4 mt-2 flex-col">
                         <span class="text-gray-700 text-xs font-bold">Notas</span>
-                        <textarea @bind="_model.Notes" 
+                        <textarea @bind="_model.Notes"
                                   class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" rows="5"
                                   placeholder="Gracias por hacer negocios con nosotros, Dios te guarde" />
                     </div>

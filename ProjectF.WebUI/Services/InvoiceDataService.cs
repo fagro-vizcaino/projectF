@@ -1,4 +1,5 @@
 ﻿using ProjectF.WebUI.Pages.Invoices;
+using ProjectF.WebUI.Pages.Invoices.List;
 using System.Net.Http;
 
 namespace ProjectF.WebUI.Services
@@ -8,6 +9,14 @@ namespace ProjectF.WebUI.Services
         const string baseUrl = "sales/invoice";
 
         public InvoiceDataService(HttpClient client) 
+            : base(baseUrl, client) { }
+    }
+
+    public class InvoiceListDataService : _BaseDataService<InvoiceMainList>
+    {
+        const string baseUrl = "sales/invoice";
+
+        public InvoiceListDataService(HttpClient client)
             : base(baseUrl, client) { }
     }
 }

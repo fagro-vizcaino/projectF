@@ -86,6 +86,12 @@ namespace ProjectF.WebUI.Components.Common
             Elements = result;
         }
 
+        public virtual async Task<T> GetById(int id)
+        {
+            var entity = (await DataService.GetDetails(id));
+            Console.WriteLine($"Get detail :{JsonSerializer.Serialize(entity)}");
+            return entity;
+        }
         public virtual async Task<Either<Error, Unit>> Edit(long id, T entity)
         {
             Console.WriteLine($"Success editing:{JsonSerializer.Serialize(entity)}");

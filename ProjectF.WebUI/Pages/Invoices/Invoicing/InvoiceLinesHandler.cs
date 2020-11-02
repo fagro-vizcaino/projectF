@@ -17,29 +17,49 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
     {
         [Parameter]
         public Product[] ProductDataSource { get; set; }
-        public List<InvoiceLine> InvoiceLines { get; set; }
         [Parameter]
         public EventCallback<List<InvoiceLine>> OnLineChanged { get; set; }
-
+        [Parameter]
+        public List<InvoiceLine> InvoiceLines { get; set; }
         [Inject]
         public IJSRuntime jSRuntime { get; set; }
 
         protected override Task OnInitializedAsync()
         {
-            ProductDataSource = System.Array.Empty<Product>();
-            InvoiceLines = new List<InvoiceLine> { GetEmptyLine() };
+            Console.WriteLine("On initialized async invoice lines");
+            ProductDataSource = ProductDataSource.Length > 0 
+                ? ProductDataSource
+                : System.Array.Empty<Product>();
+            
+            InvoiceLines = (InvoiceLines?.Count(l => l.Id > 0)) >= 1 
+                ? InvoiceLines
+                : new List<InvoiceLine> { GetEmptyLine() };
+
             return Task.CompletedTask;
         }
 
+        protected override Task OnParametersSetAsync()
+        {
+           // IsEdit(InvoiceLines);
+            Console.WriteLine("On parameter set async invoice lines");
+            Console.WriteLine($"Product {ProductDataSource.Length}");
+            Console.WriteLine($"Line {InvoiceLines.Count}");
+            return base.OnParametersSetAsync();
+        }
+
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            Console.WriteLine($"producs {ProductDataSource.Length}");
+            return base.OnAfterRenderAsync(firstRender);
+        }
+
         protected Product GetProduct(string searchText)
-            => ProductDataSource
-            .FirstOrDefault(p => p.Id == parseInt(searchText).Match(r => r, () => 0));
+            => ProductDataSource.FirstOrDefault(p => p.Id == parseInt(searchText).Match(r => r, () => 0));
 
         protected readonly Func<string, SelectOption, bool> FilterOptionValue = FilterOption;
 
         protected static bool FilterOption(string value, SelectOption option)
-            => option.Children.ToUpperInvariant()
-            .Contains(value.ToLower(), StringComparison.OrdinalIgnoreCase);
+            => option.Children.ToUpperInvariant().Contains(value.ToLower(), StringComparison.OrdinalIgnoreCase);
 
         protected void OnChange(OneOf<string, IEnumerable<string>, LabeledValue, IEnumerable<LabeledValue>> value,
             OneOf<SelectOption, IEnumerable<SelectOption>> option, InvoiceLine line)
@@ -70,10 +90,11 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             OnLineChanged.InvokeAsync(InvoiceLines.ToList());
         }
 
-        InvoiceLine GetEmptyLine()
+        public InvoiceLine GetEmptyLine()
             => new InvoiceLine() { 
                 Product = new Product() { Tax = new Tax() }
                 , IsEmpty = true
+                , IsDelete = false
                 , Index = (InvoiceLines?.Count ?? 0) + 1 };
 
         void UpdateEmptyLines()

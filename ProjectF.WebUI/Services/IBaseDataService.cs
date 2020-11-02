@@ -1,4 +1,5 @@
 ﻿using LanguageExt;
+using ProjectF.WebUI.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace ProjectF.WebUI.Services
         Task<Option<T>> Update(long id, T item);
         Task<Option<string>> Delete(long id);
         Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> Get(RequestQueryParametersBase requestQuery);
         Task<T> GetDetails(long id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AntDesign;
 using LanguageExt;
 using static LanguageExt.Prelude;
+using static System.Text.Json.JsonSerializer;
 using Microsoft.AspNetCore.Components;
 using OneOf;
 using ProjectF.WebUI.Components.Common;
@@ -12,7 +13,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ProjectF.WebUI.Pages.Products;
-using ProjectF.WebUI.Services.Common;
+
 using System.Collections.Immutable;
 using LanguageExt.Common;
 
@@ -20,6 +21,9 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
 {
     public class InvoiceContainerHandler : BaseContainerBasicCrud<Invoice>
     {
+
+        [Parameter]
+        public int Id { get; set; }
         public InvoiceContainerHandler() : base("Factura")
         {
             InitModel(GetNewModelOrEdit());
@@ -40,11 +44,30 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public IBaseDataService<Product> ProductDataService { get; set; }
         public Product[] ProductsData { get; set; } = System.Array.Empty<Product>();
 
+        [Inject]
+        public IBaseDataService<Invoice> InvoiceService { get; set; }
+
+        public List<InvoiceLine> Lines { get; private set; }
         protected override async Task OnInitializedAsync()
         {
             PaymentTerms = (await PaymentTermDataService.GetAll()).ToArray();
             Clients = (await ClientDataService.GetAll()).ToArray();
             ProductsData = (await ProductDataService.GetAll()).ToArray();
+            Lines = new List<InvoiceLine> { InvoiceLinesRef.GetEmptyLine() };
+            if (Id > 0)
+            {
+                _model = await GetById(Id);
+                Lines = _model.InvoiceDetails.Map(i => new InvoiceLine
+                {
+                    Id = i.Id,
+                    Product = ProductsData.SingleOrDefault(p => p.Code == i.ProductCode),
+                    Index = i.Id,
+                    IsDelete = false,
+                    IsEmpty = false,
+                    OptionValue = ProductsData.SingleOrDefault(p => p.Code == i.ProductCode).Id.ToString(),
+                    Qty = i.Qty,
+                }).ToList();
+            }
         }
 
         public Invoice GetNewModelOrEdit(Invoice invoice = null)
@@ -68,14 +91,12 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                 InvoiceDetails = new List<InvoiceDetail>()
             };
 
-
         protected void OnChangeClient(OneOf<string, IEnumerable<string>,
             LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
         {
             _model.Client = Clients
                 .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
             _model.Rnc = _model.Client.Rnc;
-            StateHasChanged();
         }
 
         protected void OnChangePaymentTerm(OneOf<string, IEnumerable<string>,
@@ -84,12 +105,9 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             _model.PaymentTerm = PaymentTerms
                 .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
             _model.PaymentTermId = _model.PaymentTerm.Id;
-            StateHasChanged();
         }
 
         protected void ClearLines() => InvoiceLinesRef.ClearLines();
-
-        protected string DisplayNumberic(decimal n) => DisplayFormatter.DisplayNumberic(n);
 
         decimal ApplyDiscount(Invoice model, DiscountType selected) => selected switch
         {
@@ -102,7 +120,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             => lines.Filter(l => !l.IsDelete && l.Product.Code != null).ToImmutableList();
         public void OnLineChandedHandler(List<InvoiceLine> lines)
            => Calculate(GetValidInvoiceLine(lines));
-       
+
 
         void Calculate(ImmutableList<InvoiceLine> lines)
         {
@@ -133,9 +151,10 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                 TaxPercent = i.Product.Tax.Percentvalue
             }).Filter(c => c.ProductCode != null).ToList();
 
+            _model.Rnc = _model.Client.Rnc;
             _model.InvoiceDetails = invoiceDetail;
             _model.Ncf = $"b010000{new Random().Next(1000, 9999)}";
-            
+
             Console.WriteLine($"saving.. {JsonSerializer.Serialize(_model)}");
             await DataService.Add(_model)
                .Match(async c =>
@@ -147,4 +166,5 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
     }
 
     public enum DiscountType { Value, Percent }
+
 }

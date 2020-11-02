@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using LanguageExt.Common;
 
-namespace ProjectF.Application
+namespace ProjectF.Application.Validator
 {
     public static partial class Validators
     {
