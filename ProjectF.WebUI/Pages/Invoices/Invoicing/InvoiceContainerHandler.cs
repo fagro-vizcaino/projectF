@@ -87,6 +87,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                 Id = 0,
                 Code = GenerateCode,
                 Client = new Client(),
+                PaymentTerm = new PaymentTerm(),
                 Created = DateTime.Today,
                 InvoiceDetails = new List<InvoiceDetail>()
             };
@@ -121,7 +122,6 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public void OnLineChandedHandler(List<InvoiceLine> lines)
            => Calculate(GetValidInvoiceLine(lines));
 
-
         void Calculate(ImmutableList<InvoiceLine> lines)
         {
             _model.SubTotal = lines.Sum(i => i.Qty + i.Product.Price);
@@ -140,23 +140,56 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             Calculate(GetValidInvoiceLine(InvoiceLinesRef.InvoiceLines));
         }
 
-        public async Task SaveInvoice()
+        public Invoice ToDto()
         {
             var invoiceDetail = InvoiceLinesRef.InvoiceLines.Map(i => new InvoiceDetail
             {
+                Id = i.Id,
                 Amount = i.Product.Price,
                 ProductCode = i.Product.Code,
                 ProductDescription = i.Product.Name,
                 Qty = i.Qty,
                 TaxPercent = i.Product.Tax.Percentvalue
+
             }).Filter(c => c.ProductCode != null).ToList();
 
             _model.Rnc = _model.Client.Rnc;
+            _model.Rnc = string.Join("", Guid.NewGuid().ToString().Take(11));
             _model.InvoiceDetails = invoiceDetail;
+
+            return _model;
+        }
+
+        public async Task Save()
+        {
+            if (_model.Id > 0)
+            {
+                await UpdateInvoice();
+            }
+            else
+            {
+                await SaveInvoice();
+            }
+        }
+
+        public async Task SaveInvoice()
+        {
+            _model = ToDto();
             _model.Ncf = $"b010000{new Random().Next(1000, 9999)}";
 
-            Console.WriteLine($"saving.. {JsonSerializer.Serialize(_model)}");
+            Console.WriteLine($"saving.. {Serialize(_model)}");
             await DataService.Add(_model)
+               .Match(async c =>
+               {
+                   await FMessage.Success($"Factura: {c.Id} guardada", 3);
+               }, () => Error.New("Error while creating"));
+        }
+
+        public async Task UpdateInvoice()
+        {
+            _model = ToDto();
+            Console.WriteLine($"updating.. {Serialize(_model)}");
+            await DataService.Update(_model.Id, _model)
                .Match(async c =>
                {
                    await FMessage.Success($"Factura: {c.Id} guardada", 3);

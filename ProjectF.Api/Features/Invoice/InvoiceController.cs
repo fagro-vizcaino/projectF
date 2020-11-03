@@ -50,7 +50,6 @@ namespace ProjectF.Api.Features.Invoice
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(Left: err => BadRequest(err.Message),
                     Right: c => Ok(InvoiceViewModel.FromDto(_invoiceOperation.EntityToDto(c))));
-
         
     }
 }

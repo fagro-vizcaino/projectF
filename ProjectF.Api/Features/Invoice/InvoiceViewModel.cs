@@ -94,7 +94,8 @@ namespace ProjectF.Api.Features.Invoice
             var paymentTerm = new PaymentTermViewModel()
             {
                 DayValue = invoiceDto.PaymentTerm.DayValue,
-                Description = invoiceDto.PaymentTerm.Description.Value
+                Description = invoiceDto.PaymentTerm.Description.Value,
+                Id = invoiceDto.PaymentTermId
             };
 
             return new InvoiceViewModel()

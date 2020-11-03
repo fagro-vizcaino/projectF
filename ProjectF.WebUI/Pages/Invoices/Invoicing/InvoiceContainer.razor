@@ -31,6 +31,8 @@
                                         Style="width:100%"
                                         Placeholder="Seleccione un cliente"
                                         OnChange="OnChangeClient"
+                                        Value="@_model.Client.Id.ToString()"
+                                        DefaultValue=@(_model.Client.Id.ToString())
                                         OptionFilterProp="children">
                                     @foreach (var customer in Clients)
                                     {
@@ -55,6 +57,8 @@
                                                 Style="width:100%"
                                                 Placeholder="Seleccione un termino"
                                                 OnChange="OnChangePaymentTerm"
+                                                DefaultValue=@(_model.PaymentTerm.Id.ToString())
+                                                Value="@_model.PaymentTerm.Id.ToString()"
                                                 OptionFilterProp="children">
                                             @foreach (var term in PaymentTerms)
                                             {
@@ -201,7 +205,7 @@
                 <a href="#hover" class="no-underline hover:underline text-indigo-600 text-sm">Impresion Previa</a>
             </div>
             <div>
-                <button @onclick="SaveInvoice"
+                <button @onclick="Save"
                         @onclick:preventDefault="true"
                         class="ml-2 bg-black opacity-75 text-white font-semibold py-1 px-4 border border-white rounded-full shadow hover:bg-gray-700">
                     Guardar

@@ -38,21 +38,6 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             return Task.CompletedTask;
         }
 
-        protected override Task OnParametersSetAsync()
-        {
-           // IsEdit(InvoiceLines);
-            Console.WriteLine("On parameter set async invoice lines");
-            Console.WriteLine($"Product {ProductDataSource.Length}");
-            Console.WriteLine($"Line {InvoiceLines.Count}");
-            return base.OnParametersSetAsync();
-        }
-
-        protected override Task OnAfterRenderAsync(bool firstRender)
-        {
-            Console.WriteLine($"producs {ProductDataSource.Length}");
-            return base.OnAfterRenderAsync(firstRender);
-        }
-
         protected Product GetProduct(string searchText)
             => ProductDataSource.FirstOrDefault(p => p.Id == parseInt(searchText).Match(r => r, () => 0));
 
