@@ -16,6 +16,7 @@ using ProjectF.WebUI.Pages.Products;
 
 using System.Collections.Immutable;
 using LanguageExt.Common;
+using Microsoft.JSInterop;
 
 namespace ProjectF.WebUI.Pages.Invoices.Invoicing
 {
@@ -32,6 +33,10 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
 
         public InvoiceLines InvoiceLinesRef { get; set; }
         public DiscountType SelectedDiscount { get; set; }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
         [Inject]
         public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
         public PaymentTerm[] PaymentTerms { get; set; } = System.Array.Empty<PaymentTerm>();
@@ -46,6 +51,9 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
 
         [Inject]
         public IBaseDataService<Invoice> InvoiceService { get; set; }
+
+        [Inject]
+        public IJSRuntime jSRuntime { get; set; }
 
         public List<InvoiceLine> Lines { get; private set; }
         protected override async Task OnInitializedAsync()
@@ -69,7 +77,6 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                 }).ToList();
             }
         }
-
         public Invoice GetNewModelOrEdit(Invoice invoice = null)
             => invoice != null
             ? new Invoice
@@ -91,7 +98,6 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                 Created = DateTime.Today,
                 InvoiceDetails = new List<InvoiceDetail>()
             };
-
         protected void OnChangeClient(OneOf<string, IEnumerable<string>,
             LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
         {
@@ -99,7 +105,6 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                 .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
             _model.Rnc = _model.Client.Rnc;
         }
-
         protected void OnChangePaymentTerm(OneOf<string, IEnumerable<string>,
             LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
         {
@@ -194,6 +199,16 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                {
                    await FMessage.Success($"Factura: {c.Id} guardada", 3);
                }, () => Error.New("Error while creating"));
+        }
+
+        public async Task DownloadFile()
+        {
+            await jSRuntime.InvokeVoidAsync("open", $"http://localhost:5000/InvoicePrint/PrintInvoice", "_blank", 
+                "toolbar=no,top=800,left=300,width=1024,height=800");
+        }
+        public void GoToDashboard()
+        {
+            NavigationManager.NavigateTo("/");
         }
 
     }

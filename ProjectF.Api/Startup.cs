@@ -63,31 +63,38 @@ namespace ProjectF.Api
             services.AddScoped<BankAccountCrudHandler>();
             services.AddScoped<BankAccountTypeCrudHandler>();
 
-
-
             //Db Related stuffs.
             services.AddDbContext<_AppDbContext>(options =>
                 options
                 .UseLoggerFactory(_AppDbContext.GetLoggerFactory())
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-             services.AddMvc(o => o.Conventions.Add(new FeatureConvention()))
-            .AddRazorOptions(options =>
-                {
-                    // {0} - Action Name
-                    // {1} - Controller Name
-                    // {2} - Feature Name
-                    // Replace normal view location entirely
-                    options.ViewLocationFormats.Clear();
-                    options.ViewLocationFormats.Add("/Features/{2}/{1}/{0}.cshtml");
-                    options.ViewLocationFormats.Add("/Features/{2}/{0}.cshtml");
-                    options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
-                    options.ViewLocationExpanders.Add(new FeatureFoldersRazorViewEngine());
-                });
+            services.AddMvc(o => o.Conventions.Add(new FeatureConvention()))
+           .AddRazorOptions(options =>
+               {
+                   // Replace normal view location entirely
+                   // {0} - Action Name
+                   // {1} - Controller Name
+                   // {2} - Area Name
+                   // {3} - Feature Name
+                   options.AreaViewLocationFormats.Clear();
+                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{1}/{0}.cshtml");
+                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{0}.cshtml");
+                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/Shared/{0}.cshtml");
+                   options.AreaViewLocationFormats.Add("/Areas/Shared/{0}.cshtml");
+
+                   // replace normal view location entirely
+                   options.ViewLocationFormats.Clear();
+                   options.ViewLocationFormats.Add("/Features/{3}/{1}/{0}.cshtml");
+                   options.ViewLocationFormats.Add("/Features/{3}/{0}.cshtml");
+                   options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
+                   options.ViewLocationExpanders.Add(new FeatureFoldersRazorViewEngine());
+               });
             services.AddControllers();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(option => {
+            .AddJwtBearer(option =>
+            {
                 option.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
@@ -118,7 +125,8 @@ namespace ProjectF.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

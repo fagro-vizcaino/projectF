@@ -21,6 +21,7 @@
   </ItemGroup>
 <ItemGroup>
   <Folder Include="Features\Home\" />
+  <Folder Include="Features\Invoice\InvoicePrint\" />
 </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />

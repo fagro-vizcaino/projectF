@@ -13,7 +13,7 @@ namespace ProjectF.Data.Repositories
 {
     public class InvoiceRepository : _BaseRepository<InvoiceHeader>
     {
-        readonly Context._AppDbContext _context;
+        readonly _AppDbContext _context;
         public InvoiceRepository(_AppDbContext context) : base(context)
         {
             _context = context;

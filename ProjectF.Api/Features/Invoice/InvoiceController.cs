@@ -31,7 +31,7 @@ namespace ProjectF.Api.Features.Invoice
                     );
 
 
-    [HttpGet("{id}", Name = "GetInvoiceForEdit")]
+        [HttpGet("{id}", Name = "GetInvoiceForEdit")]
         public async Task<IActionResult> GetInvoice(long id)
             => (await _invoiceOperation.FindAsync(id))
                 .Match<ActionResult>(Left: err => NotFound(err.Message),

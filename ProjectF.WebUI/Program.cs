@@ -20,7 +20,8 @@ namespace ProjectF.WebUI
             const string baseUrl = "http://localhost:5000/api/";
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
-
+            
+            //Themes
             builder.Services.AddAntDesign();
 
             builder.Services.AddHttpClient<IBaseDataService<Category>, CategoryDataService>(client
@@ -58,6 +59,8 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<Client>, ClientValidator>();
             builder.Services.AddTransient<IValidator<Supplier>, SupplierValidator>();
             builder.Services.AddTransient<IValidator<Product>, ProductValidator>();
+
+            //themes 
 
 
             builder.Services.AddTransient<IFMessage, FMessage>();

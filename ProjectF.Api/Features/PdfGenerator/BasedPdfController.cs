@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,6 +54,8 @@ namespace ProjectF.Api.Features.PdfGenerator
             var actionContext = new ActionContext(HttpContext, routeData, new ControllerActionDescriptor());
             var options = HttpContext.RequestServices.GetRequiredService<IOptions<MvcViewOptions>>();
             var htmlHelperOptions = options.Value.HtmlHelperOptions;
+
+            
 
             var viewEngineResult = result.ViewEngine?.FindView(actionContext, viewName, true)
                                    ?? options.Value.ViewEngines.Select(x => x.FindView(actionContext, viewName, true))
