@@ -15,8 +15,7 @@ namespace ProjectF.WebUI.Pages.Taxes
                 Percentvalue =0
             };
             InitModel(emtpyModel);
-            NewOrEditOperation = GetNewModelOrEdit;
-            
+            NewOrEditOperation = GetNewModelOrEdit;   
         }
 
         public Tax GetNewModelOrEdit(Tax tax = null)

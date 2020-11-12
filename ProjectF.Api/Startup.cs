@@ -17,10 +17,11 @@ using ProjectF.Application.Werehouses;
 using ProjectF.Application.Products;
 using ProjectF.Application.Invoice;
 using ProjectF.Application.Clients;
-using ProjectF.Application.Supplier;
+using ProjectF.Application.Suppliers;
 using ProjectF.Application.PaymentTerms;
 using ProjectF.Application.Banks;
 using ProjectF.Application.Taxes;
+using ProjectF.Application.NumberSequence;
 
 namespace ProjectF.Api
 {
@@ -48,6 +49,7 @@ namespace ProjectF.Api
             services.AddScoped<ProductCrudHandler>();
             services.AddScoped<ProductRepository>();
             services.AddScoped<InvoiceCrudHandler>();
+            services.AddScoped<InvoiceMainListHandler>();
             services.AddScoped<InvoiceRepository>();
             services.AddScoped<ClientCrudHandler>();
             services.AddScoped<ClientRepository>();
@@ -61,8 +63,8 @@ namespace ProjectF.Api
             services.AddScoped<BankAccountRepository>();
             services.AddScoped<BankAccountCrudHandler>();
             services.AddScoped<BankAccountTypeCrudHandler>();
-
-
+            services.AddScoped<DocumentNumberSequenceRepository>();
+            services.AddScoped<DocumentNumberSequenceHandler>();
 
             //Db Related stuffs.
             services.AddDbContext<_AppDbContext>(options =>
@@ -70,23 +72,32 @@ namespace ProjectF.Api
                 .UseLoggerFactory(_AppDbContext.GetLoggerFactory())
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-             services.AddMvc(o => o.Conventions.Add(new FeatureConvention()))
-            .AddRazorOptions(options =>
-                {
-                    // {0} - Action Name
-                    // {1} - Controller Name
-                    // {2} - Feature Name
-                    // Replace normal view location entirely
-                    options.ViewLocationFormats.Clear();
-                    options.ViewLocationFormats.Add("/Features/{2}/{1}/{0}.cshtml");
-                    options.ViewLocationFormats.Add("/Features/{2}/{0}.cshtml");
-                    options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
-                    options.ViewLocationExpanders.Add(new FeatureFoldersRazorViewEngine());
-                });
+            services.AddMvc(o => o.Conventions.Add(new FeatureConvention()))
+           .AddRazorOptions(options =>
+               {
+                   // Replace normal view location entirely
+                   // {0} - Action Name
+                   // {1} - Controller Name
+                   // {2} - Area Name
+                   // {3} - Feature Name
+                   options.AreaViewLocationFormats.Clear();
+                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{1}/{0}.cshtml");
+                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{0}.cshtml");
+                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/Shared/{0}.cshtml");
+                   options.AreaViewLocationFormats.Add("/Areas/Shared/{0}.cshtml");
+
+                   // replace normal view location entirely
+                   options.ViewLocationFormats.Clear();
+                   options.ViewLocationFormats.Add("/Features/{3}/{1}/{0}.cshtml");
+                   options.ViewLocationFormats.Add("/Features/{3}/{0}.cshtml");
+                   options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
+                   options.ViewLocationExpanders.Add(new FeatureFoldersRazorViewEngine());
+               });
             services.AddControllers();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(option => {
+            .AddJwtBearer(option =>
+            {
                 option.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
@@ -117,7 +128,8 @@ namespace ProjectF.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

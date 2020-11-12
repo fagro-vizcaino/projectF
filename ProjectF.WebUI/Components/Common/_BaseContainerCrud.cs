@@ -59,13 +59,11 @@ namespace ProjectF.WebUI.Components.Common
         protected void CloseDrawer()
             => (IsDrawerVisible, IsEditing) = (false, false);
 
-
         protected override async Task OnInitializedAsync()
             => await GetAll();
 
         public virtual async Task OnFinish(EditContext editContext, long id)
         {
-            
             if (id > 0)
             {
                 await Edit(id, (T)editContext.Model);
@@ -81,14 +79,20 @@ namespace ProjectF.WebUI.Components.Common
             Console.WriteLine($"Failed:{JsonSerializer.Serialize(editContext.Model)}");
         }
 
-        public async Task GetAll()
+        public virtual async Task GetAll()
         {
             var result = (await DataService.GetAll()).ToArray();
             Console.WriteLine($"Get all:{JsonSerializer.Serialize(result)}");
             Elements = result;
         }
 
-        public async Task<Either<Error, Unit>> Edit(long id, T entity)
+        public virtual async Task<T> GetById(int id)
+        {
+            var entity = (await DataService.GetDetails(id));
+            Console.WriteLine($"Get detail :{JsonSerializer.Serialize(entity)}");
+            return entity;
+        }
+        public virtual async Task<Either<Error, Unit>> Edit(long id, T entity)
         {
             Console.WriteLine($"Success editing:{JsonSerializer.Serialize(entity)}");
             return

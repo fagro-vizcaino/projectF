@@ -1,8 +1,4 @@
-﻿using ProjectF.Api.Features.Product;
-using ProjectF.Api.Features.Tax;
-using System.Security.Principal;
-
-namespace ProjectF.Api.Features.Invoice
+﻿namespace ProjectF.Api.Features.Invoice
 {
     public class InvoiceDetailViewModel
     {

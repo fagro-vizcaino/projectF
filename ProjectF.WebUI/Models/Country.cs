@@ -7,7 +7,7 @@ namespace ProjectF.WebUI.Models
 {
     public class Country: FEntity
     {
-        public int Name { get; set; }
+        public string Name { get; set; }
         public string IconImage { get; set; }
     }
 }

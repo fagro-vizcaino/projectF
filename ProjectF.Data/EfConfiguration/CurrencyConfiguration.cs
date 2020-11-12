@@ -20,11 +20,9 @@ namespace ProjectF.Data.EfConfiguration
 
         public static List<Currency> InitialCountryData()
         {
-            var currencies = new List<Currency>
-      {
-        new Currency(1,"DOP Peso Dominicano")
-        , new Currency(2, "US Dolar USA")
-      };
+            var currencies = new List<Currency> { new Currency(1,"DOP Peso Dominicano"),
+                new Currency(2, "US Dolar USA")
+                };
 
             return currencies;
         }

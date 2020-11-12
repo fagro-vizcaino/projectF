@@ -2,7 +2,7 @@
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
-using static ProjectF.Application.Validators;
+using static ProjectF.Application.Validator.Validators;
 using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Banks;

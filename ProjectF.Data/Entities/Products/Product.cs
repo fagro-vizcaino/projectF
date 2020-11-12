@@ -1,6 +1,7 @@
 ﻿using ProjectF.Data.Entities.Categories;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using ProjectF.Data.Entities.Taxes;
 using ProjectF.Data.Entities.Werehouses;
 
 namespace ProjectF.Data.Products
@@ -13,6 +14,7 @@ namespace ProjectF.Data.Products
         public GeneralText Reference { get; private set; }
         public virtual Category Category {get; private set;}
         public virtual Werehouse Werehouse { get; private set;}
+        public virtual Tax Tax { get; private set;}
         public bool IsService { get; private set; }
         public decimal Cost { get; private set; }
         public decimal Price { get; private set; }
@@ -28,6 +30,7 @@ namespace ProjectF.Data.Products
             , GeneralText reference
             , Category category
             , Werehouse werehouse
+            , Tax tax
             , bool isService
             , decimal cost
             , decimal price
@@ -41,6 +44,7 @@ namespace ProjectF.Data.Products
             Reference   = reference;
             Category    = category;
             Werehouse   = werehouse;
+            Tax         = tax;
             IsService   = isService;
             Cost        = cost;
             Price       = price;
@@ -55,6 +59,7 @@ namespace ProjectF.Data.Products
             , GeneralText reference
             , Category category
             , Werehouse werehouse
+            , Tax tax
             , bool isService
             , decimal cost
             , decimal price
@@ -68,6 +73,7 @@ namespace ProjectF.Data.Products
             Reference   = reference;
             Category    = category;
             Werehouse   = werehouse;
+            Tax         = tax;
             IsService   = isService;
             Cost        = cost;
             Price       = price;

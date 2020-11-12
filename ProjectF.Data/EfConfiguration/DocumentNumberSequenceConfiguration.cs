@@ -12,9 +12,6 @@ namespace ProjectF.Data.EfConfiguration
              builder.ToTable("DocumentNumberSequence").HasKey(c => c.Id);
             builder.Property(c => c.Id).HasColumnName("DocumentNumberSequenceId");
 
-            builder.Property(q => q.DocumentType)
-                .IsRequired();
-
             builder.Property(p => p.Name)
                .HasMaxLength(60)
                .HasConversion(p => p.Value, p => new Name(p))
@@ -22,22 +19,21 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(p => p.Prefix)
                .HasMaxLength(20)
-               .HasConversion(p => p.Value, p => new Code(p))
                .IsRequired();
 
+            builder.Property(p => p.InitialSequence)
+                .IsRequired();
 
-            builder.Property(p => p.Prefix);
+             builder.Property(p => p.NextSequence)
+               .IsRequired();
 
-             builder.Property(p => p.Sequence)
-               .HasMaxLength(60)
-               .HasConversion(p => p.Value, p => new NumberSequence(p));
+            builder.Property(q => q.FinalSequence)
+                .IsRequired();
 
-            builder.Property(q => q.FinalSequence);
-
-            builder.Property(q => q.ValidFrom);
-            builder.Property(q => q.ValidTo);
-            builder.Property(q => q.IsDefault)
-                .HasDefaultValue(false)
+            builder.Property(q => q.ValidUntil);
+            
+            builder.Property(q => q.IsActive)
+                .HasDefaultValue(true)
                 .IsRequired();
 
         }

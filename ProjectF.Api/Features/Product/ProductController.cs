@@ -22,10 +22,9 @@ namespace ProjectF.Api.Features.Product
               .Create(viewModel.ToDto())
             .Match<ActionResult>(
                   Left: err => BadRequest(err.Message),
-                  Right: p => CreatedAtRoute(nameof(GetProduct), 
-                      new  { id = FromDto(_productOperation.EntityToDto(p)).Id },  
-                      FromDto(_productOperation.EntityToDto(p)) ));
-
+                  Right: p => CreatedAtRoute(nameof(GetProduct),
+                      new { p.Id },
+                      FromDto(_productOperation.EntityToDto(p))));
 
         [HttpPut("{id}")]
         public ActionResult UpdateProduct(long id, ProductViewModel viewModel)
@@ -35,7 +34,6 @@ namespace ProjectF.Api.Features.Product
                     Left: err => BadRequest(err.Message),
                     Right: p => Ok(FromDto(_productOperation.EntityToDto(p))));
 
-
         [HttpGet("{id}", Name = "GetProduct")]
         public IActionResult GetProduct(long id)
             => _productOperation
@@ -43,7 +41,6 @@ namespace ProjectF.Api.Features.Product
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
                     Right: c => Ok(FromDto(_productOperation.EntityToDto(c))));
-
 
         [HttpGet]
         public ActionResult GetProducts()
@@ -54,5 +51,12 @@ namespace ProjectF.Api.Features.Product
 
             return NotFound();
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(long id)
+           => _productOperation.Delete(id)
+            .Match<ActionResult>(
+               Left: err => BadRequest(err.Message),
+               Right: c => NoContent());
     }
 }

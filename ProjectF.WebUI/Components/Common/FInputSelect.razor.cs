@@ -12,6 +12,7 @@ namespace ProjectF.WebUI.Components.Common
     public sealed class FInputSelect<TValue> : InputBase<TValue>
     {
         [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public string CustomCssClass { get; set;}
         string _textInputCss = "block appearance-none w-full border border-gray-400 round py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
         // Generate html when the component is rendered.
         protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -19,8 +20,8 @@ namespace ProjectF.WebUI.Components.Common
             builder.OpenElement(0, "select");
             builder.AddMultipleAttributes(1, AdditionalAttributes);
             builder.AddAttribute(2, "class", CssClass == "invalid"
-                    ? _textInputCss + "border border-red-500"
-                    : $"{CssClass} {_textInputCss}");
+                    ? $"{_textInputCss } border border-red-500"
+                    : $"{CssClass} {_textInputCss} {CustomCssClass}");
             builder.AddAttribute(3, "value", BindConverter.FormatValue(CurrentValueAsString));
             builder.AddAttribute(4, "onchange", EventCallback.Factory.CreateBinder<string>(this, value => CurrentValueAsString = value, CurrentValueAsString, null));
             builder.AddContent(5, ChildContent);

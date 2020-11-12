@@ -1,4 +1,5 @@
 ﻿using ProjectF.Data.Entities.Clients;
+using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.PaymentList;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace ProjectF.Data.Entities.Invoices
         public long Id { get; }
         public string Code { get; }
         public string Ncf { get; }
+        public int NumberSequenceId { get; }
         public string Rnc { get; }
         public long ClientId { get;  }
         public Client Client { get; }
@@ -22,7 +24,6 @@ namespace ProjectF.Data.Entities.Invoices
         public string TermAndConditions { get; }
         public string Footer { get; }
         public decimal Discount { get; }
-        public decimal Subtotal { get; }
         public decimal SubTotal { get; }
         public decimal Total { get; }
         public decimal TaxTotal { get; }
@@ -37,6 +38,7 @@ namespace ProjectF.Data.Entities.Invoices
         public InvoiceHeaderDto(long id
             , string code
             , string ncf
+            , int numberSequenceId
             , string rnc
             , long clientId
             , Client client
@@ -56,6 +58,7 @@ namespace ProjectF.Data.Entities.Invoices
             Id                = id;
             Code              = code;
             Ncf               = ncf;
+            NumberSequenceId  = numberSequenceId;
             Rnc               = rnc;
             Client            = client;
             ClientId          = clientId;
@@ -67,7 +70,7 @@ namespace ProjectF.Data.Entities.Invoices
             TermAndConditions = termAndConditions;
             Footer            = footer;
             Discount          = discount;
-            Subtotal          = subtotal;
+            SubTotal          = subtotal;
             TaxTotal          = taxTotal;
             Total             = total;
             _invoiceDetails   = invoiceDetails.ToList();
@@ -77,6 +80,7 @@ namespace ProjectF.Data.Entities.Invoices
         public InvoiceHeaderDto With(long? id = null
             , string? code = null
             , string? ncf = null
+            , int? numberSequenceId = null
             , string? rnc = null
             , Client? client = null
             , long? clientId = null
@@ -96,6 +100,7 @@ namespace ProjectF.Data.Entities.Invoices
             return new InvoiceHeaderDto(id ?? this.Id
                 , code ?? this.Code
                 , ncf ?? this.Ncf
+                , numberSequenceId ?? this.NumberSequenceId
                 , rnc ?? this.Rnc
                 , clientId ?? this.ClientId
                 , client ?? this.Client
@@ -107,7 +112,7 @@ namespace ProjectF.Data.Entities.Invoices
                 , termAndConditions ?? this.TermAndConditions
                 , footer ?? this.Footer
                 , discount ?? this.Discount
-                , subTotal ?? this.Subtotal
+                , subTotal ?? this.SubTotal
                 , taxTotal ?? this.TaxTotal
                 , total ?? this.Total
                 , invoiceDetails ?? this._invoiceDetails);
@@ -117,6 +122,7 @@ namespace ProjectF.Data.Entities.Invoices
         public void Deconstruct(out long id, 
             out string code,
             out string ncf, 
+            out int numberSequenceId,
             out string rnc,
             out Client client,
             out long clientId,
@@ -137,6 +143,7 @@ namespace ProjectF.Data.Entities.Invoices
             id                 = Id;
             code               = Code;
             ncf                = Ncf;
+            numberSequenceId   = NumberSequenceId;
             rnc                = Rnc;
             clientId           = ClientId;
             client             = Client;
@@ -148,14 +155,30 @@ namespace ProjectF.Data.Entities.Invoices
             termAndConditions  = TermAndConditions;
             footer             = Footer;
             discount           = Discount;
-            subTotal           = Subtotal;
+            subTotal           = SubTotal;
             taxTotal           = TaxTotal;
             total              = Total;
             invoiceDetails     = _invoiceDetails;
             systemCreated      = SystemCreated;
-
-
         }
+
+        public static implicit operator InvoiceHeader(InvoiceHeaderDto dto)
+          => new InvoiceHeader(new Code(dto.Code),
+              dto.Ncf,
+              dto.NumberSequenceId,
+              dto.Rnc,
+              dto.Client,
+              dto.Created,
+              dto.DueDate,
+              dto.PaymentTerm,
+              new GeneralText(dto.Notes),
+              new GeneralText(dto.TermAndConditions),
+              new GeneralText(dto.Footer),
+              dto.Discount,
+              dto.SubTotal,
+              dto.TaxTotal,
+              dto.Total,
+              dto.InvoiceDetails.ToList());
 
     }
 }

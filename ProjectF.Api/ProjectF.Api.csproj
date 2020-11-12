@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <LangVersion>8.0</LangVersion>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dc957a92-3fa7-4661-9ebe-2f67a7fdc02a</UserSecretsId>
   </PropertyGroup>
 
@@ -16,14 +15,15 @@
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.5.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="PlaywrightSharp" Version="0.152.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1" />
   </ItemGroup>
 <ItemGroup>
-    <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />
-    <ProjectReference Include="..\ProjectF.Data\ProjectF.Data.csproj" />
+  <Folder Include="Features\Home\" />
+  <Folder Include="Features\Invoice\InvoicePrint\" />
 </ItemGroup>
 <ItemGroup>
-  <Folder Include="Features\Home\" />
+  <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />
 </ItemGroup>
 
 </Project>

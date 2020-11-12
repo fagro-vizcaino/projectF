@@ -42,5 +42,14 @@ namespace ProjectF.Data.Entities.Invoices
             InvoiceHeader invoiceHeader)
         => (ProductCode, Description, Qty, Amount, TaxPercent, InvoiceHeader)
             = (productCode, description, qty, amount, taxPercent, invoiceHeader);
+
+
+        public static implicit operator InvoiceDetailDto(InvoiceDetail detail)
+           => new InvoiceDetailDto(detail.Id,
+               detail.ProductCode.Value,
+               detail.Description.Value,
+               detail.Qty,
+               detail.Amount,
+               detail.TaxPercent);
     }
 }

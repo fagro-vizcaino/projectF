@@ -7,48 +7,35 @@ using static LanguageExt.Prelude;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using System.Collections.Immutable;
+using System.Threading.Tasks;
+using ProjectF.Application.NumberSequence;
 
 namespace ProjectF.Application.Invoice
 {
     public class InvoiceCrudHandler
     {
         readonly InvoiceRepository _invoiceRepository;
-        readonly ProductRepository _productRepository;
-        readonly CategoryRepository _categoryRepository;
-        readonly WerehouseRepository _werehouseRepository;
-        readonly CountryRepository _countryRepository;
         readonly ClientRepository _clientRepository;
         readonly PaymentTermRepository _paymentTermRepository;
+        readonly DocumentNumberSequenceHandler _numberSequenceHandler;
 
         public InvoiceCrudHandler(InvoiceRepository invoiceRepository,
-            ProductRepository productRepository,
-            CategoryRepository categoryRepository,
-            WerehouseRepository werehouseRepository,
             ClientRepository clientRepository,
             PaymentTermRepository paymentTermRepository,
-            CountryRepository countryRepository)
-        {
-            (_invoiceRepository,
-                       _productRepository,
-                       _categoryRepository,
-                       _werehouseRepository,
-                       _countryRepository,
-                       _clientRepository,
-                       _paymentTermRepository)
-                       = (invoiceRepository,
-                       productRepository,
-                       categoryRepository,
-                       werehouseRepository,
-                       countryRepository,
-                       clientRepository,
-                       paymentTermRepository);
-        }
+            DocumentNumberSequenceHandler numberSequenceHandler) 
+            => (_invoiceRepository, 
+            _clientRepository, 
+            _paymentTermRepository, 
+            _numberSequenceHandler)
+            = (invoiceRepository, 
+            clientRepository, 
+            paymentTermRepository, 
+            numberSequenceHandler);
+        
 
         public Either<Error, InvoiceHeader> Create(InvoiceHeaderDto invoiceDto)
             => ValidateCode(invoiceDto)
             .Bind(ValidateRnc)
-            .Bind(ValidateNcf)
             .Bind(ValidateClient)
             .Bind(SetClient)
             .Bind(ValidatePaymentTerm)
@@ -56,15 +43,17 @@ namespace ProjectF.Application.Invoice
             .Bind(ValidateNotes)
             .Bind(ValidateTermAndConditions)
             .Bind(ValidateInvoiceDetail)
-            .Bind(CreateEntity)
+            .Bind(c => StartTransaction(c))
+            .Bind(c => GenerateNumberSequence(c))
             .Bind(Add)
-            .Bind(Save);
+            .Bind(Save)
+            .Bind(UpdateNumberSequence)
+            .Bind(CommitTransaction);
 
         public Either<Error, InvoiceHeader> Update(long id, InvoiceHeaderDto invoiceDto)
           => ValidateIsCorrectUpdate(id, invoiceDto)
            .Bind(ValidateCode)
           .Bind(ValidateRnc)
-          .Bind(ValidateNcf)
           .Bind(ValidateClient)
           .Bind(ValidatePaymentTerm)
           .Bind(ValidateNotes)
@@ -78,7 +67,8 @@ namespace ProjectF.Application.Invoice
             => _invoiceRepository.GetAll()
                 .Map(i => new InvoiceHeaderDto(i.Id,
                     i.Code.Value,
-                    i.Ncf.Value.ToString(),
+                    i.Ncf,
+                    i.NumberSequenceId,
                     i.Rnc,
                     i.Client?.Id ?? 0,
                     i.Client,
@@ -103,32 +93,12 @@ namespace ProjectF.Application.Invoice
                             d.TaxPercent)
                     )));
 
-        public Either<Error, InvoiceHeader> Find(params object[] valueKeys)
-            => _invoiceRepository.Find(valueKeys).Match(Some: i => i,
-                None: Left<Error, InvoiceHeader>(Error.New("No records found")));
-            
+        public Task<Either<Error, InvoiceHeader>> FindAsync(params object[] valueKeys)
+            => _invoiceRepository.FindByAsync(valueKeys);
 
-        public InvoiceHeaderDto EntityToDto(InvoiceHeader invoice)
-             => new InvoiceHeaderDto(invoice.Id,
-                 invoice.Code.Value,
-                 invoice.Ncf.Value.ToString(),
-                 invoice.Rnc,
-                 invoice.Client?.Id ?? 0,
-                 invoice.Client,
-                 invoice.Created,
-                 invoice.DueDate,
-                 invoice.PaymentTerm?.Id ?? 0,
-                 invoice.PaymentTerm,
-                 invoice.Notes.Value,
-                 invoice.TermAndConditions.Value,
-                 invoice.Footer.Value,
-                 invoice.Discount,
-                 invoice.SubTotal,
-                 invoice.TaxTotal,
-                 invoice.Total,
-                 invoice.InvoiceDetails
-                    .ToList()
-                    .Map(d => new InvoiceDetailDto(d.Id, d.ProductCode.Value, d.Description.Value, d.Qty, d.Amount, d.TaxPercent)));
+        public Either<Error, InvoiceHeader> Find(params object[] valueKeys)
+            => _invoiceRepository.FindBy(valueKeys).Match(Some: i => i,
+                None: Left<Error, InvoiceHeader>(Error.New("No records found")));
 
         Either<Error, InvoiceHeaderDto> ValidateCode(InvoiceHeaderDto invoiceDto)
            => Code.Of(invoiceDto.Code)
@@ -140,16 +110,6 @@ namespace ProjectF.Application.Invoice
           => invoiceDto.Rnc.Length <= 11
             ? invoiceDto
             : Left<Error, InvoiceHeaderDto>(Error.New("Rnc is greater than 11"));
-
-        Either<Error, InvoiceHeaderDto> ValidateNcf(InvoiceHeaderDto invoiceDto)
-        {
-            var _ncfNumber = string.Join("", invoiceDto.Ncf[3..]);
-            long.TryParse(_ncfNumber, out long ncfNumber);
-            return NumberSequence.Of(ncfNumber)
-               .Match<Either<Error, InvoiceHeaderDto>>(
-                    Right: c => invoiceDto,
-                    Left: err => Error.New(err.Message));
-        }
 
         Either<Error, InvoiceHeaderDto> ValidateClient(InvoiceHeaderDto invoiceDto)
          => invoiceDto.Client != null
@@ -166,13 +126,11 @@ namespace ProjectF.Application.Invoice
            ? invoiceDto
            : Left<Error, InvoiceHeaderDto>(Error.New("paymentTerm shouldn't be null"));
 
-           Either<Error, InvoiceHeaderDto> SetPaymentTerm(InvoiceHeaderDto invoiceDto)
+        Either<Error, InvoiceHeaderDto> SetPaymentTerm(InvoiceHeaderDto invoiceDto)
             => _paymentTermRepository.Find(invoiceDto.PaymentTermId)
                 .Match(Some: p => invoiceDto.With(paymentTerm: p),
                    None: () => Left<Error, InvoiceHeaderDto>(Error.New("couldn't find payment term")));
-            
-
-
+        
         Either<Error, InvoiceHeaderDto> ValidateNotes(InvoiceHeaderDto invoiceDto)
           => GeneralText.Of(invoiceDto.Notes)
               .Match<Either<Error, InvoiceHeaderDto>>(
@@ -196,52 +154,15 @@ namespace ProjectF.Application.Invoice
             return Error.New("Invalid update entity id");
         }
 
-        Either<Error, InvoiceHeader> CreateEntity(InvoiceHeaderDto invoice)
+        Either<Error, InvoiceHeader> StartTransaction(InvoiceHeaderDto invoice)
         {
-            var (_,
-                code,
-                ncf,
-                rnc,
-                client,
-                clientId,
-                created,
-                dueDate,
-                paymentTermId,
-                paymentTerm,
-                notes,
-                termAndConditions,
-                footer,
-                discount,
-                subTotal,
-                taxTotal,
-                total,
-                _, invoiceDetails) = invoice;
-
-            return new InvoiceHeader(new Code(code),
-                new NumberSequence(long.Parse(ncf[3..])),
-                ncf[..3],
-                rnc,
-                client,
-                created,
-                dueDate,
-                paymentTerm,
-                new GeneralText(notes),
-                new GeneralText(termAndConditions),
-                new GeneralText(footer),
-                discount,
-                subTotal,
-                taxTotal,
-                total,
-                invoiceDetails
-                    .ToList());
-
+            _invoiceRepository.BeginTransaction();
+            return (InvoiceHeader)invoice;
         }
 
         Either<Error, InvoiceHeader> UpdateEntity(InvoiceHeaderDto invoiceDto, InvoiceHeader invoice)
         {
             var code              = new Code(invoiceDto.Code);
-            var ncf               = new NumberSequence(long.Parse(invoiceDto.Ncf[3..]));
-            var ncfType           = invoiceDto.Ncf[..2];
             var rnc               = invoiceDto.Rnc;
             var client            = invoiceDto.Client;
             var dueDate           = invoiceDto.DueDate;
@@ -252,8 +173,6 @@ namespace ProjectF.Application.Invoice
             var invoiceDetails    = invoiceDto.InvoiceDetails;
 
             invoice.EditInvoiceHeader(code,
-                ncf,
-                ncfType,
                 rnc,
                 client,
                 dueDate,
@@ -286,10 +205,33 @@ namespace ProjectF.Application.Invoice
                 _invoiceRepository.Save();
                 return invoice;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return Error.New($"{ex.Message}\n{ex.StackTrace}");
             }
         }
+
+        Either<Error, InvoiceHeader> CommitTransaction(InvoiceHeader invoiceHeader)
+        {
+            try
+            {
+                _invoiceRepository.EndTransaction();
+                return Right(invoiceHeader);
+            }
+            catch (Exception e)
+            {
+                return Left(Error.New(e.Message));
+            }
+            
+        }
+
+        Either<Error, InvoiceHeader> UpdateNumberSequence(InvoiceHeader invoice)
+            => _numberSequenceHandler.UpdateSequence(invoice.NumberSequenceId, 1)
+                .Match<Either<Error, InvoiceHeader>>(Left: err => Error.New(err.Message),
+                    Right: c => invoice);
+
+        Either<Error, InvoiceHeader> GenerateNumberSequence(InvoiceHeaderDto invoice)
+            => _numberSequenceHandler.GenerateSequence(invoice.NumberSequenceId)
+               .Map(c => (InvoiceHeader)invoice.With(ncf: c));
     }
 }

@@ -17,14 +17,17 @@ namespace ProjectF.Application.Products
         readonly ProductRepository _productRepository;
         readonly CategoryRepository _categoryRepository;
         readonly WerehouseRepository _werehouseRepository;
+        readonly TaxRepository _taxRepository;
 
         public ProductCrudHandler(ProductRepository productRepository,
             CategoryRepository categoryRepository,
-            WerehouseRepository werehouseRepository)
+            WerehouseRepository werehouseRepository,
+            TaxRepository taxRepository)
         {
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
+            _productRepository   = productRepository;
+            _categoryRepository  = categoryRepository;
             _werehouseRepository = werehouseRepository;
+            _taxRepository       = taxRepository;
         }
 
         public Either<Error, Product> Create(ProductDto productDto)
@@ -34,6 +37,8 @@ namespace ProjectF.Application.Products
                .Bind(SetCategory)
                .Bind(ValidateWerehouse)
                .Bind(SetWerehouse)
+               .Bind(ValidateTax)
+               .Bind(SetTax)
                .Bind(CreateEntity)
                .Bind(Add)
                .Bind(Save);
@@ -61,6 +66,8 @@ namespace ProjectF.Application.Products
                    ct.Category.Id,
                    ct.Werehouse,
                    ct.Werehouse.Id,
+                   ct.Tax?.Id ?? 0,
+                   ct.Tax,
                    ct.IsService,
                    ct.Cost,
                    ct.Price));
@@ -68,7 +75,6 @@ namespace ProjectF.Application.Products
         public Either<Error, Product> Find(params object[] valueKeys)
             => _productRepository.Find(valueKeys).Match(Some: t => t,
              None: Left<Error, Product>(Error.New("couldn't find Product type")));
-          
 
         public Either<Error, Product> GetByKey(long id)
         {
@@ -89,11 +95,18 @@ namespace ProjectF.Application.Products
                , product.Category.Id
                , product.Werehouse
                , product.Werehouse.Id
+               , product.Tax.Id
+               , product.Tax
                , product.IsService
                , product.Cost
                , product.Price);
 
         //Missing Pagination
+        public Either<Error, Product> Delete(long id)
+          => Find(id)
+            .Bind(Delete)
+            .Bind(Save)
+            .MapLeft(errors => Error.New(string.Join("; ", errors)));
 
         Either<Error, Product> CreateEntity(ProductDto productDto)
         {
@@ -108,6 +121,7 @@ namespace ProjectF.Application.Products
                 , reference
                 , productDto.Category
                 , productDto.Werehouse
+                , productDto.Tax
                 , productDto.IsService
                 , productDto.Cost
                 , productDto.Price
@@ -167,6 +181,21 @@ namespace ProjectF.Application.Products
                 : Right<Error, ProductDto>(dto);
         }
 
+        Either<Error, ProductDto> ValidateTax(ProductDto productDto)
+            => productDto.Tax == null
+            ? Error.New("tax is required")
+            : Right<Error, ProductDto>(productDto);
+
+        Either<Error, ProductDto> SetTax(ProductDto productDto)
+        {
+            var dto = _taxRepository.Find(productDto.TaxId)
+                .Match(t => productDto.With(tax: t), () => productDto);
+
+            return dto.Tax == null 
+                ? Error.New("couldn't find to tax")
+                : Right<Error, ProductDto>(dto);
+        }
+
         Either<Error, Product> UpdateEntity(ProductDto productDto, Product product)
         {
             var code = new Code(productDto.Code);
@@ -181,6 +210,7 @@ namespace ProjectF.Application.Products
                 , reference
                 , productDto.Category
                 , productDto.Werehouse
+                , productDto.Tax
                 , productDto.IsService
                 , productDto.Cost
                 , productDto.Price
@@ -210,6 +240,19 @@ namespace ProjectF.Application.Products
             {
                 _productRepository.Save();
                 return product;
+            }
+            catch (Exception ex)
+            {
+                return Error.New($"{ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        Either<Error, Product> Delete(Product supplier)
+        {
+            try
+            {
+                _productRepository.Delete(supplier);
+                return supplier;
             }
             catch (Exception ex)
             {

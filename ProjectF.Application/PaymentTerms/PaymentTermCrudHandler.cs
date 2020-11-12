@@ -1,10 +1,9 @@
-﻿    using ProjectF.Data.Repositories;
+﻿using ProjectF.Data.Repositories;
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ProjectF.Data.Entities.PaymentList;
 using ProjectF.Data.Entities.Common.ValueObjects;
 

@@ -20,6 +20,7 @@ namespace ProjectF.Data.Repositories
             return _context.Products
                  .Include(u => u.Category)
                  .Include(u => u.Werehouse)
+                 .Include(u => u.Tax)
                  .Select(c => c).AsEnumerable();
         }
 
@@ -29,6 +30,7 @@ namespace ProjectF.Data.Repositories
 
             _context.Entry(product).Reference(c => c.Category).Load();
             _context.Entry(product).Reference(c => c.Werehouse).Load();
+            _context.Entry(product).Reference(c => c.Tax).Load();
             return product;
         }
 
@@ -37,6 +39,7 @@ namespace ProjectF.Data.Repositories
             return _context.Products
                 .Include(c => c.Category)
                 .Include(c => c.Werehouse)
+                .Include(c => c.Tax)
                 .FirstOrDefault(c => c.Id == id);
         }
     }

@@ -5,6 +5,7 @@ using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using System;
 
 namespace ProjectF.Application.Clients
 {
@@ -30,7 +31,6 @@ namespace ProjectF.Application.Clients
             .Bind(Add)
             .Bind(Save);
 
-
         public Either<Error, Client> Update(long id, ClientDto clientDto)
             => ValidateIsCorrectUpdate(id, clientDto)
             .Bind(ValidateCode)
@@ -40,13 +40,18 @@ namespace ProjectF.Application.Clients
             .Bind(c => UpdateEntity(clientDto, c))
             .Bind(Save);
 
-
         public IEnumerable<ClientDto> GetAll()
             => _clientRepository.FindAll().Map(c => (ClientDto)c);
 
         public Either<Error, Client> Find(long id)
          => _clientRepository.FindByKey(id).Match(Some: t => t,
              None: Left<Error, Client>(Error.New("couldn't find Client type")));
+
+        public Either<Error, Client> Delete(long id)
+          => Find(id)
+            .Bind(Delete)
+            .Bind(Save)
+            .MapLeft(errors => Error.New(string.Join("; ", errors)));
 
         Either<Error, ClientDto> ValidateIsCorrectUpdate(long id, ClientDto clientDto)
         {
@@ -138,6 +143,19 @@ namespace ProjectF.Application.Clients
                 return client;
             }
             catch (System.Exception ex)
+            {
+                return Error.New($"{ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        Either<Error, Client> Delete(Client client)
+        {
+            try
+            {
+                _clientRepository.Delete(client);
+                return client;
+            }
+            catch (Exception ex)
             {
                 return Error.New($"{ex.Message}\n{ex.StackTrace}");
             }

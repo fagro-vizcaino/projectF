@@ -1,5 +1,5 @@
 ﻿using ProjectF.Data.Entities.Suppliers;
-using ProjectF.Application.Supplier;
+using ProjectF.Application.Suppliers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

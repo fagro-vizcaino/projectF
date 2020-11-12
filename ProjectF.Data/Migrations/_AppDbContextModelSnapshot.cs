@@ -149,6 +149,9 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime?>("Birthday")
+                        .HasColumnType("Date");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
@@ -340,8 +343,8 @@ namespace ProjectF.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
 
                     b.Property<long?>("InvoiceHeaderId")
                         .HasColumnType("bigint");
@@ -396,16 +399,16 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
 
-                    b.Property<long>("Ncf")
-                        .HasColumnType("bigint")
+                    b.Property<string>("Ncf")
+                        .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
-
-                    b.Property<string>("NcfType")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
+
+                    b.Property<int>("NumberSequenceId")
+                        .HasColumnType("int");
 
                     b.Property<long?>("PaymentTermId")
                         .HasColumnType("bigint");
@@ -473,38 +476,31 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Automatic")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("DocumentType")
+                    b.Property<int>("FinalSequence")
                         .HasColumnType("int");
 
-                    b.Property<long>("FinalSequence")
-                        .HasColumnType("bigint");
+                    b.Property<int>("InitialSequence")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsDefault")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<int>("NextSequence")
+                        .HasColumnType("int");
+
                     b.Property<string>("Prefix")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
-                    b.Property<long?>("Sequence")
-                        .HasColumnType("bigint")
-                        .HasMaxLength(60);
-
-                    b.Property<DateTime>("ValidFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ValidTo")
+                    b.Property<DateTime>("ValidUntil")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -691,12 +687,17 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<long?>("TaxId")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("WerehouseId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("TaxId");
 
                     b.HasIndex("WerehouseId");
 
@@ -775,6 +776,10 @@ namespace ProjectF.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ProjectF.Data.Entities.Taxes.Tax", "Tax")
+                        .WithMany()
+                        .HasForeignKey("TaxId");
 
                     b.HasOne("ProjectF.Data.Entities.Werehouses.Werehouse", "Werehouse")
                         .WithMany("Products")

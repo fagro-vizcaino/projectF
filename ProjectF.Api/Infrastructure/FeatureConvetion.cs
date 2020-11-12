@@ -5,22 +5,23 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ProjectF.Api.Infrastructure
 {
     /// <summary>
     /// This add Feature folder structure to the project
     /// </summary>
-  class FeatureConvention : IControllerModelConvention
-  {
-    public void Apply(ControllerModel controller)
+    public class FeatureConvention : IControllerModelConvention
     {
-      controller.Properties.Add("features", GetFeatureName(controller.ControllerType));
-    }
+        public void Apply(ControllerModel controller)
+        {
+            controller.Properties.Add("feature", GetFeatureName(controller.ControllerType));
+        }
 
-    private object GetFeatureName(TypeInfo controllerType)
-    {
-        var tokens = controllerType?.FullName?.Split('.');
+        private object GetFeatureName(TypeInfo controllerType)
+        {
+            var tokens = controllerType?.FullName?.Split('.');
             if (tokens.All(t => t != "Features"))
                 return "";
             var featureName = tokens
@@ -30,10 +31,10 @@ namespace ProjectF.Api.Infrastructure
             .FirstOrDefault();
 
             return featureName;
+        }
     }
-  }
 
-   public class FeatureFoldersRazorViewEngine : IViewLocationExpander
+    public class FeatureFoldersRazorViewEngine : IViewLocationExpander
     {
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context,
               IEnumerable<string> viewLocations)
@@ -54,13 +55,16 @@ namespace ProjectF.Api.Infrastructure
                 throw new NullReferenceException("ControllerActionDescriptor cannot be null.");
             }
 
-            string featureName = controllerActionDescriptor.Properties["feature"] as string ?? string.Empty;
+            string folderName = context.ControllerName;
             foreach (var location in viewLocations)
             {
-                yield return location.Replace("{3}", featureName);
+                yield return location.Replace("{3}", folderName);
             }
         }
 
-        public void PopulateValues(ViewLocationExpanderContext context) { }
+        public void PopulateValues(ViewLocationExpanderContext context)
+        {
+            
+        }
     }
 }

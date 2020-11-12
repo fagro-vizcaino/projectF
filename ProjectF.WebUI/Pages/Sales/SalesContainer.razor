@@ -1,0 +1,46 @@
+﻿@page "/sales"
+@inherits SalesContainerHandler
+
+<div class="bg-white rounded-md shadow">
+    <nav class="flex flex-col sm:flex-row">
+        <button @onclick="_ => SetTab(SalesContainerTabs.Sales)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(SalesContainerTabs.Sales)">
+            Todas las Ventas
+        </button>
+        <button @onclick="_ => SetTab(SalesContainerTabs.Invoices)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(SalesContainerTabs.Invoices)">
+            Facturas
+        </button>
+        <button @onclick="_ => SetTab(SalesContainerTabs.Customer)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(SalesContainerTabs.Customer)">
+            Clientes
+        </button>
+        <button @onclick="_ => SetTab(SalesContainerTabs.ProductsAndServices)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(SalesContainerTabs.ProductsAndServices)">
+            Productos y Servicios
+        </button>
+    </nav>
+</div>
+
+@switch (TabSelected)
+{
+    case SalesContainerTabs.Sales:
+        <span>Hello Sales</span>
+        break;
+    case SalesContainerTabs.Invoices:
+        <ProjectF.WebUI.Pages.Invoices.List.InvoiceList />
+        break;
+    case SalesContainerTabs.Customer:
+        @*<ProjectF.WebUI.Pages.Clients.ClientList />*@
+        <span>hello clientes</span>
+        break;
+    case SalesContainerTabs.ProductsAndServices:
+        @*<ProjectF.WebUI.Pages.Products.ProductsList />*@
+        <span>hello productos y servicios</span>
+        break;
+
+    default:
+        <span>hello sales</span>
+        break;
+
+}

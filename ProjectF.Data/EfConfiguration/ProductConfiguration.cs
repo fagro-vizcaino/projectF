@@ -36,6 +36,8 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.HasOne(p => p.Werehouse);
 
+            builder.HasOne(p => p.Tax);
+
             builder.Property(q => q.IsService)
                 .HasDefaultValue(false)
                 .IsRequired();

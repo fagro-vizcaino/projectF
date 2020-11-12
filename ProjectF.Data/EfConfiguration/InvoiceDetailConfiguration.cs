@@ -18,7 +18,7 @@ namespace ProjectF.Data.EfConfiguration
             .IsRequired();
 
             builder.Property(c => c.Description)
-            .HasMaxLength(20)
+            .HasMaxLength(60)
             .HasConversion(c => c.Value, c => new Name(c))
             .IsRequired();
 

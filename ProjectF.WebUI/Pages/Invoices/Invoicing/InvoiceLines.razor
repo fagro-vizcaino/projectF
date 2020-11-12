@@ -1,0 +1,83 @@
+﻿@inherits InvoiceLinesHandler
+
+<div class="flex mb-2 py-2 bg-white shadow-xs rounded antialiased">
+    <div class="w-full px-5">
+        <table class="w-full" id>
+            <thead>
+                <tr class="text-gray-600">
+                    <th class="px-4 py-2 w-1/3">Producto/Item</th>
+                    <th class="px-4 py-2 w-2/5">Descripcion</th>
+                    <th class="table-cell px-4 py-2 text-right w-1/12">Cant.</th>
+                    <th class="table-cell px-4 py-2 text-center w-1/12">Impuesto</th>
+                    <th class="table-cell px-4 py-2 text-right w-1/12">Monto</th>
+                    <th class="px-4 py-2 w-1/12 justify-center"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in InvoiceLines.Where(i => i.IsDelete == false))
+                {
+                    <tr class="hover:bg-gray-100" id="@item.Index">
+                        <td class="border px-4 py-2">
+                            <Select OptionLabelProp="label"
+                                    Style="width: 100%"
+                                    DefaultValue=@(item.OptionValue)
+                                    @ref="item.CurrentSelect"
+                                    Value="@item.OptionValue"
+                                    ShowSearch
+                                    Placeholder="Seleccione un producto/servicio"
+                                    OptionFilterProp="children"
+                                    OnChange="(value, option) => OnChange(value, option, item)"
+                                    FilterOption="FilterOptionValue">
+                                @foreach (var item in ProductDataSource)
+                                {
+                                    <SelectOption Value="@item.Id.ToString()" Label="@item.Name">
+                                        <div class="bg-gray-100 px-8 py-6 flex items-center border-b border-gray-300">
+                                            <div class="flex ml-4">
+                                                <div class="bg-gray-200 text-center">
+                                                    <i class="fas fa-tag fa-lg  w-10 h-10 object-cover rounded object-top" />
+                                                </div>
+                                                <div class="flex flex-col pl-4">
+                                                    <h2 class="font-medium text-sm">@item.Name</h2>
+                                                    <h3 class="text-gray-500 text-sm">@item.Description</h3>
+                                                </div>
+                                            </div>
+                                            <div class="text-gray-900 flex font-semibold proportional-nums items-center ml-auto py-2 leading-none">
+                                                <span class="text-sm text-gray-500">$</span>
+                                                <span>@item.Price</span>
+                                            </div>
+                                        </div>
+                                    </SelectOption>
+                                }
+                            </Select>
+                        </td>
+                        <td class="border px-4 py-2">
+                            <FInputText @bind-Value="item.Product.Description" />
+                        </td>
+                        <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">
+                            <FInputInt @bind-Value="item.Qty" />
+                        </td>
+                        <td class="border table-cell px-4 py-2 text-center w-1/12">
+                            <span>@($"{item.Product.Tax.Percentvalue} %")</span>
+                        </td>
+                        <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">
+                            <FInputDecimal @bind-Value="item.Product.Price" />
+                        </td>
+                        <td class="px-2 py-2 justify-center">
+                            <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600"
+                                    @onclick=" _ => Remove(item)"
+                                    @onclick:preventDefault="true" 
+                                    @onclick:stopPropagation="true">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+}

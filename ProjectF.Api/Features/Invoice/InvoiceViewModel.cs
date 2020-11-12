@@ -18,11 +18,12 @@ namespace ProjectF.Api.Features.Invoice
         public long Id { get; set; }
         public string Code { get; set; }
         public string Ncf { get; set; }
+        public int NumberSequenceId { get; set;}
         public string Rnc { get; set; }
         public ClientViewModel Client { get; set; }
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
-        public PaymentTermViewModel PaymentTerm { get; set; }
+        public PaymentTermDto PaymentTerm { get; set; }
         public string Notes { get; set; }
         public string TermAndConditions { get; set; }
         public string Footer { get; set; }
@@ -59,6 +60,7 @@ namespace ProjectF.Api.Features.Invoice
             return new InvoiceHeaderDto(Id
                 , Code
                 , Ncf
+                , NumberSequenceId
                 , Rnc
                 , Client.Id
                 , client
@@ -91,11 +93,9 @@ namespace ProjectF.Api.Features.Invoice
                 Street          = invoiceDto.Client.Street
             };
 
-            var paymentTerm = new PaymentTermViewModel()
-            {
-                DayValue = invoiceDto.PaymentTerm.DayValue,
-                Description = invoiceDto.PaymentTerm.Description.Value
-            };
+            var paymentTerm = new PaymentTermDto(invoiceDto.Id,
+                invoiceDto.PaymentTerm.Description.Value,
+                invoiceDto.PaymentTerm.DayValue);
 
             return new InvoiceViewModel()
             {
