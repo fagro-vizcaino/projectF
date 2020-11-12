@@ -3,16 +3,18 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.Sequences
 {
-    public class NumberSequenceDto
+    public record NumberSequenceDto
     {
         public long Id { get; }
         public string Name { get; }
         public string Prefix { get; }
         public int InitialSequence { get; }
-        public int NextSequence { get; }
+        public int NextSequence { get; init;}
         public int FinalSequence { get; }
         public DateTime ValidUntil { get; }
         public bool IsActive { get; }
+        public string DisplaySequence 
+            => $"{Prefix}{NextSequence.ToString().PadLeft(8,'0')}";
 
         public NumberSequenceDto(long id, 
             string name,
@@ -32,23 +34,6 @@ namespace ProjectF.Data.Entities.Sequences
             ValidUntil      = validUntil;
             IsActive        = isActive;
         }
-
-        public NumberSequenceDto With(long? id = null,
-            string? name = null,
-            string? prefix = null,
-            int? initialSequence = null,
-            int? nextSequence = null,
-            int? finalSequence = null,
-            DateTime? validUntil = null,
-            bool? isActive = null
-            ) => new NumberSequenceDto(id ?? this.Id,
-                name ?? this.Name,
-                prefix ?? this.Prefix,
-                initialSequence ?? this.InitialSequence,
-                nextSequence ?? this.NextSequence,
-                finalSequence ?? this.FinalSequence,
-                validUntil ?? this.ValidUntil,
-                isActive ?? this.IsActive);
 
         public static implicit operator DocumentNumberSequence(NumberSequenceDto dto)
             => new DocumentNumberSequence(new Name(dto.Name),

@@ -1,8 +1,7 @@
 ﻿using ProjectF.Application.PaymentTerms;
 using Microsoft.AspNetCore.Mvc;
-using static ProjectF.Api.Features.PaymentTerms.PaymentTermViewModel;
 using System.Linq;
-
+using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Api.Features.PaymentTerms
 {
@@ -17,23 +16,23 @@ namespace ProjectF.Api.Features.PaymentTerms
 
 
         [HttpPost]
-        public ActionResult CreatePaymentTerm(PaymentTermViewModel viewModel)
+        public ActionResult CreatePaymentTerm(PaymentTermDto dto)
             => _paymentTermOperation
-                .Create(viewModel.ToDto())
+                .Create(dto)
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
                     Right: pt => CreatedAtRoute(nameof(GetPaymentTerm), 
-                        new { id = FromDto(pt).Id }, FromDto(pt)));
+                        new { id = dto.Id }, dto));
 
 
         [HttpPut("{id}")]
-        public ActionResult UpdatePaymentTerm(long id, PaymentTermViewModel viewModel)
+        public ActionResult UpdatePaymentTerm(long id, PaymentTermDto dto)
             => _paymentTermOperation
-                .Update(id, viewModel.ToDto())
+                .Update(id, dto)
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
                     Right: pt => CreatedAtRoute(nameof(GetPaymentTerm), 
-                        new { id = pt.Id }, FromDto(pt)));
+                        new { id = pt.Id }, dto));
 
 
         [HttpGet("{id}", Name = "GetPaymentTerm")]
@@ -42,14 +41,14 @@ namespace ProjectF.Api.Features.PaymentTerms
                 .Find(id)
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
-                    Right: c => Ok(FromDto(c)));
+                    Right: c => Ok((PaymentTermDto)c));
 
 
         [HttpGet]
         public ActionResult GetPaymentTerms()
         {
             var result = _paymentTermOperation.GetAll()
-                .Select(c => FromDto(c));
+                .Select(c => c);
             if (result.Any()) return Ok(result);
 
             return NotFound();
@@ -60,7 +59,7 @@ namespace ProjectF.Api.Features.PaymentTerms
            => _paymentTermOperation.Delete(id)
            .Match<ActionResult>(
                Left: err => BadRequest(err.Message),
-               Right: c => NoContent());
+               Right: _ => NoContent());
 
         //[HttpGet]
         //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )

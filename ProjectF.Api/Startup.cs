@@ -21,6 +21,7 @@ using ProjectF.Application.Suppliers;
 using ProjectF.Application.PaymentTerms;
 using ProjectF.Application.Banks;
 using ProjectF.Application.Taxes;
+using ProjectF.Application.NumberSequence;
 
 namespace ProjectF.Api
 {
@@ -62,6 +63,8 @@ namespace ProjectF.Api
             services.AddScoped<BankAccountRepository>();
             services.AddScoped<BankAccountCrudHandler>();
             services.AddScoped<BankAccountTypeCrudHandler>();
+            services.AddScoped<DocumentNumberSequenceRepository>();
+            services.AddScoped<DocumentNumberSequenceHandler>();
 
             //Db Related stuffs.
             services.AddDbContext<_AppDbContext>(options =>

@@ -1,7 +1,5 @@
 using System.Linq;
-using System.Threading.Tasks;
 using ProjectF.Application.Categories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectF.Api.Features.Category

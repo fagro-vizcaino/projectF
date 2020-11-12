@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ProjectF.Data.Entities.Common;
+﻿using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.PaymentList

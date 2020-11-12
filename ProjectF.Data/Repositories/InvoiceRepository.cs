@@ -8,6 +8,7 @@ using ProjectF.Data.Entities.RequestFeatures;
 using System.Linq;
 using System.Threading.Tasks;
 using LanguageExt.SomeHelp;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ProjectF.Data.Repositories
 {
@@ -60,6 +61,25 @@ namespace ProjectF.Data.Repositories
                 return Error.New(ex.Message);
             }
 
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            return transaction;
+        }
+
+        public Either<Error, Unit> EndTransaction()
+        {
+            try
+            {
+                _context.Database.CommitTransaction();
+                return Right(Unit.Default);
+            }
+            catch (System.Exception e)
+            {
+                return Left<Error>(Error.New(e.Message));   
+            }
         }
     }
 }

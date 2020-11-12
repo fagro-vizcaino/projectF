@@ -10,7 +10,7 @@ using ProjectF.Data.Context;
 namespace ProjectF.Data.Migrations
 {
     [DbContext(typeof(_AppDbContext))]
-    [Migration("20201108031449_numbersequenceentity")]
+    [Migration("20201110021512_numbersequenceentity")]
     partial class numbersequenceentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -401,16 +401,16 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
 
-                    b.Property<long>("Ncf")
-                        .HasColumnType("bigint")
+                    b.Property<string>("Ncf")
+                        .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
-
-                    b.Property<string>("NcfType")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
+
+                    b.Property<int>("NumberSequenceId")
+                        .HasColumnType("int");
 
                     b.Property<long?>("PaymentTermId")
                         .HasColumnType("bigint");
@@ -478,13 +478,10 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("FinalSequency")
+                    b.Property<int>("FinalSequence")
                         .HasColumnType("int");
 
-                    b.Property<int>("InitialSequency")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IntialSequency")
+                    b.Property<int>("InitialSequence")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -497,7 +494,7 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
-                    b.Property<int>("NextSequency")
+                    b.Property<int>("NextSequence")
                         .HasColumnType("int");
 
                     b.Property<string>("Prefix")

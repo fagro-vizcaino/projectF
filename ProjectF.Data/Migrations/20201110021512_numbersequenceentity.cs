@@ -8,15 +8,15 @@ namespace ProjectF.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
+                name: "NcfType",
+                table: "InvoiceHeader");
+
+            migrationBuilder.DropColumn(
                 name: "Automatic",
                 table: "DocumentNumberSequence");
 
             migrationBuilder.DropColumn(
                 name: "DocumentType",
-                table: "DocumentNumberSequence");
-
-            migrationBuilder.DropColumn(
-                name: "FinalSequence",
                 table: "DocumentNumberSequence");
 
             migrationBuilder.DropColumn(
@@ -35,20 +35,30 @@ namespace ProjectF.Data.Migrations
                 name: "ValidTo",
                 table: "DocumentNumberSequence");
 
+            migrationBuilder.AlterColumn<string>(
+                name: "Ncf",
+                table: "InvoiceHeader",
+                maxLength: 20,
+                nullable: true,
+                oldClrType: typeof(long),
+                oldType: "bigint",
+                oldMaxLength: 20);
+
             migrationBuilder.AddColumn<int>(
-                name: "FinalSequency",
-                table: "DocumentNumberSequence",
+                name: "NumberSequenceId",
+                table: "InvoiceHeader",
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(
-                name: "InitialSequency",
+            migrationBuilder.AlterColumn<int>(
+                name: "FinalSequence",
                 table: "DocumentNumberSequence",
                 nullable: false,
-                defaultValue: 0);
+                oldClrType: typeof(long),
+                oldType: "bigint");
 
             migrationBuilder.AddColumn<int>(
-                name: "IntialSequency",
+                name: "InitialSequence",
                 table: "DocumentNumberSequence",
                 nullable: false,
                 defaultValue: 0);
@@ -60,7 +70,7 @@ namespace ProjectF.Data.Migrations
                 defaultValue: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "NextSequency",
+                name: "NextSequence",
                 table: "DocumentNumberSequence",
                 nullable: false,
                 defaultValue: 0);
@@ -75,15 +85,11 @@ namespace ProjectF.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FinalSequency",
-                table: "DocumentNumberSequence");
+                name: "NumberSequenceId",
+                table: "InvoiceHeader");
 
             migrationBuilder.DropColumn(
-                name: "InitialSequency",
-                table: "DocumentNumberSequence");
-
-            migrationBuilder.DropColumn(
-                name: "IntialSequency",
+                name: "InitialSequence",
                 table: "DocumentNumberSequence");
 
             migrationBuilder.DropColumn(
@@ -91,12 +97,35 @@ namespace ProjectF.Data.Migrations
                 table: "DocumentNumberSequence");
 
             migrationBuilder.DropColumn(
-                name: "NextSequency",
+                name: "NextSequence",
                 table: "DocumentNumberSequence");
 
             migrationBuilder.DropColumn(
                 name: "ValidUntil",
                 table: "DocumentNumberSequence");
+
+            migrationBuilder.AlterColumn<long>(
+                name: "Ncf",
+                table: "InvoiceHeader",
+                type: "bigint",
+                maxLength: 20,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldMaxLength: 20,
+                oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "NcfType",
+                table: "InvoiceHeader",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AlterColumn<long>(
+                name: "FinalSequence",
+                table: "DocumentNumberSequence",
+                type: "bigint",
+                nullable: false,
+                oldClrType: typeof(int));
 
             migrationBuilder.AddColumn<bool>(
                 name: "Automatic",
@@ -111,13 +140,6 @@ namespace ProjectF.Data.Migrations
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
-
-            migrationBuilder.AddColumn<long>(
-                name: "FinalSequence",
-                table: "DocumentNumberSequence",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsDefault",

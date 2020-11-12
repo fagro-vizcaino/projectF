@@ -5,22 +5,20 @@ using ProjectF.Data.Entities.Clients;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.PaymentList;
-using ProjectF.Data.Entities.Taxes;
-using ProjectF.Data.Products;
 
 namespace ProjectF.Data.Entities.Invoices
 {
     public class InvoiceHeader : Entity
     {
         public Code Code { get; private set; }
-        public NumberSequence Ncf { get; private set; }
-        public string NcfType { get; private set; }
+        public string Ncf { get; private set; }
+        public int NumberSequenceId { get; private set; }
         public string Rnc { get; private set; }
         public virtual Client Client { get; private set; }
         public virtual Company Company { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime DueDate { get; private set; }
-
+        
         public virtual PaymentTerm PaymentTerm { get; private set; }
         public decimal Discount { get; private set; }
         public decimal SubTotal { get; private set; }
@@ -39,8 +37,8 @@ namespace ProjectF.Data.Entities.Invoices
         protected InvoiceHeader() { }
 
         public InvoiceHeader(Code code,
-            NumberSequence ncf,
-            string ncfType,
+            string ncf,
+            int numberSequenceId,
             string rnc,
             Client client,
             DateTime created,
@@ -57,7 +55,7 @@ namespace ProjectF.Data.Entities.Invoices
         {
             Code              = code;
             Ncf               = ncf;
-            NcfType           = ncfType;
+            NumberSequenceId  = numberSequenceId;
             Rnc               = rnc;
             Client            = client;
             Created           = created;
@@ -88,8 +86,6 @@ namespace ProjectF.Data.Entities.Invoices
         }
 
         public void EditInvoiceHeader(Code code,
-            NumberSequence ncf,
-            string ncfType,
             string rnc,
             Client client,
             DateTime dueDate,
@@ -108,9 +104,7 @@ namespace ProjectF.Data.Entities.Invoices
                     d.TaxPercent,
                     invoiceHeader));
 
-            Code                        = code;
-            Ncf                         = ncf;
-            NcfType                     = ncfType;
+            Code                        = code;            
             Rnc                         = rnc;
             Client                      = client;
             DueDate                     = dueDate;
@@ -122,5 +116,31 @@ namespace ProjectF.Data.Entities.Invoices
             _invoiceDetails.RemoveAll(c => c.Id == c.Id);
             _invoiceDetails.AddRange(_localInvoiceDetails);
         }
+
+        public static implicit operator InvoiceHeaderDto(InvoiceHeader invoice)
+            => new InvoiceHeaderDto(invoice.Id,
+                invoice.Code.Value,
+                invoice.Ncf,
+                invoice.NumberSequenceId,
+                invoice.Rnc,
+                invoice.Client.Id,
+                invoice.Client,
+                invoice.Created,
+                invoice.DueDate,
+                invoice.PaymentTerm.Id,
+                invoice.PaymentTerm,
+                invoice.Notes.Value,
+                invoice.TermAndConditions.Value,
+                invoice.Footer.Value,
+                invoice.Discount,
+                invoice.SubTotal,
+                invoice.TaxTotal,
+                invoice.Total,
+                invoice.InvoiceDetails.Map(i => new InvoiceDetailDto(i.Id,
+                    i.ProductCode.Value,
+                    i.Description.Value,
+                    i.Qty,
+                    i.Amount,
+                    i.TaxPercent)));
     }
 }

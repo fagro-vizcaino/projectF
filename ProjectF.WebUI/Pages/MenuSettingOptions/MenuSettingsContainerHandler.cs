@@ -10,39 +10,46 @@ namespace ProjectF.WebUI.Pages.MenuSettingOptions
 {
     public class MenuSettingsContainerHandler : ComponentBase
     {
-        public IReadOnlyList<MenuSetting> MenuSettingOptions { get; private set; }
+        public IReadOnlyList<MenuSetting> MenuSettingOptions { get; set; } = Enumerable.Empty<MenuSetting>().ToList();
 
         [Inject]
         NavigationManager NavigationManager { get; set;}
 
-        public MenuSettingsContainerHandler()
+        protected override Task OnInitializedAsync()
         {
             MenuSettingOptions = new List<MenuSetting>()
             {
-                new MenuSetting 
+                new ()
                 {
                     Route = "config/tax/",
                     Icon = @"<i class='fas fa-percentage fa-lg'></i>",
-                    Name ="Impuestos",
+                    Name = "Impuestos",
                     Description = "Define los impuesto que manejas"
                 },
-                new MenuSetting 
-                { 
+                new ()
+                {
                     Route = "/config/paymentterm/",
                     Icon = @"<i class='fas fa-comment-dollar fa-lg'></i>",
-                    Name ="Termino de Pagos", 
+                    Name = "Termino de Pagos",
                     Description = "Define los impuesto que manejas"
                 },
-                new MenuSetting 
-                { 
+                new ()
+                {
                     Route = "/config/bankAccountTypes",
                     Icon = @"<i class='fab fa-bandcamp fa-lg'></i>",
-                    Name ="Tipo Cuenta Banco", 
+                    Name = "Tipo Cuenta Banco",
                     Description = "Define los impuesto que manejas"
+                },
+                new ()
+                {
+                    Route = "/config/documentsequence",
+                    Icon = @"<i class='fas fa-stream'></i>",
+                    Name = "Sequencia Númerica",
+                    Description = "Defina la sequencia numerica para los documentos"
                 }
             };
+            return base.OnInitializedAsync();
         }
-
         protected void GoToRoute(string route)
         {
             NavigationManager.NavigateTo(route);

@@ -17,10 +17,11 @@ namespace ProjectF.Data.EfConfiguration
                 .HasConversion(c => c.Value, c => new Code(c))
                 .IsRequired();
 
-            builder.Property(q => q.Ncf)
-                .HasMaxLength(20)
-                .HasConversion(p => p.Value, p => new NumberSequence(p))
+            builder.Property(q => q.NumberSequenceId)
                 .IsRequired();
+
+            builder.Property(q => q.Ncf)
+                .HasMaxLength(20);
 
             builder.Property(q => q.Rnc)
                .HasMaxLength(15);
