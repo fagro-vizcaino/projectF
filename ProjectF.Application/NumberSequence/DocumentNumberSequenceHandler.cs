@@ -19,49 +19,52 @@ namespace ProjectF.Application.NumberSequence
 
         public Either<Error, NumberSequenceDto> Create(NumberSequenceDto numberSequenceDto)
             => ValidateName(numberSequenceDto)
-            .Bind(Add)
-            .Bind(Save);
+            .Bind(c => Add(c))
+            .Bind(Save)
+            .Map(c => (NumberSequenceDto)c);
 
         public Either<Error, NumberSequenceDto> Update(long id, NumberSequenceDto numberSequenceDto)
             => ValidateIsCorrectUpdate(id, numberSequenceDto)
             .Bind(ValidateName)
             .Bind(c => Find(c.Id))
             .Bind(c => UpdateEntity(numberSequenceDto, c))
-            .Bind(Save);
+            .Bind(Save)
+            .Map(c =>(NumberSequenceDto)c);
 
         public IEnumerable<NumberSequenceDto> GetAll()
             => _numberSequenceRepository.GetAll().Map(pt => (NumberSequenceDto)pt);
 
-        public Either<Error, NumberSequenceDto> Find(params object[] valueKeys)
+        public Either<Error, DocumentNumberSequence> Find(params object[] valueKeys)
             => _numberSequenceRepository
             .Find(valueKeys)
-            .Match(Some: p => Right((NumberSequenceDto)p),
-                None: Left<Error, NumberSequenceDto>(Error.New("Couldn't find number sequence")));
+            .Match(Some: p => Right(p),
+                None: Left<Error, DocumentNumberSequence>(Error.New("Couldn't find number sequence")));
 
         public Either<Error, NumberSequenceDto> Delete(long id)
            => Find(id)
              .Bind(Delete)
-             .Bind(Save);
+             .Bind(Save)
+             .Map(c => (NumberSequenceDto)c);
                 
         public Either<Error, Unit> UpdateSequence(long id, int nextSequence)
         => _numberSequenceRepository.Find(id)
-            .Match(Some: c => UpdateEntity(GetDto(c, nextSequence), c),
+            .Match(Some: c => UpdateEntity(GetUpdatedSequenceDto(c, nextSequence), c),
                 None: () => Left(Error.New("Couldn't find document number sequence")))
             .Bind(Save)
             .Map(c => Unit.Default);
-
-        NumberSequenceDto GetDto(DocumentNumberSequence numberSequence, int nextSequence)
-        {
-            var result = ((NumberSequenceDto)numberSequence) 
-                    with { NextSequence = numberSequence.NextSequence + nextSequence };
-            return result;
-        }
-
+       
         public Either<Error, string> GenerateSequence(long sequenceId)
             => _numberSequenceRepository.Find(new {id = sequenceId })
                 .Match<Either<Error, string>>(
                     Some: c => Right($"{c.Prefix}{(c.NextSequence + 1).ToString().PadLeft(8,'0')}"),
                     None: () => Left(Error.New("Couldn't generate sequence")));
+
+        NumberSequenceDto GetUpdatedSequenceDto(DocumentNumberSequence numberSequence, int nextSequence)
+        {
+            var result = ((NumberSequenceDto)numberSequence) 
+                    with { NextSequence = numberSequence.NextSequence + nextSequence };
+            return result;
+        }
 
         //Missing Pagination
         Either<Error, NumberSequenceDto> ValidateIsCorrectUpdate(long id, NumberSequenceDto numberSequenceDto)
@@ -75,7 +78,7 @@ namespace ProjectF.Application.NumberSequence
                 .Match(Succ: c => numberSequenceDto,
                  Fail: err => Left<Error, NumberSequenceDto>(Error.New(string.Join(";", err))));
 
-        Either<Error, NumberSequenceDto> UpdateEntity(NumberSequenceDto numberSequenceDto, DocumentNumberSequence originalDocumentSequence)
+        Either<Error, DocumentNumberSequence> UpdateEntity(NumberSequenceDto numberSequenceDto, DocumentNumberSequence originalDocumentSequence)
         {
             originalDocumentSequence.EditDocumentNumberSequence(new Name(numberSequenceDto.Name), 
                 numberSequenceDto.Prefix,
@@ -85,16 +88,16 @@ namespace ProjectF.Application.NumberSequence
                 numberSequenceDto.ValidUntil,
                 numberSequenceDto.IsActive);
 
-            return (NumberSequenceDto) originalDocumentSequence;
+            return originalDocumentSequence;
         }
 
         //Update next sequence only by invoice/bill
-        Either<Error, NumberSequenceDto> Add(NumberSequenceDto numberSequenceDto)
+        Either<Error, DocumentNumberSequence> Add(DocumentNumberSequence documentSequence)
         {
             try
             {
-                _numberSequenceRepository.Add(numberSequenceDto);
-                return numberSequenceDto;
+                _numberSequenceRepository.Add(documentSequence);
+                return documentSequence;
             }
             catch (Exception ex)
             {
@@ -102,12 +105,12 @@ namespace ProjectF.Application.NumberSequence
             }
         }
 
-        Either<Error, NumberSequenceDto> Save(NumberSequenceDto paymentTerm)
+        Either<Error, DocumentNumberSequence> Save(DocumentNumberSequence documentSequence)
         {
             try
             {
                 _numberSequenceRepository.Save();
-                return paymentTerm;
+                return documentSequence;
             }
             catch (Exception ex)
             {
@@ -115,7 +118,7 @@ namespace ProjectF.Application.NumberSequence
             }
         }
 
-        Either<Error, NumberSequenceDto> Delete(NumberSequenceDto numberSequence)
+        Either<Error, DocumentNumberSequence> Delete(DocumentNumberSequence numberSequence)
         {
             try
             {

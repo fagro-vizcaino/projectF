@@ -3,15 +3,18 @@
 {
 <Table DataSource="Elements">
     <Column @bind-Field="@context.Name" Title="Nombre" Sortable />
-    <Column @bind-Field="@context.DisplaySequence" Title="Sequencia Generada" />
-    <Column @bind-Field="@context.InitialSequence" Title="Sequencia Inicial" Style="text-align: right;" />
-    <Column @bind-Field="@context.NextSequence" Title="Proxima Sequencia" Style="text-align: right;" />
-    <Column @bind-Field="@context.FinalSequence" Title="Sequencia Final" Style="text-align: right;" />
-    <Column @bind-Field="@context.IsActive" Title="Es Activo">
-        @(context.IsActive ? "Si" : "No")
+
+    <Column @bind-Field="@context.DisplaySequence" Title="Auto Generado" />
+    <Column @bind-Field="@context.InitialSequence" Title="# Inicial" Style="text-align: right;" />
+    <Column @bind-Field="@context.NextSequence" Title="# Proximo" Style="text-align: right;" />
+    <Column @bind-Field="@context.FinalSequence" Title="# Final" Style="text-align: right;" />
+    <Column @bind-Field="@context.IsActive" Title="Activo" Style="text-align: right;">
+        @(context.IsActive 
+                    ? (MarkupString)"<i class='fas fa-check text-green-500'></i>" 
+                    : (MarkupString)"<i class='fas fa-exclamation text-yellow-500'></i>")
     </Column>
 
-    <ActionColumn Title="Acción" Style="text-align: right" Width="40">
+    <ActionColumn Title="Acción" Style="text-align: right">
         <Space>
             <SpaceItem>
                 <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />
@@ -20,7 +23,7 @@
         <Space>
             <SpaceItem>
                 <Popconfirm Placement="@PlacementType.Top"
-                            Title="@("Estas seguro de borrar este sequencia")"
+                            Title="@("Estas seguro de borrar este producto")"
                             OkText="Sí"
                             CancelText="No"
                             OnConfirm="()=> OnClickDelete.InvokeAsync(context.Id)">

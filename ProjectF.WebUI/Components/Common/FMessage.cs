@@ -1,13 +1,11 @@
 ﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
-using System;
 using System.Threading.Tasks;
 
 namespace ProjectF.WebUI.Components.Common
 {
     public class FMessage: IFMessage
     {
-        private readonly MessageService _service;
+        readonly MessageService _service;
 
         public FMessage(MessageService messageService)
             => (_service) = messageService;

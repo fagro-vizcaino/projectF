@@ -1,5 +1,4 @@
 ﻿using ProjectF.WebUI.Models;
-using System;
 using ProjectF.WebUI.Components.Common;
 
 namespace ProjectF.WebUI.Pages.Categories

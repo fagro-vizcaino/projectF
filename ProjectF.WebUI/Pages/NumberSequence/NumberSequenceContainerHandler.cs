@@ -11,8 +11,22 @@ namespace ProjectF.WebUI.Pages.NumberSequence
             NewOrEditOperation = GetNewModelOrEdit;
         }
 
-        public NumberSequence GetNewModelOrEdit(NumberSequence numberSequence = null)
-          => numberSequence ?? EmptyObject();
+        public NumberSequence GetNewModelOrEdit(NumberSequence sequence = null)
+          => sequence?.Id > 0 
+            ? new NumberSequence()
+            {
+                Id              = sequence.Id,
+                DisplaySequence = sequence.DisplaySequence,
+                Name            = sequence.Name,
+                InitialSequence = sequence.InitialSequence,
+                NextSequence    = sequence.NextSequence,
+                FinalSequence   = sequence.FinalSequence,
+                IsActive        = sequence.IsActive,
+                Prefix          = sequence.Prefix,
+                ValidUntil      = sequence.ValidUntil
+
+            }
+            : EmptyObject();
 
         NumberSequence EmptyObject() => new NumberSequence
             {
