@@ -7,9 +7,9 @@
               Subtitle="Define las sequencias númericas de los documentos"
               OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
 
-<NumberSequenceList Elements="Elements" 
-                    OnClickDrawerEdit="OpenDrawerForEdit" 
-                    OnClickDelete="Delete"/>
+<NumberSequenceList Elements="Elements"
+                    OnClickDrawerEdit="OpenDrawerForEdit"
+                    OnClickDelete="Delete" />
 
 <div>
     <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Sequencia " : "Crear Sequencia")}")' OnClose="CloseDrawer">
@@ -24,7 +24,7 @@
                     <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
                 </div>
                 <div class="mb-4">
-                    <FLabel Value="Prefix" LabelFor="Prefix" />
+                    <FLabel Value="Prefijo" LabelFor="Prefix" />
                     <FInputText @bind-Value="_model.Prefix" AdditionalAttributes="@(new Dictionary<string, object> {{"Prefix", "Prefix" }})" />
                     <FCustomValidationMessage For="@(() => _model.Prefix)" Class="mt-2 font-semibold text-red-600" />
                 </div>
@@ -43,14 +43,16 @@
                     <DatePicker @bind-Value="_model.ValidUntil" />
                     <FCustomValidationMessage For="@(() => _model.ValidUntil)" Class="mt-2 font-semibold text-red-600" />
                 </div>
-                
+
                 <div class="mb-6">
                     <FLabel Value="Mostrar" LabelFor="ShowOn" />
                     <Switch @bind-Value="_model.IsActive" />
                 </div>
 
                 <FDivider />
-                <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 shadow-xs rounded focus:outline-none focus:shadow-outline">
+                <button @onclick:stopPropagation="true"
+                        type="submit"
+                        class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 shadow-xs rounded focus:outline-none focus:shadow-outline">
                     @($"{(IsEditing ? "Editar" : "Guardar")}")
                 </button>
             </EditForm>
@@ -63,5 +65,5 @@
 @code{
     public Dictionary<string, object> formcss =
          new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
-    
+
 }

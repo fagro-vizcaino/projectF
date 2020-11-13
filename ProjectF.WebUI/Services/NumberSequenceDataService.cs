@@ -1,4 +1,4 @@
-﻿using ProjectF.WebUI.Pages.NumberSequence;
+﻿using ProjectF.WebUI.Pages.NumberSequences;
 using System.Net.Http;
 
 namespace ProjectF.WebUI.Services

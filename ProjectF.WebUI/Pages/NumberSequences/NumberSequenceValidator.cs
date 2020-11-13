@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 
-namespace ProjectF.WebUI.Pages.NumberSequence
+namespace ProjectF.WebUI.Pages.NumberSequences
 {
     public class NumberSequenceValidator : AbstractValidator<NumberSequence>
     {

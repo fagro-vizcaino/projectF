@@ -10,7 +10,7 @@ using ProjectF.WebUI.Pages.Invoices;
 using FluentValidation;
 using ProjectF.WebUI.Components.Common;
 using ProjectF.WebUI.Pages.Invoices.List;
-using ProjectF.WebUI.Pages.NumberSequence;
+using ProjectF.WebUI.Pages.NumberSequences;
 
 namespace ProjectF.WebUI
 {

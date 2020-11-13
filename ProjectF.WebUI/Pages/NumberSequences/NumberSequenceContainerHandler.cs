@@ -1,7 +1,7 @@
 ﻿using ProjectF.WebUI.Components.Common;
 using System;
 
-namespace ProjectF.WebUI.Pages.NumberSequence
+namespace ProjectF.WebUI.Pages.NumberSequences
 {
     public class NumberSequenceContainerHandler : BaseContainerBasicCrud<NumberSequence>
     {
