@@ -8,6 +8,7 @@ namespace ProjectF.WebUI.Pages.Invoices
     {
         public string Code { get; set; }
         public string Ncf { get; set; }
+        public int NumberSequenceId { get; set; }
         public string Rnc { get; set; }
         public Client Client { get; set; }
         public DateTime Created { get; set; }

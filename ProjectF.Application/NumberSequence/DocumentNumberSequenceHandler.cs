@@ -53,8 +53,8 @@ namespace ProjectF.Application.NumberSequence
             .Bind(Save)
             .Map(c => Unit.Default);
        
-        public Either<Error, string> GenerateSequence(long sequenceId)
-            => _numberSequenceRepository.Find(new {id = sequenceId })
+        public Either<Error, string> GenerateSequence(long id)
+            => _numberSequenceRepository.Find(id)
                 .Match<Either<Error, string>>(
                     Some: c => Right($"{c.Prefix}{(c.NextSequence + 1).ToString().PadLeft(8,'0')}"),
                     None: () => Left(Error.New("Couldn't generate sequence")));

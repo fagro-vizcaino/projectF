@@ -116,6 +116,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             _model.Client = Clients
                 .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
             _model.Rnc = _model.Client.Rnc;
+            StateHasChanged();
         }
         
         protected void OnChangePaymentTerm(OneOf<string, IEnumerable<string>,
@@ -132,6 +133,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             var result = NumberSequences
                 .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
             _model.Ncf = result.DisplaySequence;
+            _model.NumberSequenceId = parseInt(value.Value.ToString()).Match(i => i, () => 0);
             StateHasChanged();
         }
 
@@ -203,7 +205,6 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public async Task SaveInvoice()
         {
             _model = ToDto();
-            _model.Ncf = $"b010000{new Random().Next(1000, 9999)}";
 
             Console.WriteLine($"saving.. {Serialize(_model)}");
             await DataService.Add(_model)
