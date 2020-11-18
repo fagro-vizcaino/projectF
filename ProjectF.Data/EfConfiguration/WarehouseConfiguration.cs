@@ -1,16 +1,16 @@
 using ProjectF.Data.Entities.Common.ValueObjects;
-using ProjectF.Data.Entities.Werehouses;
+using ProjectF.Data.Entities.Warehouses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ProjectF.Data.EfConfiguration
 {
-    class WerehouseConfiguration : IEntityTypeConfiguration<Werehouse>
+    class WarehouseConfiguration : IEntityTypeConfiguration<Warehouse>
     {
-        public void Configure(EntityTypeBuilder<Werehouse> builder)
+        public void Configure(EntityTypeBuilder<Warehouse> builder)
         {
-            builder.ToTable("Werehouse").HasKey(w => w.Id);
-            builder.Property(w => w.Id).HasColumnName("WerehouseId");
+            builder.ToTable("Warehouse").HasKey(w => w.Id);
+            builder.Property(w => w.Id).HasColumnName("WarehouseId");
 
             builder.Property(p => p.Code)
                .HasMaxLength(20)

@@ -1,14 +1,13 @@
 ﻿using ProjectF.WebUI.Components.Common;
 using ProjectF.WebUI.Models;
-using System.Linq;
 
 namespace ProjectF.WebUI.Pages.Werehouses
 {
-    public class WerehouseContainerHandler : BaseContainerBasicCrud<Werehouse>
+    public class WarehouseContainerHandler : BaseContainerBasicCrud<Warehouse>
     {
-        public WerehouseContainerHandler() : base("Almacen")
+        public WarehouseContainerHandler() : base("Almacen")
         {
-            var emptyModel = new Werehouse
+            var emptyModel = new Warehouse
             {
                 Id = 0,
                 Name = null,
@@ -19,9 +18,9 @@ namespace ProjectF.WebUI.Pages.Werehouses
             NewOrEditOperation = GetNewModelOrEdit;
         }
 
-        public Werehouse GetNewModelOrEdit(Werehouse werehouse = null)
+        public Warehouse GetNewModelOrEdit(Warehouse werehouse = null)
           => werehouse != null
-              ? new Werehouse
+              ? new Warehouse
               {
                   Id = werehouse.Id,
                   Name = werehouse.Name,
@@ -29,7 +28,7 @@ namespace ProjectF.WebUI.Pages.Werehouses
                   Location = werehouse.Location
 
               }
-              : new Werehouse
+              : new Warehouse
               {
                   Id = 0,
                   Name = null,

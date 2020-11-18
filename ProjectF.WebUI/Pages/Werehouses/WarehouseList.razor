@@ -7,7 +7,7 @@
         <Column @bind-Field="@context.Name" Title="Nombre" Sortable />
         <Column @bind-Field="@context.Location" Title="Ubicacion" />
 
-        <ActionColumn Title="Acción">
+        <ActionColumn Title="Acción" Style="text-align:right">
             <Space>
                 <SpaceItem>
                     <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />
@@ -35,10 +35,10 @@ else
 
 @code {
     [Parameter]
-    public Werehouse[] Elements { get; set; }
+    public Warehouse[] Elements { get; set; }
 
     [Parameter]
-    public EventCallback<Werehouse> OnClickDrawerEdit { get; set; }
+    public EventCallback<Warehouse> OnClickDrawerEdit { get; set; }
 
     [Parameter]
     public EventCallback<long> OnClickDelete { get; set; }

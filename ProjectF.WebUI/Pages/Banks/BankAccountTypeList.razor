@@ -3,28 +3,28 @@
 
 @if (Elements.Length > 0)
 {
-    <Table DataSource="Elements">
-        <Column @bind-Field="@context.Name" Title="Tipo cuenta" Sortable />
-
-        <ActionColumn Title="Acción">
-            <Space>
-                <SpaceItem>
-                    <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />
-                </SpaceItem>
-            </Space>
-            <Space>
-                <SpaceItem>
-                    <Popconfirm Placement="@PlacementType.Top"
-                                Title="@("Estas seguro de borrar este tipo cuenta")"
-                                OkText="Sí"
-                                CancelText="No"
-                                OnConfirm="()=> OnClickDelete.InvokeAsync(context.Id)">
-                        <Button Shape="circle" Icon="delete" Danger />
-                    </Popconfirm>
-                </SpaceItem>
-            </Space>
-        </ActionColumn>
-    </Table>
+<Table DataSource="Elements">
+    <Column @bind-Field="@context.Name" Title="Tipo cuenta" Sortable />
+    <Column @bind-Field="@context.Description" Title="Descripción" Sortable />
+    <ActionColumn Title="Acción" Style="text-align:right">
+        <Space>
+            <SpaceItem>
+                <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />
+            </SpaceItem>
+        </Space>
+        <Space>
+            <SpaceItem>
+                <Popconfirm Placement="@PlacementType.Top"
+                            Title="@("Estas seguro de borrar este tipo cuenta")"
+                            OkText="Sí"
+                            CancelText="No"
+                            OnConfirm="()=> OnClickDelete.InvokeAsync(context.Id)">
+                    <Button Shape="circle" Icon="delete" Danger />
+                </Popconfirm>
+            </SpaceItem>
+        </Space>
+    </ActionColumn>
+</Table>
 }
 else
 {

@@ -27,7 +27,7 @@ namespace ProjectF.WebUI
 
             builder.Services.AddHttpClient<IBaseDataService<Category>, CategoryDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Werehouse>, WerehouseDataService>(client
+            builder.Services.AddHttpClient<IBaseDataService<Warehouse>, WarehouseDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
             builder.Services.AddHttpClient<IBaseDataService<Tax>, TaxesDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
@@ -54,7 +54,7 @@ namespace ProjectF.WebUI
 
 
             builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
-            builder.Services.AddTransient<IValidator<Werehouse>, WerehouseValidator>();
+            builder.Services.AddTransient<IValidator<Warehouse>, WarehouseValidator>();
             builder.Services.AddTransient<IValidator<Tax>, TaxValidator>();
             builder.Services.AddTransient<IValidator<PaymentTerm>, PaymentTermValidator>();
             builder.Services.AddTransient<IValidator<Bank>, BankValidator>();

@@ -10,7 +10,7 @@ namespace ProjectF.WebUI.Pages.Products
         public Category Category { get; set; }
         public long CategoryId { get; set; }
         public long WerehouseId { get; set; }
-        public Werehouse Werehouse { get; set; }
+        public Warehouse Werehouse { get; set; }
         public long TaxId { get; set; }
         public Tax Tax { get; set; }
         public bool IsService { get; set; }

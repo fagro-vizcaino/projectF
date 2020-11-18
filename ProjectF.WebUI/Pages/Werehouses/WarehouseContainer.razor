@@ -1,5 +1,5 @@
-﻿@page "/werehouses"
-@inherits WerehouseContainerHandler
+﻿@page "/config/warehouses"
+@inherits WarehouseContainerHandler
 @using Models
 @using AntDesign.core
 @using ProjectF.WebUI.Components.Common
@@ -8,9 +8,10 @@
               Subtitle="Define los alamcenes y ubicaciones para tus productos o servicios"
               OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
 
-<WerehouseList Elements="Elements"
-              OnClickDrawerEdit="OpenDrawerForEdit"
-              OnClickDelete="Delete" />
+<WarehouseList Elements="Elements"
+               OnClickDrawerEdit="OpenDrawerForEdit"
+               OnClickDelete="Delete"></WarehouseList>
+
 <div>
     <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Almacen" : "Crear Almacen")}")' OnClose="CloseDrawer">
         <Template style="height:90%">
@@ -27,7 +28,7 @@
                     <FInputText @bind-Value="_model.Location" AdditionalAttributes="@(new Dictionary<string, object> {{"location", "location" }})" />
                     <FCustomValidationMessage For="@(() => _model.Location)" Class="mt-2 font-semibold text-red-600" />
                 </div>
-                
+
                 <FDivider />
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     @($"{(IsEditing ? "Editar" : "Guardar")}")

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ProjectF.Api.Features.Category
 {
 
-    [Route("api/inventory/[controller]")]
+    [Route("api/config/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {

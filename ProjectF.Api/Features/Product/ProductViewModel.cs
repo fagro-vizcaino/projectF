@@ -4,7 +4,7 @@ using ProjectF.Api.Features.Werehouses;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Products;
 using ProjectF.Data.Entities.Taxes;
-using ProjectF.Data.Entities.Werehouses;
+using ProjectF.Data.Entities.Warehouses;
 
 namespace ProjectF.Api.Features.Product
 {
@@ -16,7 +16,7 @@ namespace ProjectF.Api.Features.Product
         public string Description { get; set; }
         public string Reference { get; set; }
         public CategoryViewModel Category { get; set; }
-        public WerehouseViewModel Werehouse { get; set; }
+        public WarehouseViewModel Werehouse { get; set; }
         public TaxViewModel Tax { get; set;}
         public bool IsService { get; set; }
         public decimal Cost { get; set; }
@@ -32,7 +32,7 @@ namespace ProjectF.Api.Features.Product
                 new Name(Category.Name),
                 Category.ShowOn);
 
-            var werehouse = new Werehouse(new Code(Werehouse.Code)
+            var werehouse = new Warehouse(new Code(Werehouse.Code)
                 , new Name(Werehouse.Name)
                 , Werehouse.Location);
 
@@ -64,7 +64,7 @@ namespace ProjectF.Api.Features.Product
                 ShowOn = productDto.Category.ShowOn
             };
 
-            var werehouse = new WerehouseViewModel()
+            var werehouse = new WarehouseViewModel()
             {
                 Code     = productDto.Werehouse.Code.Value,
                 Name     = productDto.Werehouse.Name.Value,

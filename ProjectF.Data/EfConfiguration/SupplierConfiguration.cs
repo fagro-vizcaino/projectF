@@ -5,7 +5,7 @@ using ProjectF.Data.Entities;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Suppliers;
-using ProjectF.Data.Entities.Werehouses;
+using ProjectF.Data.Entities.Warehouses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

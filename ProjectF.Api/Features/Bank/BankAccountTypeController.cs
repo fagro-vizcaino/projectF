@@ -35,7 +35,7 @@ namespace ProjectF.Api.Features.Bank
                     Right: c => Ok(FromDto(c)));
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetBankAccountType")]
         public IActionResult GetBankAccountType(long id)
             => _bankAccountTypeCrudHandler
                 .Find(id)

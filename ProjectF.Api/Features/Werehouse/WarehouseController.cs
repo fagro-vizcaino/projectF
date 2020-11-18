@@ -1,24 +1,22 @@
 using System.Linq;
-using System.Threading.Tasks;
-using ProjectF.Application.Categories;
 using ProjectF.Application.Werehouses;
-using static ProjectF.Api.Features.Werehouses.WerehouseViewModel;
-using Microsoft.AspNetCore.Authorization;
+using static ProjectF.Api.Features.Werehouses.WarehouseViewModel;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ProjectF.Api.Features.Werehouses {
+namespace ProjectF.Api.Features.Werehouses
+{
 
-    [Route("api/inventory/[controller]")]
+    [Route("api/config/[controller]")]
     [ApiController]
-    public class WerehouseController : ControllerBase {
+    public class WarehouseController : ControllerBase {
         private readonly WerehouseCrudHandler _werehouseOperation;
 
-        public WerehouseController(WerehouseCrudHandler werehouseOperation) {
+        public WarehouseController(WerehouseCrudHandler werehouseOperation) {
             _werehouseOperation = werehouseOperation;
         }
 
         [HttpPost]
-        public ActionResult CreateWerehouse(WerehouseViewModel werehouseViewmodel)
+        public ActionResult CreateWerehouse(WarehouseViewModel werehouseViewmodel)
             => _werehouseOperation
                 .Create(werehouseViewmodel.ToDto())
                 .Match<ActionResult>(
@@ -27,7 +25,7 @@ namespace ProjectF.Api.Features.Werehouses {
 
 
         [HttpPut("{id}")]
-        public ActionResult UpdateWerehouse(long id, WerehouseViewModel viewModel)
+        public ActionResult UpdateWerehouse(long id, WarehouseViewModel viewModel)
             => _werehouseOperation
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(

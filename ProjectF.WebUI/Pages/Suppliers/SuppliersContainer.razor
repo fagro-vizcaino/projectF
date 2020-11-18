@@ -32,9 +32,9 @@
                     <FCustomValidationMessage For="@(() => _model.Phone)" Class="mt-2 font-semibold text-red-600" />
                 </div>
                 <div class="mb-4">
-                    <FLabel Value="Télefono" LabelFor="Phone" />
+                    <FLabel Value="Rnc" LabelFor="Rnc" />
                     <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                    <FCustomValidationMessage For="@(() => _model.Phone)" Class="mt-2 font-semibold tWext-red-600" />
+                    <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold tWext-red-600" />
                 </div>
                 <div class="mb-6">
                     <FLabel Value="Es Formal ?" LabelFor="ShowOn" />
@@ -46,8 +46,8 @@
                     <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
                 </div>
                 <div class="mb-4">
-                    <FLabel Value="Calle" LabelFor="HomeOrApartment" />
-                    <FTextArea @bind-Value="_model.HomeOrApartment" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FLabel Value="Calle" LabelFor="Street" />
+                    <FTextArea @bind-Value="_model.Street" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
                     <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
                 </div>
                 <div class="mb-4">

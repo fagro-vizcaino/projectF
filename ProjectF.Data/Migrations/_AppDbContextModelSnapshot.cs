@@ -644,11 +644,11 @@ namespace ProjectF.Data.Migrations
                     b.ToTable("Tax");
                 });
 
-            modelBuilder.Entity("ProjectF.Data.Entities.Werehouses.Werehouse", b =>
+            modelBuilder.Entity("ProjectF.Data.Entities.Warehouses.Warehouse", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("WerehouseId")
+                        .HasColumnName("WarehouseId")
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -670,7 +670,7 @@ namespace ProjectF.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Werehouse");
+                    b.ToTable("Warehouse");
                 });
 
             modelBuilder.Entity("ProjectF.Data.Products.Product", b =>
@@ -836,7 +836,7 @@ namespace ProjectF.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjectF.Data.Entities.Werehouses.Werehouse", "Werehouse")
+                    b.HasOne("ProjectF.Data.Entities.Warehouses.Warehouse", "Werehouse")
                         .WithMany("Products")
                         .HasForeignKey("WerehouseId")
                         .OnDelete(DeleteBehavior.Cascade)

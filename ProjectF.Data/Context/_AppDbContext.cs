@@ -12,7 +12,7 @@ using ProjectF.Data.Entities.Sequences;
 using ProjectF.Data.Entities.Suppliers;
 using ProjectF.Data.Entities.Taxes;
 using ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType;
-using ProjectF.Data.Entities.Werehouses;
+using ProjectF.Data.Entities.Warehouses;
 using ProjectF.Data.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +24,7 @@ namespace ProjectF.Data.Context
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Werehouse> Werehouses { get; set; }
+        public DbSet<Warehouse> Werehouses { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
@@ -58,7 +58,7 @@ namespace ProjectF.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new WerehouseConfiguration());
+            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
 
             modelBuilder.ApplyConfiguration(new SupplierConfiguration());
             modelBuilder.ApplyConfiguration(new BankAccountConfiguration());

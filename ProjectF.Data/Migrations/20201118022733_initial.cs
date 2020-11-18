@@ -127,10 +127,10 @@ namespace ProjectF.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Werehouse",
+                name: "Warehouse",
                 columns: table => new
                 {
-                    WerehouseId = table.Column<long>(nullable: false)
+                    WarehouseId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(maxLength: 20, nullable: false),
                     Name = table.Column<string>(maxLength: 60, nullable: false),
@@ -138,7 +138,7 @@ namespace ProjectF.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Werehouse", x => x.WerehouseId);
+                    table.PrimaryKey("PK_Warehouse", x => x.WarehouseId);
                 });
 
             migrationBuilder.CreateTable(
@@ -322,10 +322,10 @@ namespace ProjectF.Data.Migrations
                         principalColumn: "TaxId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Werehouse_WerehouseId",
+                        name: "FK_Product_Warehouse_WerehouseId",
                         column: x => x.WerehouseId,
-                        principalTable: "Werehouse",
-                        principalColumn: "WerehouseId",
+                        principalTable: "Warehouse",
+                        principalColumn: "WarehouseId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -522,7 +522,7 @@ namespace ProjectF.Data.Migrations
                 name: "Tax");
 
             migrationBuilder.DropTable(
-                name: "Werehouse");
+                name: "Warehouse");
 
             migrationBuilder.DropTable(
                 name: "Client");

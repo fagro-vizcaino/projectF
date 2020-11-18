@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjectF.WebUI.Models
 {
-    public class WerehouseValidator : AbstractValidator<Werehouse>
+    public class WarehouseValidator : AbstractValidator<Warehouse>
     {
-        public WerehouseValidator()
+        public WarehouseValidator()
         {
             RuleFor(x => x.Name).NotEmpty()
               .WithMessage("Nombre Requerido")

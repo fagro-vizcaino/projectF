@@ -1,6 +1,6 @@
 ﻿using ProjectF.Data.Entities.Categories;
 using ProjectF.Data.Entities.Taxes;
-using ProjectF.Data.Entities.Werehouses;
+using ProjectF.Data.Entities.Warehouses;
 using System.Security.Principal;
 
 namespace ProjectF.Data.Entities.Products
@@ -15,7 +15,7 @@ namespace ProjectF.Data.Entities.Products
         public Category Category { get; }
         public long CategoryId { get; }
         public long WerehouseId { get; }
-        public Werehouse Werehouse { get; }
+        public Warehouse Werehouse { get; }
         public long TaxId { get;}
         public Taxes.Tax Tax { get;}
         public bool IsService { get; }
@@ -29,7 +29,7 @@ namespace ProjectF.Data.Entities.Products
             string reference,
             Category category,
             long categoryId,
-            Werehouse werehouse,
+            Warehouse werehouse,
             long werehouseId,
             long taxId,
             Tax tax,
@@ -60,7 +60,7 @@ namespace ProjectF.Data.Entities.Products
             , string? description       = null
             , string? reference         = null
             , Category? category        = null
-            , Werehouse? werehouse      = null
+            , Warehouse? werehouse      = null
             , bool? isService           = null
             , decimal? cost             = null
             , decimal? price            = null

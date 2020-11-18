@@ -2,7 +2,7 @@
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Taxes;
-using ProjectF.Data.Entities.Werehouses;
+using ProjectF.Data.Entities.Warehouses;
 
 namespace ProjectF.Data.Products
 {
@@ -13,7 +13,7 @@ namespace ProjectF.Data.Products
         public GeneralText Description { get; private set; }
         public GeneralText Reference { get; private set; }
         public virtual Category Category {get; private set;}
-        public virtual Werehouse Werehouse { get; private set;}
+        public virtual Warehouse Werehouse { get; private set;}
         public virtual Tax Tax { get; private set;}
         public bool IsService { get; private set; }
         public decimal Cost { get; private set; }
@@ -29,7 +29,7 @@ namespace ProjectF.Data.Products
             , GeneralText description
             , GeneralText reference
             , Category category
-            , Werehouse werehouse
+            , Warehouse werehouse
             , Tax tax
             , bool isService
             , decimal cost
@@ -58,7 +58,7 @@ namespace ProjectF.Data.Products
             , GeneralText description
             , GeneralText reference
             , Category category
-            , Werehouse werehouse
+            , Warehouse werehouse
             , Tax tax
             , bool isService
             , decimal cost

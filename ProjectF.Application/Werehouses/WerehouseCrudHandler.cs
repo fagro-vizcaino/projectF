@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ProjectF.Data.Entities.Werehouses;
+using ProjectF.Data.Entities.Warehouses;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Repositories;
 using LanguageExt;
@@ -19,7 +19,7 @@ namespace ProjectF.Application.Werehouses
             _werehouseRepository = werehouseRepo;
         }
 
-        public Either<Error, Werehouse> Create(WerehouseDto werehouseDto)
+        public Either<Error, Warehouse> Create(WarehouseDto werehouseDto)
             => ValidateCode(werehouseDto)
             .Bind(ValidateName)
             .Bind(CreateEntity)
@@ -27,7 +27,7 @@ namespace ProjectF.Application.Werehouses
             .Bind(Save);
 
 
-        public Either<Error, Werehouse> Update(long id, WerehouseDto werehouseDto)
+        public Either<Error, Warehouse> Update(long id, WarehouseDto werehouseDto)
             => ValidateIsCorrectUpdate(id, werehouseDto)
             .Bind(ValidateCode)
             .Bind(ValidateName)
@@ -36,39 +36,39 @@ namespace ProjectF.Application.Werehouses
             .Bind(Save);
 
 
-        public Either<Error, Werehouse> Delete(long id)
+        public Either<Error, Warehouse> Delete(long id)
            => Find(id)
              .Bind(Delete)
              .Bind(Save);
 
-        public IEnumerable<WerehouseDto> GetAll()
-            => _werehouseRepository.GetAll().Map(w => (WerehouseDto) w);
+        public IEnumerable<WarehouseDto> GetAll()
+            => _werehouseRepository.GetAll().Map(w => (WarehouseDto) w);
 
-        public Either<Error, Werehouse> Find(params object[] valueKeys)
+        public Either<Error, Warehouse> Find(params object[] valueKeys)
             => _werehouseRepository.Find(valueKeys).Match(Some: t => t,
-             None: Left<Error, Werehouse>(Error.New("couldn't find werehouse type")));
+             None: Left<Error, Warehouse>(Error.New("couldn't find werehouse type")));
 
-        Either<Error, WerehouseDto> ValidateIsCorrectUpdate(long id, WerehouseDto werehouseDto)
+        Either<Error, WarehouseDto> ValidateIsCorrectUpdate(long id, WarehouseDto werehouseDto)
         {
             if (id == werehouseDto.Id) return werehouseDto;
             return Error.New("Invalid update entity id");
         }
 
-        Either<Error, WerehouseDto> ValidateCode(WerehouseDto werehouseDto)
+        Either<Error, WarehouseDto> ValidateCode(WarehouseDto werehouseDto)
             => Code.Of(werehouseDto.Code)
-                .Match<Either<Error, WerehouseDto>>(
+                .Match<Either<Error, WarehouseDto>>(
                     Left: err => Error.New(err.Message),
                     Right: c => werehouseDto);
 
-        Either<Error, WerehouseDto> ValidateName(WerehouseDto werehosueDto)
+        Either<Error, WarehouseDto> ValidateName(WarehouseDto werehosueDto)
             => Name.Of(werehosueDto.Name)
                 .Match(Succ: c => werehosueDto,
-                    Fail: err => Left<Error, WerehouseDto>(Error.New(string.Join(":", err))));
+                    Fail: err => Left<Error, WarehouseDto>(Error.New(string.Join(":", err))));
 
-        Either<Error, Werehouse> CreateEntity(WerehouseDto werehouseDto)
-            => Right<Error, Werehouse>(werehouseDto);
+        Either<Error, Warehouse> CreateEntity(WarehouseDto werehouseDto)
+            => Right<Error, Warehouse>(werehouseDto);
 
-        Either<Error, Werehouse> UpdateEntity(WerehouseDto werehouseDto, Werehouse werehouse)
+        Either<Error, Warehouse> UpdateEntity(WarehouseDto werehouseDto, Warehouse werehouse)
         {
             var code = new Code(werehouseDto.Code);
             var name = new Name(werehouseDto.Name);
@@ -76,7 +76,7 @@ namespace ProjectF.Application.Werehouses
             return werehouse;
         }
 
-        Either<Error, Werehouse> Add(Werehouse werehouse)
+        Either<Error, Warehouse> Add(Warehouse werehouse)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace ProjectF.Application.Werehouses
             }
         }
 
-        Either<Error, Werehouse> Save(Werehouse werehouse)
+        Either<Error, Warehouse> Save(Warehouse werehouse)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace ProjectF.Application.Werehouses
             }
         }
 
-        Either<Error, Werehouse> Delete(Werehouse werehouse)
+        Either<Error, Warehouse> Delete(Warehouse werehouse)
         {
             try
             {

@@ -5,9 +5,9 @@ using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Products;
 
-namespace ProjectF.Data.Entities.Werehouses
+namespace ProjectF.Data.Entities.Warehouses
 {
-    public class Werehouse : Entity
+    public class Warehouse : Entity
     {
         public Code Code { get; private set; }
         public Name Name { get; private set; }
@@ -15,9 +15,9 @@ namespace ProjectF.Data.Entities.Werehouses
 
         private readonly List<Product> _products = new List<Product>();
         public virtual IReadOnlyList<Product> Products => _products.ToList();
-        protected Werehouse() { }
+        protected Warehouse() { }
 
-        public Werehouse(Code code, Name name, string location)
+        public Warehouse(Code code, Name name, string location)
         {
             Code     = code;
             Name     = name;
@@ -31,7 +31,7 @@ namespace ProjectF.Data.Entities.Werehouses
             Location = location ?? string.Empty;
         }
 
-        public static implicit operator WerehouseDto(Werehouse entity)
-          => new WerehouseDto(entity.Id, entity.Code.Value, entity.Name.Value, entity.Location);
+        public static implicit operator WarehouseDto(Warehouse entity)
+          => new WarehouseDto(entity.Id, entity.Code.Value, entity.Name.Value, entity.Location);
     }
 }

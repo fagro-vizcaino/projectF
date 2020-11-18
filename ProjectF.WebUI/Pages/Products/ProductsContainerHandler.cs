@@ -28,8 +28,8 @@ namespace ProjectF.WebUI.Pages.Products
         public Category[] Categories { get; set; } = Array.Empty<Category>();
 
         [Inject]
-        public IBaseDataService<Werehouse> WerehouseDataService { get; set; }
-        public Werehouse[] Werehouses { get; set; } = Array.Empty<Werehouse>();
+        public IBaseDataService<Warehouse> WerehouseDataService { get; set; }
+        public Warehouse[] Werehouses { get; set; } = Array.Empty<Warehouse>();
 
         [Inject]
         public IBaseDataService<Tax> TaxDataService { get; set; }
@@ -59,7 +59,7 @@ namespace ProjectF.WebUI.Pages.Products
                 Price3 = product.Price3,
                 Price4 = product.Price4,
                 Reference = product.Reference,
-                Werehouse = new Werehouse { Id = product.WerehouseId }
+                Werehouse = new Warehouse { Id = product.WerehouseId }
             }
             : new Product { Code = GenerateCode };
     }

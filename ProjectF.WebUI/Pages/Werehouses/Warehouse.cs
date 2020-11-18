@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectF.WebUI.Models
 {
-    public class Werehouse : FEntity
+    public class Warehouse : FEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
