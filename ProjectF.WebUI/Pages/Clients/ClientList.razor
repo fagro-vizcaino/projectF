@@ -4,7 +4,7 @@
 @if (Elements.Length > 0)
 {
 <Table DataSource="Elements">
-    <Column @bind-Field="@context.Name" Title="Nombre" Sortable />
+    <Column Title="Nombre" Field="@context.DisplayName"> @context.DisplayName</Column>
     <Column @bind-Field="@context.Email" Title="Email" />
     <Column @bind-Field="@context.Phone" Title="Télefono" />
     <Column @bind-Field="@context.City" Title="Ciudad" />

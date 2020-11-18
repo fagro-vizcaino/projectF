@@ -6,7 +6,7 @@ namespace ProjectF.WebUI.Models
     {
         public ClientValidator()
         {
-            RuleFor(c => c.Name).NotEmpty()
+            RuleFor(c => c.FirstName).NotEmpty()
                 .WithMessage("Nombre es requerido");
         }
     }

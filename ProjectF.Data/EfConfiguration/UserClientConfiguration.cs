@@ -18,10 +18,14 @@ namespace ProjectF.Data.EfConfiguration
                .HasConversion(s => s.Value, s => new Code(s))
                .IsRequired();
 
-            builder.Property(s => s.Name)
+            builder.Property(s => s.Firstname)
                .HasMaxLength(60)
                .HasConversion(s => s.Value, s => new Name(s))
                .IsRequired();
+
+            builder.Property(s => s.Lastname)
+               .HasMaxLength(120)
+               .HasConversion(s => s.Value, s => new Name(s));
 
             builder.Property(s => s.Email)
                 .HasMaxLength(60)

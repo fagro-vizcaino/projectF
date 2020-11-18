@@ -43,7 +43,7 @@ namespace ProjectF.Data.Entities.Invoices
         }
 
         string GetClientName(Client client)
-            => $"{client.Name.Value}";
+            => $"{client.Firstname.Value}";
 
         string GetStatus(DateTime invoiceDueDate, DateTime? paymentDate)
         {

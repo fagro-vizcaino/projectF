@@ -82,19 +82,19 @@ namespace ProjectF.WebUI.Components.Common
         public virtual async Task GetAll()
         {
             var result = (await DataService.GetAll()).ToArray();
-            Console.WriteLine($"Get all:{JsonSerializer.Serialize(result)}");
+            //Console.WriteLine($"Get all:{JsonSerializer.Serialize(result)}");
             Elements = result;
         }
 
         public virtual async Task<T> GetById(int id)
         {
             var entity = (await DataService.GetDetails(id));
-            Console.WriteLine($"Get detail :{JsonSerializer.Serialize(entity)}");
+            //Console.WriteLine($"Get detail :{JsonSerializer.Serialize(entity)}");
             return entity;
         }
         public virtual async Task<Either<Error, Unit>> Edit(long id, T entity)
         {
-            Console.WriteLine($"Success editing:{JsonSerializer.Serialize(entity)}");
+            //Console.WriteLine($"Success editing:{JsonSerializer.Serialize(entity)}");
             return
                 await DataService.Update(id, entity)
                 .Match(
@@ -113,7 +113,7 @@ namespace ProjectF.WebUI.Components.Common
 
         public virtual async Task<Either<Error, Unit>> Add(T entity)
         {
-            Console.WriteLine($"Success add:{JsonSerializer.Serialize(entity)}");
+            //Console.WriteLine($"Success add:{JsonSerializer.Serialize(entity)}");
             return await DataService.Add(entity)
                 .Match(async c =>
                 {

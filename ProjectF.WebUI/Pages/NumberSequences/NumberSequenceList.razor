@@ -3,14 +3,14 @@
 {
 <Table DataSource="Elements">
     <Column @bind-Field="@context.Name" Title="Nombre" Sortable />
-
-    <Column @bind-Field="@context.DisplaySequence" Title="Auto Generado" />
+    <Column @bind-Field="@context.Prefix" Title="Comprobante" />
+    <Column @bind-Field="@context.DisplaySequence" Title="Sequencia" />
     <Column @bind-Field="@context.InitialSequence" Title="# Inicial" Style="text-align: right;" />
     <Column @bind-Field="@context.NextSequence" Title="# Proximo" Style="text-align: right;" />
     <Column @bind-Field="@context.FinalSequence" Title="# Final" Style="text-align: right;" />
     <Column @bind-Field="@context.IsActive" Title="Activo" Style="text-align: right;">
-        @(context.IsActive 
-                    ? (MarkupString)"<i class='fas fa-check text-green-500'></i>" 
+        @(context.IsActive
+                    ? (MarkupString)"<i class='fas fa-check text-green-500'></i>"
                     : (MarkupString)"<i class='fas fa-exclamation text-yellow-500'></i>")
     </Column>
 

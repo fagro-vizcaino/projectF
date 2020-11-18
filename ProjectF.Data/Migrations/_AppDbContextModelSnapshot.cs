@@ -27,10 +27,11 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
@@ -40,9 +41,11 @@ namespace ProjectF.Data.Migrations
                         .HasMaxLength(200);
 
                     b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
@@ -66,10 +69,11 @@ namespace ProjectF.Data.Migrations
                         .HasMaxLength(60);
 
                     b.Property<string>("AccountNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(18)")
                         .HasMaxLength(18);
 
-                    b.Property<long?>("BankAccountTypeId")
+                    b.Property<long>("BankAccountTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("Created")
@@ -77,6 +81,7 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("Datetime");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
 
@@ -102,6 +107,7 @@ namespace ProjectF.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(119)")
                         .HasMaxLength(119);
 
@@ -153,6 +159,7 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("Date");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
@@ -161,31 +168,41 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(60)")
-                        .HasMaxLength(60);
-
-                    b.Property<string>("HomeOrApartment")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<string>("Firstname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
+
+                    b.Property<string>("HomeOrApartment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(120)")
+                        .HasMaxLength(120);
+
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(11)")
                         .HasMaxLength(11);
 
                     b.Property<string>("Rnc")
+                        .IsRequired()
                         .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
                     b.Property<string>("Street")
+                        .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
@@ -205,16 +222,18 @@ namespace ProjectF.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CurrencyId")
+                    b.Property<int>("CurrencyId")
                         .HasColumnType("int");
 
                     b.Property<string>("HomeOrApartment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -224,21 +243,25 @@ namespace ProjectF.Data.Migrations
                         .HasMaxLength(60);
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(11)")
                         .HasMaxLength(11);
 
-                    b.Property<long?>("RegimeTypeId")
+                    b.Property<long>("RegimeTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Rnc")
+                        .IsRequired()
                         .HasColumnType("nvarchar(18)")
                         .HasMaxLength(18);
 
                     b.Property<string>("Street")
+                        .IsRequired()
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
 
                     b.Property<string>("Website")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -261,6 +284,7 @@ namespace ProjectF.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("IconImage")
+                        .IsRequired()
                         .HasColumnType("nvarchar(800)")
                         .HasMaxLength(800);
 
@@ -346,7 +370,7 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
-                    b.Property<long?>("InvoiceHeaderId")
+                    b.Property<long>("InvoiceHeaderId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("ProductCode")
@@ -375,16 +399,13 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("ClientId")
+                    b.Property<long>("ClientId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
-
-                    b.Property<long?>("CompanyId")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -396,24 +417,28 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Footer")
+                        .IsRequired()
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
 
                     b.Property<string>("Ncf")
+                        .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
 
                     b.Property<int>("NumberSequenceId")
                         .HasColumnType("int");
 
-                    b.Property<long?>("PaymentTermId")
+                    b.Property<long>("PaymentTermId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Rnc")
+                        .IsRequired()
                         .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
@@ -430,6 +455,7 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("decimal(12,2)");
 
                     b.Property<string>("TermAndConditions")
+                        .IsRequired()
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
 
@@ -439,8 +465,6 @@ namespace ProjectF.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("PaymentTermId");
 
@@ -476,16 +500,23 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("FinalSequence")
                         .HasColumnType("int");
 
                     b.Property<int>("InitialSequence")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool?>("IsActive")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -517,6 +548,7 @@ namespace ProjectF.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
@@ -525,7 +557,7 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -534,6 +566,7 @@ namespace ProjectF.Data.Migrations
                         .HasMaxLength(60);
 
                     b.Property<string>("HomeOrApartment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -551,10 +584,12 @@ namespace ProjectF.Data.Migrations
                         .HasMaxLength(11);
 
                     b.Property<string>("Rnc")
+                        .IsRequired()
                         .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
                     b.Property<string>("Street")
+                        .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
@@ -658,6 +693,7 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("decimal(16,2)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
@@ -684,13 +720,14 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("decimal(16,2)");
 
                     b.Property<string>("Reference")
+                        .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
-                    b.Property<long?>("TaxId")
+                    b.Property<long>("TaxId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("WerehouseId")
+                    b.Property<long>("WerehouseId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -708,65 +745,81 @@ namespace ProjectF.Data.Migrations
                 {
                     b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Banks.BankAccount", b =>
                 {
                     b.HasOne("ProjectF.Data.Entities.Banks.BankAccountType", "BankAccountType")
                         .WithMany()
-                        .HasForeignKey("BankAccountTypeId");
+                        .HasForeignKey("BankAccountTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Clients.Client", b =>
                 {
                     b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Company", b =>
                 {
                     b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectF.Data.Entities.Currencies.Currency", "Currency")
                         .WithMany()
-                        .HasForeignKey("CurrencyId");
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType.TaxRegimeType", "RegimeType")
                         .WithMany()
-                        .HasForeignKey("RegimeTypeId");
+                        .HasForeignKey("RegimeTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Invoices.InvoiceDetail", b =>
                 {
                     b.HasOne("ProjectF.Data.Entities.Invoices.InvoiceHeader", "InvoiceHeader")
                         .WithMany("InvoiceDetails")
-                        .HasForeignKey("InvoiceHeaderId");
+                        .HasForeignKey("InvoiceHeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Invoices.InvoiceHeader", b =>
                 {
                     b.HasOne("ProjectF.Data.Entities.Clients.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId");
-
-                    b.HasOne("ProjectF.Data.Entities.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectF.Data.Entities.PaymentList.PaymentTerm", "PaymentTerm")
                         .WithMany()
-                        .HasForeignKey("PaymentTermId");
+                        .HasForeignKey("PaymentTermId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Suppliers.Supplier", b =>
                 {
                     b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Products.Product", b =>
@@ -779,11 +832,15 @@ namespace ProjectF.Data.Migrations
 
                     b.HasOne("ProjectF.Data.Entities.Taxes.Tax", "Tax")
                         .WithMany()
-                        .HasForeignKey("TaxId");
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectF.Data.Entities.Werehouses.Werehouse", "Werehouse")
                         .WithMany("Products")
-                        .HasForeignKey("WerehouseId");
+                        .HasForeignKey("WerehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

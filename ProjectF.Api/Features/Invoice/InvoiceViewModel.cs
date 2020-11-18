@@ -3,6 +3,7 @@ using ProjectF.Data.Entities.PaymentList;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Invoices;
 using ProjectF.Data.Entities.Clients;
+using static ProjectF.Data.Entities.Clients.ClientMapper;
 using ProjectF.Application.Invoice;
 using ProjectF.Data.Entities.Countries;
 using System;
@@ -20,7 +21,7 @@ namespace ProjectF.Api.Features.Invoice
         public string Ncf { get; set; }
         public int NumberSequenceId { get; set;}
         public string Rnc { get; set; }
-        public ClientViewModel Client { get; set; }
+        public ClientDto Client { get; set; }
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
         public PaymentTermDto PaymentTerm { get; set; }
@@ -35,7 +36,8 @@ namespace ProjectF.Api.Features.Invoice
         public InvoiceHeaderDto ToDto()
         {
             var client = new Client(new Code(Client.Code),
-                new Name(Client.Name),
+                new Name(Client.Firstname),
+                new Name(Client.Lastname),
                 new Email(Client.Email),
                 new Phone(Client.Phone),
                 Client.Birthday,
@@ -79,20 +81,7 @@ namespace ProjectF.Api.Features.Invoice
         }
         public static InvoiceViewModel FromDto(InvoiceHeaderDto invoiceDto)
         {
-            var client = new ClientViewModel()
-            {
-                Id              = invoiceDto.Client.Id,
-                Code            = invoiceDto.Client.Code.Value,
-                Name            = invoiceDto.Client.Name.Value,
-                Rnc             = invoiceDto.Client.Rnc,
-                City            = invoiceDto.Client.City,
-                Email           = invoiceDto.Client.Email,
-                HomeOrApartment = invoiceDto.Client.HomeOrApartment,
-                Phone           = invoiceDto.Client.Phone.Value,
-                SelectedCountry = invoiceDto.Client.Country?.Id ?? 0,
-                Street          = invoiceDto.Client.Street
-            };
-
+           
             var paymentTerm = new PaymentTermDto(invoiceDto.Id,
                 invoiceDto.PaymentTerm.Description.Value,
                 invoiceDto.PaymentTerm.DayValue);
@@ -100,7 +89,7 @@ namespace ProjectF.Api.Features.Invoice
             return new InvoiceViewModel()
             {
                 Id                = invoiceDto.Id,
-                Client            = client,
+                Client            = EntityToDto(invoiceDto.Client),
                 Code              = invoiceDto.Code,
                 Rnc               = invoiceDto.Rnc,
                 Ncf               = invoiceDto.Ncf,

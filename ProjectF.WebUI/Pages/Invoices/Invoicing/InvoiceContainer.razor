@@ -35,7 +35,7 @@
                                         OptionFilterProp="children">
                                     @foreach (var customer in Clients)
                                     {
-                                        <SelectOption Value="@customer.Id.ToString()">@customer.Name</SelectOption>
+                                        <SelectOption Value="@customer.Id.ToString()">@customer.DisplayName</SelectOption>
                                     }
                                 </Select>
                             </div>
@@ -232,7 +232,7 @@
             </div>
             <div>
                 <a href="#" 
-                   @onclick="async () => DownloadFile()"
+                   @onclick="async () => await DownloadFile()"
                    @onclick:preventDefault="true"
                    class="no-underline hover:underline text-indigo-600 text-sm">
                     Impresion Previa

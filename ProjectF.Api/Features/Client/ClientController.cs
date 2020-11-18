@@ -1,6 +1,8 @@
 ﻿using ProjectF.Application.Clients;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using ProjectF.Data.Entities.Clients;
+using static ProjectF.Data.Entities.Clients.ClientMapper;
 
 namespace ProjectF.Api.Features.ContactClient
 {
@@ -16,21 +18,21 @@ namespace ProjectF.Api.Features.ContactClient
         }
 
         [HttpPost]
-        public ActionResult CreateClient(ClientViewModel viewModel)
+        public ActionResult CreateClient(ClientDto model)
             => _clientCrudHandler
-                .Create(viewModel.ToDto())
+                .Create(model)
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: category => Ok(ClientViewModel.FromDto(category)));
+                    Right: c => Ok(EntityToDto(c)));
 
 
         [HttpPut("{id}")]
-        public ActionResult UpdateClient(long id, ClientViewModel viewModel)
+        public ActionResult UpdateClient(long id, ClientDto model)
             => _clientCrudHandler
-                .Update(id, viewModel.ToDto())
+                .Update(id, model)
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(ClientViewModel.FromDto(c)));
+                    Right: c => Ok(EntityToDto(c)));
 
 
         [HttpGet("{id}")]
@@ -39,14 +41,13 @@ namespace ProjectF.Api.Features.ContactClient
                 .Find(id)
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
-                    Right: c => Ok(ClientViewModel.FromDto(c)));
+                    Right: c => Ok(EntityToDto(c)));
 
 
         [HttpGet]
         public ActionResult GetClients()
         {
-            var result = _clientCrudHandler.GetAll()
-                .Select(c => ClientViewModel.FromDto(c));
+            var result = _clientCrudHandler.GetAll();
             if (result.Any()) return Ok(result);
 
             return NotFound();

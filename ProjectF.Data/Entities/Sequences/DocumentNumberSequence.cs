@@ -19,7 +19,9 @@ namespace ProjectF.Data.Entities.Sequences
         public int NextSequence { get; private set; }
         public int FinalSequence { get; private set; }
         public DateTime ValidUntil { get; private set; }
-        public bool IsActive { get; private set; }
+        public bool? IsActive { get; private set; }
+        public DateTime Created { get; private set; }
+        public DateTime? Modified { get; private set;}
 
         protected DocumentNumberSequence() { }
 
@@ -29,7 +31,9 @@ namespace ProjectF.Data.Entities.Sequences
             int nextSequence,
             int finalSequence,
             DateTime validUntil,
-            bool isActive)
+            bool? isActive,
+            DateTime created,
+            DateTime? modified = null)
         {
             Name            = name;
             Prefix          = prefix;
@@ -38,6 +42,8 @@ namespace ProjectF.Data.Entities.Sequences
             FinalSequence   = finalSequence;
             ValidUntil      = validUntil;
             IsActive        = isActive;
+            Created         = DateTime.MinValue == created ? DateTime.Now : created;
+            Modified        = modified;
         }
 
 
@@ -47,7 +53,8 @@ namespace ProjectF.Data.Entities.Sequences
             int nextSequence,
             int finalSequence,
             DateTime validUntil,
-            bool isActive)
+            bool? isActive,
+            DateTime? modified = null)
         {
             Name            = name;
             Prefix          = prefix;
@@ -56,17 +63,20 @@ namespace ProjectF.Data.Entities.Sequences
             FinalSequence   = finalSequence;
             ValidUntil      = validUntil;
             IsActive        = isActive;
+            Modified        = modified == null ? DateTime.Now : modified;
         }
 
-        public static implicit operator NumberSequenceDto(DocumentNumberSequence entity)
-          => new NumberSequenceDto(entity.Id,
-              entity.Name.Value,
-              entity.Prefix,
-              entity.InitialSequence,
-              entity.NextSequence,
-              entity.FinalSequence,
-              entity.ValidUntil,
-              entity.IsActive);
+        public static implicit operator NumberSequenceDto(DocumentNumberSequence model)
+          => new NumberSequenceDto(model.Id,
+              model.Name.Value,
+              model.Prefix,
+              model.InitialSequence,
+              model.NextSequence,
+              model.FinalSequence,
+              model.ValidUntil,
+              model.IsActive,
+              model.Created,
+              model.Modified);
 
     }
 }

@@ -36,6 +36,9 @@ namespace ProjectF.Data.EfConfiguration
                 .HasDefaultValue(true)
                 .IsRequired();
 
+            builder.Property(q => q.Created);
+            builder.Property(q => q.Modified);
+
         }
     }
 }

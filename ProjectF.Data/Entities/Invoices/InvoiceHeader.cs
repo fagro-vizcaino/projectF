@@ -15,7 +15,7 @@ namespace ProjectF.Data.Entities.Invoices
         public int NumberSequenceId { get; private set; }
         public string Rnc { get; private set; }
         public virtual Client Client { get; private set; }
-        public virtual Company Company { get; private set; }
+        //public virtual Company Company { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime DueDate { get; private set; }
         

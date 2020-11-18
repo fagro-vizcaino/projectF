@@ -27,7 +27,7 @@ namespace ProjectF.Data.EfConfiguration
                .HasMaxLength(15);
 
             builder.HasOne(q => q.Client);
-            builder.HasOne(q => q.Company);
+           
 
             builder.Property(q => q.Created)
                 .IsRequired();
