@@ -8,6 +8,8 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 using static ProjectF.Data.Entities.Clients.ClientMapper;
 using System;
 using System.Linq;
+using ProjectF.Data.Entities.RequestFeatures;
+using System.Threading.Tasks;
 
 namespace ProjectF.Application.Clients
 {
@@ -41,8 +43,10 @@ namespace ProjectF.Application.Clients
             .Bind(c => UpdateEntity(clientDto, c))
             .Bind(Save);
 
-        public List<ClientDto> GetAll()
-            => _clientRepository.FindAll().Map(c => EntityToDto(c)).ToList();
+        
+        public Task<Either<Error, (List<ClientDto> list, MetaData meta)>> GetClientList(ClientListParameters listParameters)
+            => _clientRepository.GetClientListAsync(listParameters, true)
+            .MapT(c => (ClientList: c.Select(i  => EntityToDto(i)).ToList(), MetaData: c.MetaData));
 
         public Either<Error, Client> Find(long id)
          => _clientRepository.FindByKey(id).Match(Some: t => t,

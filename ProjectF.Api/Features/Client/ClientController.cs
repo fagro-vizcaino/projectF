@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using ProjectF.Data.Entities.Clients;
 using static ProjectF.Data.Entities.Clients.ClientMapper;
+using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace ProjectF.Api.Features.ContactClient
 {
@@ -43,15 +45,14 @@ namespace ProjectF.Api.Features.ContactClient
                     Left: err => NotFound(err.Message),
                     Right: c => Ok(EntityToDto(c)));
 
-
         [HttpGet]
-        public ActionResult GetClients()
-        {
-            var result = _clientCrudHandler.GetAll();
-            if (result.Any()) return Ok(result);
-
-            return NotFound();
-        }
+        public async Task<ActionResult> GetClients([FromQuery] ClientListParameters clientListParameters)
+        => (await _clientCrudHandler.GetClientList(clientListParameters))
+                .Match<ActionResult>(Left: err => NotFound(err.Message),
+                        Right: c => {
+                            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
+                            return Ok(c.list);
+                        });
 
 
         [HttpDelete("{id}")]
@@ -61,11 +62,5 @@ namespace ProjectF.Api.Features.ContactClient
              Left: err => BadRequest(err.Message),
              Right: c => NoContent());
 
-        //[HttpGet]
-        //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )
-        //{
-        //    var result = _categoryOperations.GetAll()
-        //    return Ok();
-        //}
     }
 }

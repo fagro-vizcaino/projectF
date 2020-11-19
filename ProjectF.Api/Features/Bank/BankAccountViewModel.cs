@@ -11,7 +11,7 @@ namespace ProjectF.Api.Features.Bank
         public string Description { get; set; }
         public decimal InitialBalance { get; set; }
         public long BankAccountTypeId { get; set; }
-        public BankAccountTypeViewModel BankAccountType { get; set; }
+        public BankAccountTypeViewModel? BankAccountType { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Modified { get; set; }
 

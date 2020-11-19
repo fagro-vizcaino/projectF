@@ -60,11 +60,5 @@ namespace ProjectF.Api.Features.Bank
          .Match<ActionResult>(
              Left: err => BadRequest(err.Message),
              Right: c => NoContent());
-        //[HttpGet]
-        //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )
-        //{
-        //    var result = _categoryOperations.GetAll()
-        //    return Ok();
-        //}
     }
 }

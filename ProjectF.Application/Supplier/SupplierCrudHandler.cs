@@ -57,10 +57,9 @@ namespace ProjectF.Application.Suppliers
         public Either<Error, Supplier> Find(long key)
         {
             var supplier = _supplierRepository.GetByKeys(key);
-            if (supplier == null)
-                return Error.New("No records found");
-
-            return supplier;
+            return supplier is null 
+                ? Error.New("No records found") 
+                : (Either<Error, Supplier>)supplier;
         }
 
         public Either<Error, Supplier> Delete(long id)

@@ -113,7 +113,7 @@ namespace ProjectF.WebUI.Components.Common
 
         public virtual async Task<Either<Error, Unit>> Add(T entity)
         {
-            //Console.WriteLine($"Success add:{JsonSerializer.Serialize(entity)}");
+            Console.WriteLine($"About to add:{JsonSerializer.Serialize(entity)}");
             return await DataService.Add(entity)
                 .Match(async c =>
                 {

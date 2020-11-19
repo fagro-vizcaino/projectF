@@ -16,5 +16,5 @@ namespace ProjectF.Data.Entities.Clients
         string City, 
         string Street, 
         int SelectedCountry, 
-        Country Country);
+        Country? Country);
 }

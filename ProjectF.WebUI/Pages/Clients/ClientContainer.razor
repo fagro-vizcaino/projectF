@@ -57,7 +57,7 @@
                     <div class="inline-block relative w-full">
                         <FInputSelect @bind-Value="_model.SelectedCountry">
                             <option value="0">Seleccione una tipo cuenta</option>
-                            @foreach (var type in BankAccountTypes)
+                            @foreach (var type in Countries)
                             {
                                 <option value="@type.Id">@type.Name</option>
                             }

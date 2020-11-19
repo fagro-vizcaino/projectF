@@ -15,13 +15,12 @@ namespace ProjectF.Api.Features.Supplier
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Rnc { get; set; }
-        public string HomeOrApartment { get; set; }
-        public string City { get; set; }
-        public string Street { get; set; }
+        public string HomeOrApartment { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string Street { get; set; } = string.Empty;
         public int SelectedCountry { get; set; }
-        public ProjectF.Data.Entities.Countries.Country Country { get; set; }
+        public Data.Entities.Countries.Country? Country { get; set; }
         public bool IsIndependent { get; set; }
-
 
         public SupplierDto ToDto()
             => new SupplierDto(Id

@@ -46,6 +46,11 @@
                     <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
                 </div>
                 <div class="mb-4">
+                    <FLabel Value="Ciudad" LabelFor="City" />
+                    <FTextArea @bind-Value="_model.City" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.City)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
                     <FLabel Value="Calle" LabelFor="Street" />
                     <FTextArea @bind-Value="_model.Street" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
                     <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />

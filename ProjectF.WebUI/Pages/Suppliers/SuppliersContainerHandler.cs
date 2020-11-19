@@ -35,21 +35,21 @@ namespace ProjectF.WebUI.Pages.Suppliers
         }
 
         public Supplier GetNewModelOrEdit(Supplier supplier = null)
-            => supplier != null 
+            => supplier is not null 
             ? new Supplier
             {
-                Id = supplier.Id,
-                Name = supplier.Name,
-                Code = supplier.Code,
-                City = supplier.City,
+                Id              = supplier.Id,
+                Name            = supplier.Name,
+                Code            = supplier.Code,
+                City            = supplier.City,
                 SelectedCountry = supplier.SelectedCountry,
-                Email = supplier.Email,
-                Country = supplier.Country,
-                IsIndependent = supplier.IsIndependent,
-                Rnc = supplier.Rnc,
+                Email           = supplier.Email,
+                Country         = supplier.Country,
+                IsIndependent   = supplier.IsIndependent,
+                Rnc             = supplier.Rnc,
                 HomeOrApartment = supplier.HomeOrApartment,
-                Phone = supplier.Phone,
-                Street = supplier.Street
+                Phone           = supplier.Phone,
+                Street          = supplier.Street
             }
             : new Supplier { Id = 0, Name = null, Code = GenerateCode};
     }
