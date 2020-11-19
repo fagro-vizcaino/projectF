@@ -60,7 +60,6 @@ namespace ProjectF.Data.Repositories
             {
                 return Error.New(ex.Message);
             }
-
         }
 
         public IDbContextTransaction BeginTransaction()

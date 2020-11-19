@@ -9,7 +9,7 @@ namespace ProjectF.Data.Entities.Clients
 {
     public class ClientListParameters : RequestParameters
     {
-
+        public ClientStatus Status { get; set; }
     }
 
     public enum ClientStatus
