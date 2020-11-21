@@ -3,6 +3,9 @@ using System.Linq;
 using static ProjectF.Api.Features.Bank.BankAccountViewModel;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Application.Banks;
+using System.Threading.Tasks;
+using ProjectF.Data.Entities.Banks;
+using System.Text.Json;
 
 namespace ProjectF.Api.Features.Bank
 {
@@ -45,14 +48,12 @@ namespace ProjectF.Api.Features.Bank
 
 
         [HttpGet]
-        public ActionResult GetBankAccount()
-        {
-            var result = _bankAccountCrudHandler.GetAll()
-                .Select(c => FromDto(c));
-            if (result.Any()) return Ok(result);
-
-            return NotFound();
-        }
+        public async Task<ActionResult> GetBankAccount([FromQuery] BankListParameters bankListParameters)
+            => (await _bankAccountCrudHandler.GetBankAccountList(bankListParameters))
+             .Match<ActionResult>(Left: err => NotFound(err.Message), Right: c => {
+                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
+                 return Ok(c.list);
+             });
 
         [HttpDelete("{id}")]
         public ActionResult Delete(long id)

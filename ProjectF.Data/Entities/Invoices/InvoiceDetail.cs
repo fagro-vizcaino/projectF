@@ -5,7 +5,7 @@ using ProjectF.Data.Products;
 
 namespace ProjectF.Data.Entities.Invoices
 {
-    public class InvoiceDetail : Entity
+    public class InvoiceDetail : _BaseEntity
     {
         public Code ProductCode { get; private set; }
         public Name Description { get; private set; }

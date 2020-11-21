@@ -4,7 +4,7 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.Banks
 {
-    public class BankAccount : Entity
+    public class BankAccount : _BaseEntity
     {
         public Name AccountName { get; private set; }
         public string AccountNumber { get; private set; }

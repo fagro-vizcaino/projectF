@@ -5,7 +5,7 @@ using ProjectF.Data.Entities.Banks;
 
 namespace ProjectF.Data.Entities.Banks
 {
-    public class BankAccountType : Entity
+    public class BankAccountType : _BaseEntity
     {
         public Name Name { get; private set; }
         public GeneralText Description { get; private set; }

@@ -7,7 +7,7 @@ using ProjectF.Data.Products;
 
 namespace ProjectF.Data.Entities.Warehouses
 {
-    public class Warehouse : Entity
+    public class Warehouse : _BaseEntity
     {
         public Code Code { get; private set; }
         public Name Name { get; private set; }

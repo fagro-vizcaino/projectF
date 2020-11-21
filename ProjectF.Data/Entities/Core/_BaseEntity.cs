@@ -2,21 +2,21 @@ using System;
 
 namespace ProjectF.Data.Entities.Common
 {
-    public abstract class Entity
+    public abstract class _BaseEntity
     {
         public long Id { get; private set; }
+        public EntityStatus Status { get; protected set; }
+        protected _BaseEntity() { }
 
-        protected Entity() { }
-
-
-        protected Entity(long id) : this()
+        protected _BaseEntity(long id, EntityStatus status) : this()
         {
             Id = id;
+            Status = status;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Entity other))
+            if (!(obj is _BaseEntity other))
                 return false;
 
             if (ReferenceEquals(this, other))
@@ -31,7 +31,7 @@ namespace ProjectF.Data.Entities.Common
             return Id == other.Id;
         }
 
-        public static bool operator ==(Entity a, Entity b)
+        public static bool operator ==(_BaseEntity a, _BaseEntity b)
         {
             if (a is null && b is null)
                 return true;
@@ -42,7 +42,7 @@ namespace ProjectF.Data.Entities.Common
             return a.Equals(b);
         }
 
-        public static bool operator !=(Entity a, Entity b)
+        public static bool operator !=(_BaseEntity a, _BaseEntity b)
         {
             return !(a == b);
         }
@@ -61,5 +61,12 @@ namespace ProjectF.Data.Entities.Common
 
             return type;
         }
+
+    }
+
+    public enum EntityStatus
+    {
+        Active = 1,
+        Deleted = 2
     }
 }

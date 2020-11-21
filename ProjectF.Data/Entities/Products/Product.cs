@@ -6,7 +6,7 @@ using ProjectF.Data.Entities.Warehouses;
 
 namespace ProjectF.Data.Products
 {
-    public class Product : Entity
+    public class Product : _BaseEntity
     {
         public Code Code { get; private set; }
         public Name Name { get; private set; }

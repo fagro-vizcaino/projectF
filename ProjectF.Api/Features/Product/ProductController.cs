@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using static ProjectF.Api.Features.Product.ProductViewModel;
+using System.Threading.Tasks;
+using ProjectF.Data.Entities.Products;
+using System.Text.Json;
 
 namespace ProjectF.Api.Features.Product
 {
@@ -12,9 +15,7 @@ namespace ProjectF.Api.Features.Product
         readonly ProductCrudHandler _productOperation;
 
         public ProductController(ProductCrudHandler productOperation)
-        {
-            _productOperation = productOperation;
-        }
+            => _productOperation = productOperation;
 
         [HttpPost]
         public ActionResult CreateProduct(ProductViewModel viewModel)
@@ -43,14 +44,12 @@ namespace ProjectF.Api.Features.Product
                     Right: c => Ok(FromDto(_productOperation.EntityToDto(c))));
 
         [HttpGet]
-        public ActionResult GetProducts()
-        {
-            var result = _productOperation.GetAll()
-                .Select(c => FromDto(c));
-            if (result.Any()) return Ok(result);
-
-            return NotFound();
-        }
+        public async Task<ActionResult> GetClients([FromQuery] ProductListParameters productListParameters)
+       => (await _productOperation.GetProductList(productListParameters))
+               .Match<ActionResult>(Left: err => NotFound(err.Message), Right: c => {
+                           Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
+                           return Ok(c.list);
+                   });
 
         [HttpDelete("{id}")]
         public ActionResult Delete(long id)

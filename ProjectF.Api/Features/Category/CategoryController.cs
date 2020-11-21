@@ -42,7 +42,6 @@ namespace ProjectF.Api.Features.Category
                     Left: err => NotFound(err.Message),
                     Right: c => Ok(CategoryViewModel.FromDto(c)));
 
-
         [HttpGet]
         public ActionResult GetCategories()
         {

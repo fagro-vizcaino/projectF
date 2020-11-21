@@ -17,6 +17,7 @@ using ProjectF.Data.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ProjectF.Data.Entities.PaymentMethods;
 
 namespace ProjectF.Data.Context
 {
@@ -39,10 +40,8 @@ namespace ProjectF.Data.Context
         public DbSet<Tax> Taxes { get; set; }
         public DbSet<DocumentNumberSequence> DocumentNumberSequences { get; set; }
         public DbSet<TaxRegimeType> TaxRegimeTypes { get; set; }
-
-        public _AppDbContext(DbContextOptions<_AppDbContext> options) : base(options)
-        {
-        }
+        public DbSet<PaymentTerm> PaymentMethods { get; set; }
+        public _AppDbContext(DbContextOptions<_AppDbContext> options) : base(options) { }
 
         public static ILoggerFactory GetLoggerFactory()
         {
@@ -58,8 +57,8 @@ namespace ProjectF.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
 
+            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
             modelBuilder.ApplyConfiguration(new SupplierConfiguration());
             modelBuilder.ApplyConfiguration(new BankAccountConfiguration());
             modelBuilder.ApplyConfiguration(new BankAccountTypeConfiguration());
@@ -70,16 +69,16 @@ namespace ProjectF.Data.Context
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new TaxConfiguration());
             modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration());
-            modelBuilder.ApplyConfiguration( new DocumentNumberSequenceConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceHeaderConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.Entity<Country>().HasData(CountryConfiguration.InitialCountryData());
 
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
-            modelBuilder.Entity<Currency>().HasData(CurrencyConfiguration.InitialCountryData());
-
-
+            modelBuilder.Entity<Currency>().HasData(CurrencyConfiguration.InitialCurrencyData());
+            
             base.OnModelCreating(modelBuilder);
         }
     }

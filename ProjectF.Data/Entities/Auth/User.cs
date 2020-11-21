@@ -4,7 +4,7 @@ using ProjectF.Data.Entities.Countries;
 
 namespace ProjectF.Data.Entities.Auth
 {
-  public class User : Entity
+  public class User : _BaseEntity
   {
     public string Fullname { get; set; }
     public Email Email { get; set; }

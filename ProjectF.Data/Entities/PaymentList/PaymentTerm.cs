@@ -6,7 +6,7 @@ namespace ProjectF.Data.Entities.PaymentList
     /// <summary>
     /// 
     /// </summary>
-    public class PaymentTerm : Entity
+    public class PaymentTerm : _BaseEntity
     {
         public Name Description { get; private set; }
         public int DayValue { get; private set; }

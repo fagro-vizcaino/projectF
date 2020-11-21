@@ -5,7 +5,7 @@ using System;
 
 namespace ProjectF.Data.Entities.Clients
 {
-    public class Client : Entity
+    public class Client : _BaseEntity
     {
         public Code Code { get; private set; }
         public Name Firstname { get; private set; }

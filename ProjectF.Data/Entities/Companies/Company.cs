@@ -6,7 +6,7 @@ using ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType;
 
 namespace ProjectF.Data.Entities
 {
-    public class Company : Entity
+    public class Company : _BaseEntity
     {
         public Name Name { get; private set; }
         public string Rnc { get; private set; }

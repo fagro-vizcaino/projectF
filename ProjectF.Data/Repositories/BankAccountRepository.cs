@@ -3,6 +3,10 @@ using LanguageExt;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using LanguageExt.Common;
+using ProjectF.Data.Entities.RequestFeatures;
+using System;
 
 namespace ProjectF.Data.Repositories
 {
@@ -22,11 +26,29 @@ namespace ProjectF.Data.Repositories
                 .Include(b => b.BankAccountType)
                 .SingleOrDefault(b => b.Id == id);
 
-
         public override IEnumerable<BankAccount> GetAll()
         => _context.BankAccounts
                 .Include(b => b.BankAccountType)
                 .ToList();
+
+
+        public async Task<Either<Error, PagedList<BankAccount>>> GetBankAccountListAsync(BankListParameters paramenters, bool trackChanges)
+        {
+            try
+            {
+                var bankAccount = await FindByCondition(e => e.Id > 0, trackChanges)
+                    .Include(b => b.BankAccountType)
+                    .OrderBy(e => e.Id)
+                    .ToListAsync();
+
+                return PagedList<BankAccount>
+                  .ToPagedList(bankAccount, paramenters.PageNumber, paramenters.PageSize);
+            }
+            catch (Exception ex)
+            {
+                return Error.New(ex.Message);
+            }
+        }
 
     }
 }

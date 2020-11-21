@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Banks;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using System.Threading.Tasks;
+using ProjectF.Data.Entities.RequestFeatures;
+using System.Linq;
 
 namespace ProjectF.Application.Banks
 {
@@ -41,9 +44,10 @@ namespace ProjectF.Application.Banks
             .Apply((editObject, bankAccountObj, c) => UpdateEntity(bankAccountObj, editObject))
             .Map(c => c);
 
-        public IEnumerable<BankAccountDto> GetAll()
-          => _bankRepository.GetAll().Map(b => (BankAccountDto)b);
-
+        public Task<Either<Error, (List<BankAccountDto> list, MetaData meta)>> GetBankAccountList(BankListParameters listParameters)
+            => _bankRepository.GetBankAccountListAsync(listParameters, true)
+            .MapT(c => (c.Select(i => (BankAccountDto)i).ToList(), c.MetaData));
+        
         public Validation<Error, BankAccount> Find(long id)
             => _bankRepository.Get(id)
             .Match(Some: c => Success<Error, BankAccount>(c),

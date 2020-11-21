@@ -3,7 +3,7 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.Taxes
 {
-    public class Tax : Entity
+    public class Tax : _BaseEntity
     {
         public Name Name { get; set; }
         public decimal PercentValue { get; set; }

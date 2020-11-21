@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LanguageExt.SomeHelp;
 using Microsoft.EntityFrameworkCore.Storage;
+using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Repositories
 {
@@ -23,7 +24,7 @@ namespace ProjectF.Data.Repositories
         public async Task<Either<Error, InvoiceHeader>> FindByAsync(params object[] valuesKeys)
         {
             var result = await base.FindAsync(valuesKeys);
-            if (result == null) return Error.New("No Invoice Found");
+            if (result is null) return Error.New("No Invoice Found");
 
             _context.Entry(result).Reference(c => c.Client).Load();
             _context.Entry(result).Reference(c => c.PaymentTerm).Load();

@@ -4,7 +4,7 @@ using ProjectF.Data.Entities.Countries;
 
 namespace ProjectF.Data.Entities.Suppliers
 {
-    public class Supplier : Entity
+    public class Supplier : _BaseEntity
     {
 
         public Code Code { get; private set; }

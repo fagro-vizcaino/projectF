@@ -11,7 +11,7 @@ namespace ProjectF.Data.Entities.Sequences
     /// 1021032040 = sequence
     /// 9999999999 = final sequence is the limit of the sequence
     /// </summary>
-    public class DocumentNumberSequence : Entity
+    public class DocumentNumberSequence : _BaseEntity
     {
         public Name Name { get; private set; }
         public string Prefix { get; private set; }

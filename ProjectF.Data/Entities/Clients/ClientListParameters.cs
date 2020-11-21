@@ -14,7 +14,7 @@ namespace ProjectF.Data.Entities.Clients
 
     public enum ClientStatus
     {
-        BalanceDue,
+        isBalanceDue,
         IsActive
     }
 }

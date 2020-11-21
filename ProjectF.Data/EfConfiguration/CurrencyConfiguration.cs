@@ -18,7 +18,7 @@ namespace ProjectF.Data.EfConfiguration
               .IsRequired();
         }
 
-        public static List<Currency> InitialCountryData()
+        public static List<Currency> InitialCurrencyData()
         {
             var currencies = new List<Currency> { new Currency(1,"DOP Peso Dominicano"),
                 new Currency(2, "US Dolar USA")

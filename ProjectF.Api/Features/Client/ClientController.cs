@@ -52,7 +52,7 @@ namespace ProjectF.Api.Features.ContactClient
                         Right: c => {
                             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
                             return Ok(c.list);
-                        });
+                            });
 
 
         [HttpDelete("{id}")]

@@ -3,7 +3,7 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.Categories
 {
-    public class Category : Entity
+    public class Category : _BaseEntity
     {
         public Code Code { get; private set; }
         public Name Name { get; private set; }

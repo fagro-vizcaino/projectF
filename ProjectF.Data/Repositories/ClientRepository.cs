@@ -21,23 +21,16 @@ namespace ProjectF.Data.Repositories
             _context = context;
         }
 
-
         public Option<Client> FindByKey(long id)
-        {
-            return _context.Clients
+            => _context.Clients
                 .Include(c => c.Country)
                 .FirstOrDefault(c => c.Id == id);
-        }
-
+        
 
         public IEnumerable<Client> FindAll()
-        {
-            return _context.Clients
-                .Include(c => c.Country);
-        }
+            => _context.Clients.Include(c => c.Country);
 
-        public async Task<Either<Error, PagedList<Client>>> GetClientListAsync(ClientListParameters paramenters,
-          bool trackChanges)
+        public async Task<Either<Error, PagedList<Client>>> GetClientListAsync(ClientListParameters paramenters, bool trackChanges)
         {
             try
             {

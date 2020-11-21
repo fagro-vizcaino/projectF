@@ -9,6 +9,9 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Products;
 using ProjectF.Data.Entities.Products;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Threading.Tasks;
+using ProjectF.Data.Entities.RequestFeatures;
+using System.Linq;
 
 namespace ProjectF.Application.Products
 {
@@ -71,6 +74,10 @@ namespace ProjectF.Application.Products
                    ct.IsService,
                    ct.Cost,
                    ct.Price));
+
+        public Task<Either<Error, (List<ProductDto> list, MetaData meta)>> GetProductList(ProductListParameters listParameters)
+           => _productRepository.GetProductListAsync(listParameters, true)
+           .MapT(c => (c.Select(i => EntityToDto(i)).ToList(), c.MetaData));
 
         public Either<Error, Product> Find(params object[] valueKeys)
             => _productRepository.Find(valueKeys).Match(Some: t => t,

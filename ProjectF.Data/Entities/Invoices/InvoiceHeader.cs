@@ -8,7 +8,7 @@ using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Entities.Invoices
 {
-    public class InvoiceHeader : Entity
+    public class InvoiceHeader : _BaseEntity
     {
         public Code Code { get; private set; }
         public string Ncf { get; private set; }
