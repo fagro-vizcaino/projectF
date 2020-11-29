@@ -1,4 +1,5 @@
 ﻿using ProjectF.Data.Entities.Banks;
+using ProjectF.Data.Entities.Common;
 using System;
 
 namespace ProjectF.Api.Features.Bank
@@ -14,7 +15,8 @@ namespace ProjectF.Api.Features.Bank
         public BankAccountTypeViewModel? BankAccountType { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Modified { get; set; }
-
+        public EntityStatus Status { get; set; }
+        
         public BankAccountDto ToDto()
             => new BankAccountDto(Id,
                 AccountName,
@@ -22,9 +24,10 @@ namespace ProjectF.Api.Features.Bank
                 Description,
                 InitialBalance,
                 BankAccountTypeId,
-                bankAccountType: null,
+                BankAccountType: null,
                 Created,
-                Modified);
+                Modified,
+                Status);
 
         public static BankAccountViewModel FromDto(BankAccountDto accountDto)
             => new BankAccountViewModel()

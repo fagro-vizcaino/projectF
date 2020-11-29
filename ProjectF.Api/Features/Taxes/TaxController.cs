@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-
+using static ProjectF.Data.Entities.Taxes.TaxMapper;
 using ProjectF.Application.Taxes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ProjectF.Api.Features.Tax
+namespace ProjectF.Api.Features.Taxes
 {
     [Route("api/config/[controller]")]
     [ApiController]
@@ -21,7 +21,7 @@ namespace ProjectF.Api.Features.Tax
                 .Create(viewModel.ToDto())
                 .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: tax => Ok(_taxOperation.EntityToDto(tax)));
+                    Right: tax => Ok(TaxViewModel.FromDtoToView(FromEntity(tax))));
 
 
         [HttpPut("{id}")]
@@ -30,7 +30,7 @@ namespace ProjectF.Api.Features.Tax
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: t => Ok(TaxViewModel.FromDto(t)));
+                    Right: t => Ok(TaxViewModel.FromDtoToView(FromEntity(t))));
 
 
         [HttpGet("{id}")]
@@ -39,13 +39,13 @@ namespace ProjectF.Api.Features.Tax
                 .Find(id)
                 .Match<ActionResult>(
                     Left : err => NotFound(err.Message),
-                    Right: tax => Ok(TaxViewModel.FromDto(_taxOperation.EntityToDto(tax))));
+                    Right: tax => Ok(TaxViewModel.FromDtoToView(FromEntity(tax))));
 
 
         [HttpGet]
         public ActionResult GetTaxes() {
             var result = _taxOperation.GetAll()
-                .Select(c => TaxViewModel.FromDto(c));
+                .Select(c => TaxViewModel.FromDtoToView(c));
             if (result.Any()) return Ok(result);
 
             return NotFound();

@@ -9,9 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using ProjectF.Application.Categories;
 using ProjectF.Data.Repositories;
 using ProjectF.Application.Auth;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using ProjectF.Application.Countries;
 using ProjectF.Application.Werehouses;
 using ProjectF.Application.Products;
@@ -22,7 +19,10 @@ using ProjectF.Application.PaymentTerms;
 using ProjectF.Application.Banks;
 using ProjectF.Application.Taxes;
 using ProjectF.Application.NumberSequence;
-using ProjectF.Data.FakeData;
+using ProjectF.Application.PaymentMethods;
+using ProjectF.EmailService;
+using Microsoft.AspNetCore.Routing;
+using ProjectF.EmailService.Auth;
 
 namespace ProjectF.Api
 {
@@ -42,7 +42,6 @@ namespace ProjectF.Api
             services.AddScoped<CategoryRepository>();
             services.AddScoped<WerehouseCrudHandler>();
             services.AddScoped<WerehouseRepository>();
-            services.AddScoped<AuthUserCrudHandler>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<CountryRepository>();
@@ -66,6 +65,8 @@ namespace ProjectF.Api
             services.AddScoped<BankAccountTypeCrudHandler>();
             services.AddScoped<DocumentNumberSequenceRepository>();
             services.AddScoped<DocumentNumberSequenceHandler>();
+            services.AddScoped<PaymentMethodHandler>(); 
+            services.AddScoped<PaymentMethodRepository>();
 
             //Db Related stuffs.
             services.AddDbContext<_AppDbContext>(options =>
@@ -94,20 +95,29 @@ namespace ProjectF.Api
                    options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
                    options.ViewLocationExpanders.Add(new FeatureFoldersRazorViewEngine());
                });
+
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
+
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
+
+            var authHtmlTemplate = Configuration
+                .GetSection("AuthTemplates")
+                .Get<AuthHtmlTemplateConfig>();
+
+            services.AddSingleton(authHtmlTemplate);
+
+            services.AddScoped<AuthUserCrudHandler>();
             services.AddControllers();
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(option =>
+            services.Configure<RouteOptions>(options =>
             {
-                option.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
+                options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
             });
 
         }
@@ -123,6 +133,7 @@ namespace ProjectF.Api
             // app.UseHttpsRedirection();
 
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

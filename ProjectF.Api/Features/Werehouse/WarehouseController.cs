@@ -1,11 +1,11 @@
 using System.Linq;
 using ProjectF.Application.Werehouses;
+using static ProjectF.Data.Entities.Warehouses.WarehouseMapper;
 using static ProjectF.Api.Features.Werehouses.WarehouseViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectF.Api.Features.Werehouses
 {
-
     [Route("api/config/[controller]")]
     [ApiController]
     public class WarehouseController : ControllerBase {
@@ -21,7 +21,7 @@ namespace ProjectF.Api.Features.Werehouses
                 .Create(werehouseViewmodel.ToDto())
                 .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: werehouse => Ok(FromDto(werehouse)));
+                    Right: w => Ok(FromDtoToView(FromEntity(w))));
 
 
         [HttpPut("{id}")]
@@ -30,7 +30,7 @@ namespace ProjectF.Api.Features.Werehouses
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(FromDto(c)));
+                    Right: c => Ok(FromDtoToView(FromEntity(c))));
 
 
         [HttpGet("{id}")]
@@ -39,7 +39,7 @@ namespace ProjectF.Api.Features.Werehouses
                 .Find(id)
                 .Match<ActionResult>(
                     Left : err => NotFound(err.Message),
-                    Right: w => Ok(FromDto(w)));
+                    Right: w => Ok(FromDtoToView(FromEntity(w))));
 
 
         [HttpGet]
@@ -57,13 +57,5 @@ namespace ProjectF.Api.Features.Werehouses
            .Match<ActionResult>(
                Left: err => BadRequest(err.Message),
                Right: c => NoContent());
-        //[HttpGet]
-
-        //[HttpGet]
-        //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )
-        //{
-        //    var result = _categoryOperations.GetAll()
-        //    return Ok();
-        //}
     }
 }

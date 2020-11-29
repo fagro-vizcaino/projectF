@@ -25,7 +25,7 @@ namespace ProjectF.Api.Features.ContactClient
                 .Create(model)
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(EntityToDto(c)));
+                    Right: c => Ok(FromEntity(c)));
 
 
         [HttpPut("{id}")]
@@ -34,7 +34,7 @@ namespace ProjectF.Api.Features.ContactClient
                 .Update(id, model)
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(EntityToDto(c)));
+                    Right: c => Ok(FromEntity(c)));
 
 
         [HttpGet("{id}")]
@@ -43,7 +43,7 @@ namespace ProjectF.Api.Features.ContactClient
                 .Find(id)
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
-                    Right: c => Ok(EntityToDto(c)));
+                    Right: c => Ok(FromEntity(c)));
 
         [HttpGet]
         public async Task<ActionResult> GetClients([FromQuery] ClientListParameters clientListParameters)

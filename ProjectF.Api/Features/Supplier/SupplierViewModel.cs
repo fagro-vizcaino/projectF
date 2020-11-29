@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Api.Features.Supplier
 {
@@ -21,6 +22,9 @@ namespace ProjectF.Api.Features.Supplier
         public int SelectedCountry { get; set; }
         public Data.Entities.Countries.Country? Country { get; set; }
         public bool IsIndependent { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Modified { get; set; }
+        public EntityStatus Status { get; set; }
 
         public SupplierDto ToDto()
             => new SupplierDto(Id
@@ -34,24 +38,30 @@ namespace ProjectF.Api.Features.Supplier
                 , Street
                 , SelectedCountry
                 , Country
-                , IsIndependent);
+                , IsIndependent
+                , Created
+                , Modified
+                , Status);
 
 
-        public static SupplierViewModel FromDto(SupplierDto supplierDto)
+        public static SupplierViewModel FromDto(SupplierDto dto)
               => new SupplierViewModel()
               {
-                  Id              = supplierDto.Id,
-                  Code            = supplierDto.Code,
-                  Name            = supplierDto.Name,
-                  Email           = supplierDto.Email,
-                  Phone           = supplierDto.Phone,
-                  Rnc             = supplierDto.Rnc,
-                  HomeOrApartment = supplierDto.HomeOrApartment,
-                  City            = supplierDto.City,
-                  Street          = supplierDto.Street,
-                  SelectedCountry = supplierDto.SelectedCountry,
-                  Country         = supplierDto.Country,
-                  IsIndependent   = supplierDto.IsIndependent
+                  Id              = dto.Id,
+                  Code            = dto.Code,
+                  Name            = dto.Name,
+                  Email           = dto.Email,
+                  Phone           = dto.Phone,
+                  Rnc             = dto.Rnc,
+                  HomeOrApartment = dto.HomeOrApartment,
+                  City            = dto.City,
+                  Street          = dto.Street,
+                  SelectedCountry = dto.SelectedCountry,
+                  Country         = dto.Country,
+                  IsIndependent   = dto.IsIndependent,
+                  Created         = dto.Created,
+                  Modified        = dto.Modified,
+                  Status          = dto.Status,
               };
 
     }

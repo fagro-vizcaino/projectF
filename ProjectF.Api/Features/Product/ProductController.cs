@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using static ProjectF.Api.Features.Product.ProductViewModel;
+using static ProjectF.Data.Entities.Products.ProductMapper;
 using System.Threading.Tasks;
 using ProjectF.Data.Entities.Products;
 using System.Text.Json;
@@ -25,7 +26,8 @@ namespace ProjectF.Api.Features.Product
                   Left: err => BadRequest(err.Message),
                   Right: p => CreatedAtRoute(nameof(GetProduct),
                       new { p.Id },
-                      FromDto(_productOperation.EntityToDto(p))));
+                      FromDtoToView(FromEntity(p))));
+
 
         [HttpPut("{id}")]
         public ActionResult UpdateProduct(long id, ProductViewModel viewModel)
@@ -33,7 +35,8 @@ namespace ProjectF.Api.Features.Product
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: p => Ok(FromDto(_productOperation.EntityToDto(p))));
+                    Right: p => Ok(FromDtoToView(FromEntity(p))));
+
 
         [HttpGet("{id}", Name = "GetProduct")]
         public IActionResult GetProduct(long id)
@@ -41,7 +44,7 @@ namespace ProjectF.Api.Features.Product
                 .GetByKey(id)
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
-                    Right: c => Ok(FromDto(_productOperation.EntityToDto(c))));
+                    Right: c => Ok(FromDtoToView(FromEntity(c))));
 
         [HttpGet]
         public async Task<ActionResult> GetClients([FromQuery] ProductListParameters productListParameters)

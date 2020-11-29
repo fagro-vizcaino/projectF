@@ -1,10 +1,13 @@
-﻿using ProjectF.Api.Features.Category;
-using ProjectF.Api.Features.Tax;
+﻿using ProjectF.Api.Features.Categories;
+using ProjectF.Api.Features.Taxes;
 using ProjectF.Api.Features.Werehouses;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Products;
-using ProjectF.Data.Entities.Taxes;
 using ProjectF.Data.Entities.Warehouses;
+using ProjectF.Data.Entities.Categories;
+using ProjectF.Data.Entities.Taxes;
+using System;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Api.Features.Product
 {
@@ -16,7 +19,7 @@ namespace ProjectF.Api.Features.Product
         public string Description { get; set; }
         public string Reference { get; set; }
         public CategoryViewModel Category { get; set; }
-        public WarehouseViewModel Werehouse { get; set; }
+        public WarehouseViewModel Warehouse { get; set; }
         public TaxViewModel Tax { get; set;}
         public bool IsService { get; set; }
         public decimal Cost { get; set; }
@@ -24,19 +27,28 @@ namespace ProjectF.Api.Features.Product
         public decimal Price2 { get; set; }
         public decimal Price3 { get; set; }
         public decimal Price4 { get; set; }
-
+        public DateTime Created { get; set; }
+        public DateTime? Modified { get; set; }
+        public EntityStatus Status { get; set; }
         public ProductDto ToDto()
         {
-            var category = new Data.Entities.Categories.Category(
-                new Code(Category.Code),
+            var category = new Category(new Code(Category.Code),
                 new Name(Category.Name),
-                Category.ShowOn);
+                Category.ShowOn,
+                Category.Created,
+                Category.Status);
 
-            var werehouse = new Warehouse(new Code(Werehouse.Code)
-                , new Name(Werehouse.Name)
-                , Werehouse.Location);
+            var warehouse = new Warehouse(new Code(Warehouse.Code)
+                , new Name(Warehouse.Name)
+                , Warehouse.Location
+                , Warehouse.Created
+                , Warehouse.Status);
 
-            var tax = new Data.Entities.Taxes.Tax(new Name(Tax.Name), Tax.PercentValue);
+            var tax = new Tax(new Name(Tax.Name)
+                , Tax.PercentValue
+                , Tax.Created
+                , Tax.Modified
+                , Tax.Status);
 
             return new ProductDto(Id
                , Code
@@ -45,16 +57,19 @@ namespace ProjectF.Api.Features.Product
                , Reference
                , category
                , Category.Id
-               , werehouse
-               , Werehouse.Id
+               , warehouse
+               , Warehouse.Id
                , Tax.Id
                , tax
                , IsService
                , Cost
-               , Price);
+               , Price
+               , Created
+               , Modified
+               , Status);
         }
 
-        public static ProductViewModel FromDto(ProductDto productDto)
+        public static ProductViewModel FromDtoToView(ProductDto productDto)
         {
             var category = new CategoryViewModel()
             {
@@ -66,10 +81,10 @@ namespace ProjectF.Api.Features.Product
 
             var werehouse = new WarehouseViewModel()
             {
-                Code     = productDto.Werehouse.Code.Value,
-                Name     = productDto.Werehouse.Name.Value,
-                Id       = productDto.Werehouse.Id,
-                Location = productDto.Werehouse.Location,
+                Code     = productDto.Warehouse.Code.Value,
+                Name     = productDto.Warehouse.Name.Value,
+                Id       = productDto.Warehouse.Id,
+                Location = productDto.Warehouse.Location,
             };
 
             var tax = new TaxViewModel()
@@ -87,7 +102,7 @@ namespace ProjectF.Api.Features.Product
                 Description = productDto.Description,
                 Reference   = productDto.Reference,
                 Category    = category,
-                Werehouse   = werehouse,
+                Warehouse   = werehouse,
                 Tax         = tax,
                 IsService   = productDto.IsService,
                 Cost        = productDto.Cost,

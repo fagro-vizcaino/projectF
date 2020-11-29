@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using ProjectF.Api.Features.ContactClient;
 using ProjectF.Api.Features.PaymentTerms;
+using ProjectF.Data.Entities.Common;
+using System.Collections.Immutable;
 
 namespace ProjectF.Api.Features.Invoice
 {
@@ -22,7 +24,7 @@ namespace ProjectF.Api.Features.Invoice
         public int NumberSequenceId { get; set;}
         public string Rnc { get; set; }
         public ClientDto Client { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime InvoiceDate { get; set; }
         public DateTime DueDate { get; set; }
         public PaymentTermDto PaymentTerm { get; set; }
         public string Notes { get; set; }
@@ -33,6 +35,9 @@ namespace ProjectF.Api.Features.Invoice
         public decimal TaxTotal { get; set; }
         public decimal Total { get; set; }
         public List<InvoiceDetailViewModel> InvoiceDetails { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Modified { get; set; }
+        public EntityStatus Status { get; set; }
         public InvoiceHeaderDto ToDto()
         {
             var client = new Client(new Code(Client.Code),
@@ -45,10 +50,14 @@ namespace ProjectF.Api.Features.Invoice
                 Client.HomeOrApartment,
                 Client.City,
                 Client.Street,
-                new Country(Client.SelectedCountry, "", ""));
+                new Country(Client.SelectedCountry, "", ""),
+                Client.Created,
+                Client.Status);
 
             var paymentTerm = new PaymentTerm(new Name(PaymentTerm.Description),
-                PaymentTerm.DayValue);
+                PaymentTerm.DayValue,
+                PaymentTerm.Created,
+                PaymentTerm.Status);
 
             var details = InvoiceDetails.Map(i => new InvoiceDetailDto(
                     i.Id,
@@ -77,30 +86,35 @@ namespace ProjectF.Api.Features.Invoice
                 , SubTotal
                 , TaxTotal
                 , Total
-                , details);
+                , details.ToImmutableList()
+                , Created
+                , Modified
+                , Status);
         }
-        public static InvoiceViewModel FromDto(InvoiceHeaderDto invoiceDto)
+        public static InvoiceViewModel FromDtoToView(InvoiceHeaderDto invoiceDto)
         {
-           
             var paymentTerm = new PaymentTermDto(invoiceDto.Id,
                 invoiceDto.PaymentTerm.Description.Value,
-                invoiceDto.PaymentTerm.DayValue);
+                invoiceDto.PaymentTerm.DayValue,
+                invoiceDto.PaymentTerm.Created,
+                invoiceDto.PaymentTerm.Modified,
+                invoiceDto.PaymentTerm.Status);
 
             return new InvoiceViewModel()
             {
                 Id                = invoiceDto.Id,
-                Client            = EntityToDto(invoiceDto.Client),
+                Client            = FromEntity(invoiceDto.Client),
                 Code              = invoiceDto.Code,
                 Rnc               = invoiceDto.Rnc,
                 Ncf               = invoiceDto.Ncf,
-                Created           = invoiceDto.Created,
+                Created           = invoiceDto.InvoiceDate,
                 DueDate           = invoiceDto.DueDate,
                 Footer            = invoiceDto.Footer,
                 Notes             = invoiceDto.Notes,
                 PaymentTerm       = paymentTerm,
                 TermAndConditions = invoiceDto.TermAndConditions,
                 Discount          = invoiceDto.Discount,
-                SubTotal          = invoiceDto.SubTotal,
+                SubTotal          = invoiceDto.Subtotal,
                 TaxTotal          = invoiceDto.TaxTotal,
                 Total             = invoiceDto.Total,
                 InvoiceDetails    = invoiceDto.InvoiceDetails.Map(i => new InvoiceDetailViewModel()

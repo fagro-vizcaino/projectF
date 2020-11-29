@@ -8,8 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="3.4.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -25,6 +26,11 @@
 </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />
+  <ProjectReference Include="..\ProjectF.EmailService\ProjectF.EmailService.csproj" />
 </ItemGroup>
-
+<ItemGroup>
+  <None Update="EmailTemplates\auth\ForgotPassword.html">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
 </Project>
