@@ -2,6 +2,7 @@ using ProjectF.Data.Entities.Auth;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectF.Data.Entities;
 
 namespace ProjectF.Data.EfConfiguration
 {
@@ -13,15 +14,22 @@ namespace ProjectF.Data.EfConfiguration
             
             builder.Property(u => u.Id).HasColumnName("UserId");
             
-            builder.Property(u => u.Fullname)
-            .HasMaxLength(200)
+            builder.Property(u => u.Firstname)
+            .HasMaxLength(65)
             .IsRequired();
 
-            builder.Property(u => u.Email)
-                .HasMaxLength(30)
-                .HasConversion(u => u.Value, u => new Email(u));
+            builder.Property(u => u.Lastname)
+            .HasMaxLength(220);
 
-            builder.HasOne(u => u.Country).WithMany();
-      }
+            builder.HasOne(u => u.Country).WithMany()
+                .IsRequired(false);
+
+            builder.HasOne<Company>()
+                .WithMany()
+                .IsRequired(false)
+                .HasForeignKey(s => s.CompanyId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+        }
     }
 }

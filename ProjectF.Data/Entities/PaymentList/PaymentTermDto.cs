@@ -1,17 +1,8 @@
-﻿using ProjectF.Data.Entities.Common.ValueObjects;
+﻿using System;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.Entities.PaymentList
 {
     public record PaymentTermDto
-    {
-        public long Id { get; }
-        public string Description { get; }
-        public int DayValue { get; }
-
-        public PaymentTermDto(long id, string description, int dayValue)
-         => (Id, Description, DayValue) = (id, description, dayValue);
-
-        public static implicit operator PaymentTerm(PaymentTermDto dto)
-            =>  new PaymentTerm(new Name(dto.Description), dto.DayValue);
-    }
+        (long Id, string Description, int DayValue, DateTime Created, DateTime? Modified, EntityStatus Status);
 }

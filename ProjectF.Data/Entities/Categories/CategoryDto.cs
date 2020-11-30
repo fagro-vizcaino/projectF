@@ -1,18 +1,13 @@
-using ProjectF.Data.Entities.Common.ValueObjects;
+using System;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.Entities.Categories
 {
-    public record CategoryDto
-    {
-        public long Id { get; }
-        public string Code { get; }
-        public string Name { get; }
-        public bool ShowOn { get; }
-
-        public CategoryDto(long id, string code, string name, bool showOn)
-            =>(Id, Code, Name, ShowOn) = (id, code, name, showOn);
-    
-        public static implicit operator Category(CategoryDto dto)
-            =>  new Category(new Code(dto.Code), new Name(dto.Name), dto.ShowOn);
-    }
+    public record CategoryDto(long Id
+        , string Code
+        , string Name
+        , bool ShowOn
+        , DateTime Created
+        , DateTime? Modified
+        , EntityStatus Status);
 }

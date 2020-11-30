@@ -5,6 +5,14 @@ using LanguageExt;
 using LanguageExt.Common;
 using ProjectF.Data.Entities.Auth;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 
 namespace ProjectF.Application.Auth
 {
@@ -12,151 +20,96 @@ namespace ProjectF.Application.Auth
     {
         readonly UserRepository _userRepository;
         readonly CountryRepository _countryRepository;
+        readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
+        private User _user;
 
-        public AuthUserCrudHandler(UserRepository userRepository, CountryRepository countryRepository)
+        public AuthUserCrudHandler(UserRepository userRepository
+            , CountryRepository countryRepository
+            , UserManager<User> userManager
+            , IConfiguration configuration)
         {
-            _userRepository = userRepository;
+            _userRepository    = userRepository;
             _countryRepository = countryRepository;
+            _userManager       = userManager;
+            _configuration     = configuration;
         }
 
-        public Either<Error, Unit> Register(UserDto user)
-           => GeneratePasswordHash(user)
-               .Bind(ValidateEmail)
-               .Bind(ValidateFullname)
-               .Bind(ValidateCountry)
-               .Bind(SetCountry)
-               .Bind(Exits)
-               .Bind(CreateEntity)
-               .Bind(Add)
-               .Bind(Save);
+        public Either<Error, RegisterUserDto> Register(RegisterUserDto user)
+           => ValidateCountry(user)
+               .Bind(SetCountry);
 
-        public Either<Error, UserDto> Login(UserDto user)
-          => FindUser(user)
-            .Bind(VerifyPasswordHash)
-            .Match<Either<Error, UserDto>>(
-                Left: err => Error.New(err.Message),
-                Right: user => user
-            );
-
-        Either<Error, UserDto> ValidateEmail(UserDto user)
-          => Email.Of(user.Email)
-            .Match<Either<Error, UserDto>>(
-              Left: e => Error.New(e.Message),
-              Right: em => user
-            );
-
-        Either<Error, UserDto> ValidateCountry(UserDto user)
+        public async Task<bool> ValidateUser(UserLoginDto userLoginDto)
         {
-            if (user.Country == null && user.SelectedCountry == 0)
+            _user = await _userManager.FindByNameAsync(userLoginDto.Username);
+            return (_user is not null 
+                && await _userManager.CheckPasswordAsync(_user, userLoginDto.Password)
+                && await _userManager.IsEmailConfirmedAsync(_user));
+        }
+
+        public async Task<string> CreateToken()
+        {
+            var signingCredentials = GetSigningCredentials();
+            var claims = await GetClaims();
+            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+
+        SigningCredentials GetSigningCredentials()
+        {
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET") ?? string.Empty);
+            var secret = new SymmetricSecurityKey(key);
+            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+        }
+
+        private async Task<List<Claim>> GetClaims()
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, _user.UserName)
+            };
+
+            var roles = await _userManager.GetRolesAsync(_user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            return claims;
+        }
+
+        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+
+            var tokenOptions = new JwtSecurityToken
+            (
+                issuer: jwtSettings.GetSection("validIssuer").Value,
+                audience: jwtSettings.GetSection("validAudience").Value,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                signingCredentials: signingCredentials
+            );
+
+            return tokenOptions;
+        }
+
+      
+        Either<Error, RegisterUserDto> ValidateCountry(RegisterUserDto user)
+        {
+            if (user.Country is null && user.SelectedCountry == 0)
                 return Error.New("country is required");
 
             return user;
         }
 
-        Either<Error, UserDto> SetCountry(UserDto user)
+        Either<Error, RegisterUserDto> SetCountry(RegisterUserDto user)
         {
             var country = _countryRepository.FromCountryId(user.SelectedCountry);
             if (country == null) return Error.New("couldn't find to country");
 
-            user.Country = country;
-            return user;
-        }
-
-        Either<Error, UserDto> ValidateFullname(UserDto user)
-        {
-            if (string.IsNullOrEmpty(user.Fullname)
-             || string.IsNullOrWhiteSpace(user.Fullname)
-             || user.Fullname.Length > 200)
-                return Error.New("fullname not valid");
-
-            return user;
-        }
-
-        Either<Error, UserDto> Exits(UserDto user)
-        {
-            if (_userRepository.UserExits(user.Email)) return Error.New("Email Already exits");
-            return user;
-        }
-
-        Either<Error, UserDto> FindUser(UserDto user)
-          => _userRepository.FindByUsername(user.Email.ToLower())
-                                  .Match<Either<Error, UserDto>>(
-                                      Left: e => Error.New(e.Message),
-                                      Right: u => new UserDto(id: u.Id
-                                      , u.Email
-                                      , u.Fullname
-                                      , u.Country.Id
-                                      , u.Country
-                                      , user.Password
-                                      , u.PasswordHash
-                                      , u.PasswordSalt))
-                                  .Bind(SetCountry);
-
-        Either<Error, UserDto> VerifyPasswordHash(UserDto user)
-        {
-            try
-            {
-                using var hmac = new System.Security.Cryptography.HMACSHA512(user.PasswordSalt);
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Password));
-                if (computedHash.SequenceEqual(user.PasswordHash)) return user;
-
-                return Error.New("verification fail");
-            }
-            catch (System.Exception ex)
-            {
-                return Error.New(ex.Message);
-            }
-        }
-
-        Either<Error, UserDto> GeneratePasswordHash(UserDto user)
-        {
-            try
-            {
-                using (var hmac = new System.Security.Cryptography.HMACSHA512())
-                {
-                    user.PasswordSalt = hmac.Key;
-                    user.PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Password));
-                    return user;
-                }
-            }
-            catch (System.Exception ex)
-            {
-                return Error.New(ex.Message);
-            }
-
-        }
-
-        Either<Error, User> CreateEntity(UserDto user)
-          => new User(user.Fullname
-          , new Email(user.Email)
-          , user.Country
-          , user.PasswordHash
-          , user.PasswordSalt);
-
-        Either<Error, Unit> Add(User user)
-        {
-            try
-            {
-                _userRepository.Add(user);
-                return Unit.Default;
-            }
-            catch (System.Exception ex)
-            {
-                return Error.New($"{ex.Message}\n{ex.StackTrace}");
-            }
-        }
-
-        Either<Error, Unit> Save(Unit unit)
-        {
-            try
-            {
-                _userRepository.Save();
-                return Unit.Default;
-            }
-            catch (System.Exception ex)
-            {
-                return Error.New($"{ex.Message}\n{ex.StackTrace}");
-            }
+            var currentUser = user with { Country = country };
+            return currentUser;
         }
     }
 }

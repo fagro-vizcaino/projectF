@@ -1,4 +1,5 @@
 ﻿using System;
+using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.Sequences
@@ -12,11 +13,11 @@ namespace ProjectF.Data.Entities.Sequences
         public int NextSequence { get; init;}
         public int FinalSequence { get; }
         public DateTime ValidUntil { get; }
-        public bool? IsActive { get; }
         public string DisplaySequence 
             => $"{Prefix}{NextSequence.ToString().PadLeft(8,'0')}";
         public DateTime Created { get; }
         public DateTime? Modified { get;}
+        public EntityStatus Status { get; }
 
         public NumberSequenceDto(long id, 
             string name,
@@ -25,9 +26,9 @@ namespace ProjectF.Data.Entities.Sequences
             int nextSequence,
             int finalSequence,
             DateTime validUntil,
-            bool? isActive,
             DateTime created,
-            DateTime? modified)
+            DateTime? modified,
+            EntityStatus status)
         {
             Id              = id;
             Name            = name;
@@ -36,9 +37,9 @@ namespace ProjectF.Data.Entities.Sequences
             NextSequence    = nextSequence;
             FinalSequence   = finalSequence;
             ValidUntil      = validUntil;
-            IsActive        = isActive;
             Created         = created;
             Modified        = modified;
+            Status          = status;
         }
 
         public static implicit operator DocumentNumberSequence(NumberSequenceDto dto)
@@ -48,8 +49,7 @@ namespace ProjectF.Data.Entities.Sequences
                 dto.NextSequence, 
                 dto.FinalSequence, 
                 dto.ValidUntil, 
-                dto.IsActive,
                 dto.Created,
-                dto.Modified);
+                dto.Status);
     }
 }

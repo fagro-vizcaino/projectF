@@ -1,4 +1,5 @@
 ﻿using ProjectF.Data.Entities.Banks;
+using static ProjectF.Data.Entities.Banks.BankAccountsMapper;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System;
@@ -18,8 +19,7 @@ namespace ProjectF.Application.Banks
         
         public Either<Error, BankAccountType> Create(BankAccountTypeDto bankAccountDto)
             => Validate(bankAccountDto)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save)
             .ToEither()
             .MapLeft(errors => Error.New(string.Join("; ", errors)));
@@ -46,7 +46,7 @@ namespace ProjectF.Application.Banks
             .MapLeft(errors => Error.New(string.Join("; ", errors)));
 
         public IEnumerable<BankAccountTypeDto> GetAll()
-          => _bankAccountTypeRepository.GetAll().Map(b => (BankAccountTypeDto)b);
+          => _bankAccountTypeRepository.GetAll().Map(b => FromEntity(b));
 
         public Validation<Error, BankAccountType> Find(params object[] valueKeys)
             => _bankAccountTypeRepository.Find(valueKeys)
@@ -64,15 +64,13 @@ namespace ProjectF.Application.Banks
         Validation<Error, Name> ValidateName(BankAccountTypeDto bankAccountDto)
             => Name.Of(bankAccountDto.Name);
 
-        Validation<Error, BankAccountType> CreateEntity(BankAccountTypeDto bankAccountDto)
-         => Success<Error, BankAccountType>(bankAccountDto);
-
-        Validation<Error, BankAccountType> UpdateEntity(BankAccountTypeDto accountTypeDto, BankAccountType bankAccountType)
+        Validation<Error, BankAccountType> UpdateEntity(BankAccountTypeDto dto, BankAccountType bankAccountType)
         {
-            BankAccountType editAccount = accountTypeDto;
+            BankAccountType editAccount = FromDto(dto);
 
-            bankAccountType.EditBankAccountType(editAccount.Name,                
-                editAccount.Description);
+            bankAccountType.EditBankAccountType(editAccount.Name
+                , editAccount.Description
+                , editAccount.Status);
 
             return bankAccountType;
         }
@@ -84,7 +82,7 @@ namespace ProjectF.Application.Banks
                 _bankAccountTypeRepository.Add(bank);
                 return bank;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return Error.New($"{ex.Message}\n{ex.StackTrace}");
             }

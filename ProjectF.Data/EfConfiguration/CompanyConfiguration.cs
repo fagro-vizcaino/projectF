@@ -9,8 +9,8 @@ namespace ProjectF.Data.EfConfiguration
     {
         public void Configure(EntityTypeBuilder<Company> builder)
         {
-            builder.ToTable("Company").HasKey(c => c.Id);
-            builder.Property(c => c.Id).HasColumnName("CompanyId");
+            builder.ToTable("Company").HasKey(c => c.CompanyId);
+            builder.Property(c => c.CompanyId).HasColumnName("CompanyId");
 
             builder.Property(q => q.Name)
                 .HasMaxLength(60)
@@ -38,7 +38,17 @@ namespace ProjectF.Data.EfConfiguration
             builder.HasOne(p => p.RegimeType);
 
             builder.HasOne(p => p.Currency);
+
+            builder.Property(c => c.Status)
+                .IsRequired();
             
+            builder.Property(c => c.Created)
+                .IsRequired()
+                .HasColumnType("Datetime");
+            
+            builder.Property(c => c.Modified)
+                .HasColumnType("Datetime");
+
         }
     }
 }

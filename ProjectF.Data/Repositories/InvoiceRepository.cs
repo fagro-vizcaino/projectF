@@ -48,7 +48,7 @@ namespace ProjectF.Data.Repositories
         {
             try
             {
-                var invoices = await FindByCondition(e => e.Created >= paramenters.DateFrom
+                var invoices = await FindByCondition(e => e.InvoiceDate >= paramenters.DateFrom
                 && e.DueDate <= paramenters.DateTo, trackChanges)
                 .Include(c => c.Client)
                 .OrderBy(e => e.Id)

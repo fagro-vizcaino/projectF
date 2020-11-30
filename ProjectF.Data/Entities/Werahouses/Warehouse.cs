@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -17,21 +18,26 @@ namespace ProjectF.Data.Entities.Warehouses
         public virtual IReadOnlyList<Product> Products => _products.ToList();
         protected Warehouse() { }
 
-        public Warehouse(Code code, Name name, string location)
+        public Warehouse(Code code, 
+            Name name, 
+            string location, 
+            DateTime created, 
+            EntityStatus status = EntityStatus.Active)
         {
             Code     = code;
             Name     = name;
             Location = location ?? string.Empty;
+            Created  = created == DateTime.MinValue ? DateTime.Now : created;
+            Status   = status;
         }
 
-        public void EditWerehouse(Code code, Name name, string location)
+        public void EditWerehouse(Code code, Name name, string location, EntityStatus status)
         {
             Code     = code;
             Name     = name;
             Location = location ?? string.Empty;
+            Modified = DateTime.Now;
+            Status   = status;
         }
-
-        public static implicit operator WarehouseDto(Warehouse entity)
-          => new WarehouseDto(entity.Id, entity.Code.Value, entity.Name.Value, entity.Location);
     }
 }

@@ -25,7 +25,7 @@ namespace ProjectF.Data.Repositories
         {
             return _context.Products
                  .Include(u => u.Category)
-                 .Include(u => u.Werehouse)
+                 .Include(u => u.Warehouse)
                  .Include(u => u.Tax)
                  .Select(c => c).AsEnumerable();
         }
@@ -36,7 +36,7 @@ namespace ProjectF.Data.Repositories
             {
                 var products = await FindByCondition(e => e.Id > 0, trackChanges)
                     .Include(u => u.Category)
-                    .Include(u => u.Werehouse)
+                    .Include(u => u.Warehouse)
                     .Include(u => u.Tax)
                     .OrderBy(e => e.Id)
                     .ToListAsync();
@@ -55,7 +55,7 @@ namespace ProjectF.Data.Repositories
             var product = _context.Products.Find(keyValues);
 
             _context.Entry(product).Reference(c => c.Category).Load();
-            _context.Entry(product).Reference(c => c.Werehouse).Load();
+            _context.Entry(product).Reference(c => c.Warehouse).Load();
             _context.Entry(product).Reference(c => c.Tax).Load();
             return product;
         }
@@ -63,7 +63,7 @@ namespace ProjectF.Data.Repositories
         public Product GetByKeys(long id)
          => _context.Products
                 .Include(c => c.Category)
-                .Include(c => c.Werehouse)
+                .Include(c => c.Warehouse)
                 .Include(c => c.Tax)
                 .FirstOrDefault(c => c.Id == id);
     }

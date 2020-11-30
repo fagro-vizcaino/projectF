@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ProjectF.Data.Entities.Categories;
+using static ProjectF.Data.Entities.Categories.CategoryMapper;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Repositories;
 using LanguageExt;
@@ -13,15 +14,13 @@ namespace ProjectF.Application.Categories
     public class CategoryCrudHandler
     {
         readonly CategoryRepository _categoryRepository;
-
         public CategoryCrudHandler(CategoryRepository categoryRepository)
             => _categoryRepository = categoryRepository;
 
         public Either<Error, Category> Create(CategoryDto categoryDto)
             => ValidateCode(categoryDto)
             .Bind(ValidateName)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
         public Either<Error, Category> Update(long id, CategoryDto categoryDto)
@@ -38,7 +37,7 @@ namespace ProjectF.Application.Categories
               .Bind(Save);        
 
         public IEnumerable<CategoryDto> GetAll()
-            => _categoryRepository.GetAll().Map(ct => (CategoryDto) ct);
+            => _categoryRepository.GetAll().Map(ct => FromEntity(ct));
 
         public Either<Error, Category> Find(params object[] valueKeys)
             => _categoryRepository.Find(valueKeys)
@@ -62,12 +61,12 @@ namespace ProjectF.Application.Categories
                 .Match(Succ: c => categoryDto,
                     Fail: err => Left<Error, CategoryDto>(Error.New(string.Join(";", err))));
 
-        Either<Error, Category> CreateEntity(CategoryDto categoryDto)
-            => Right<Error, Category>(categoryDto);
-
-        Either<Error, Category> UpdateEntity(CategoryDto categoryDto, Category category)
+        Either<Error, Category> UpdateEntity(CategoryDto dto, Category category)
         {
-            category.EditCategory(new Code(categoryDto.Code), new Name(categoryDto.Name), categoryDto.ShowOn);
+            category.EditCategory(new Code(dto.Code)
+                , new Name(dto.Name)
+                , dto.ShowOn
+                , dto.Status);
             return category;
         }
 
@@ -78,7 +77,7 @@ namespace ProjectF.Application.Categories
                 _categoryRepository.Add(category);
                 return category;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return Error.New($"{ex.Message}\n{ex.StackTrace}");
             }
@@ -91,7 +90,7 @@ namespace ProjectF.Application.Categories
                 _categoryRepository.Save();
                 return category;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return Error.New($"{ex.Message}\n{ex.StackTrace}");
             }

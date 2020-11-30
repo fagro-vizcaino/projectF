@@ -11,6 +11,8 @@ using FluentValidation;
 using ProjectF.WebUI.Components.Common;
 using ProjectF.WebUI.Pages.Invoices.List;
 using ProjectF.WebUI.Pages.NumberSequences;
+using ProjectF.WebUI.AuthProviders;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ProjectF.WebUI
 {
@@ -21,7 +23,11 @@ namespace ProjectF.WebUI
             const string baseUrl = "http://localhost:5000/api/";
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
-            
+
+            //Auth
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, TestAuthStateProvider>();
+
             //Themes
             builder.Services.AddAntDesign();
 
@@ -51,7 +57,6 @@ namespace ProjectF.WebUI
                 => client.BaseAddress = new Uri(baseUrl));
             builder.Services.AddHttpClient<IBaseDataService<NumberSequence>, NumberSequenceDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
-
 
             builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
             builder.Services.AddTransient<IValidator<Warehouse>, WarehouseValidator>();

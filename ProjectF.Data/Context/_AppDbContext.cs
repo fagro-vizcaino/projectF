@@ -17,11 +17,11 @@ using ProjectF.Data.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ProjectF.Data.Entities.PaymentMethods;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ProjectF.Data.Context
 {
-    public class _AppDbContext : DbContext
+    public class _AppDbContext : IdentityDbContext<User>
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
@@ -56,8 +56,9 @@ namespace ProjectF.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
             modelBuilder.ApplyConfiguration(new SupplierConfiguration());
             modelBuilder.ApplyConfiguration(new BankAccountConfiguration());
@@ -78,6 +79,8 @@ namespace ProjectF.Data.Context
 
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
             modelBuilder.Entity<Currency>().HasData(CurrencyConfiguration.InitialCurrencyData());
+
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             
             base.OnModelCreating(modelBuilder);
         }

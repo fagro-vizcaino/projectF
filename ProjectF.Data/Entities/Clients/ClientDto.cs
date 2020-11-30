@@ -1,4 +1,5 @@
-﻿using ProjectF.Data.Entities.Common.ValueObjects;
+﻿using ProjectF.Data.Entities.Common;
+using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
 using System;
 
@@ -16,5 +17,8 @@ namespace ProjectF.Data.Entities.Clients
         string City, 
         string Street, 
         int SelectedCountry, 
-        Country? Country);
+        Country? Country
+        , DateTime Created
+        , DateTime? Modified
+        , EntityStatus Status);
 }

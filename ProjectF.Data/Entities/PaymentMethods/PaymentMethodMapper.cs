@@ -8,7 +8,6 @@ namespace ProjectF.Data.Entities.PaymentMethods
        => new PaymentMethod(new Code(dto.Code),
            new Name(dto.Description),
            dto.Created,
-           dto.Modified,
            dto.Status);
 
         public static PaymentMethodDto FromEntity(PaymentMethod entity)

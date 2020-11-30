@@ -1,4 +1,5 @@
-﻿using ProjectF.Data.Entities.Categories;
+﻿using System;
+using ProjectF.Data.Entities.Categories;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Taxes;
@@ -13,7 +14,7 @@ namespace ProjectF.Data.Products
         public GeneralText Description { get; private set; }
         public GeneralText Reference { get; private set; }
         public virtual Category Category {get; private set;}
-        public virtual Warehouse Werehouse { get; private set;}
+        public virtual Warehouse Warehouse { get; private set;}
         public virtual Tax Tax { get; private set;}
         public bool IsService { get; private set; }
         public decimal Cost { get; private set; }
@@ -36,14 +37,16 @@ namespace ProjectF.Data.Products
             , decimal price
             , decimal price2
             , decimal price3
-            , decimal price4)
+            , decimal price4
+            , DateTime created
+            , EntityStatus status)
         {
             Code        = code;
             Name        = name;
             Description = description;
             Reference   = reference;
             Category    = category;
-            Werehouse   = werehouse;
+            Warehouse   = werehouse;
             Tax         = tax;
             IsService   = isService;
             Cost        = cost;
@@ -51,6 +54,9 @@ namespace ProjectF.Data.Products
             Price2      = price2;
             Price3      = price3;
             Price4      = price4;
+            Created     = created == DateTime.MinValue ? DateTime.Now : created;
+            Status      = status;
+
         }
 
         public void EditProduct(Code code
@@ -65,14 +71,15 @@ namespace ProjectF.Data.Products
             , decimal price
             , decimal price2
             , decimal price3
-            , decimal price4)
+            , decimal price4
+            , EntityStatus status)
         {
             Code        = code;
             Name        = name;
             Description = description;
             Reference   = reference;
             Category    = category;
-            Werehouse   = werehouse;
+            Warehouse   = werehouse;
             Tax         = tax;
             IsService   = isService;
             Cost        = cost;
@@ -80,6 +87,8 @@ namespace ProjectF.Data.Products
             Price2      = price2;
             Price3      = price3;
             Price4      = price4;
+            Status      = status;
+            Modified    = DateTime.Now;
         }
     }
 }

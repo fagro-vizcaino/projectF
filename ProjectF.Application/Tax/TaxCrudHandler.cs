@@ -1,12 +1,12 @@
 ﻿using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Taxes;
+using static ProjectF.Data.Entities.Taxes.TaxMapper;
 using ProjectF.Data.Repositories;
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ProjectF.Application.Taxes
 {
@@ -16,12 +16,10 @@ namespace ProjectF.Application.Taxes
 
         public TaxCrudHandler(TaxRepository taxRepository) 
             => _taxRepository = taxRepository;
-        
 
         public Either<Error, Tax> Create(TaxDto taxDto)
             => ValidateName(taxDto)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
 
@@ -39,14 +37,11 @@ namespace ProjectF.Application.Taxes
 
         public IEnumerable<TaxDto> GetAll()
             => _taxRepository.GetAll()
-                .Map(t => new TaxDto(t.Id, t.Name.Value, t.PercentValue));
+                .Map(t => FromEntity(t));
 
         public Either<Error, Tax> Find(params object[] valueKeys)
            =>  _taxRepository.Find(valueKeys).Match(Some: p => p, 
                 None: Left<Error, Tax>(Error.New("Couldn't find tax")));
-
-        public TaxDto EntityToDto(Tax tax)
-           => new TaxDto(tax.Id, tax.Name.Value, tax.PercentValue);
 
         //Missing Pagination
 
@@ -60,18 +55,10 @@ namespace ProjectF.Application.Taxes
             => Name.Of(taxDto.Name).Match(Succ: c => taxDto,
                  Fail: err => Left<Error, TaxDto>(Error.New(string.Join(";", err))));
 
-        Either<Error, Tax> CreateEntity(TaxDto taxDto)
+        Either<Error, Tax> UpdateEntity(TaxDto dto, Tax tax)
         {
-            var name = new Name(taxDto.Name);
-            var tax = new Tax(name, taxDto.PercentValue);
-
-            return tax;
-        }
-
-        Either<Error, Tax> UpdateEntity(TaxDto taxDto, Tax tax)
-        {
-            var name = new Name(taxDto.Name);
-            tax.EditTax(name, tax.PercentValue);
+            var name = new Name(dto.Name);
+            tax.EditTax(name, tax.PercentValue, dto.Status);
             return tax;
         }
 

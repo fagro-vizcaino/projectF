@@ -2,6 +2,7 @@
 using ProjectF.Data.Entities.Invoices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectF.Data.Entities;
 
 namespace ProjectF.Data.EfConfiguration
 {
@@ -29,7 +30,7 @@ namespace ProjectF.Data.EfConfiguration
             builder.HasOne(q => q.Client);
            
 
-            builder.Property(q => q.Created)
+            builder.Property(q => q.InvoiceDate)
                 .IsRequired();
 
             builder.Property(q => q.DueDate)
@@ -63,8 +64,21 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.HasMany(q => q.InvoiceDetails).WithOne(q => q.InvoiceHeader);
 
-            builder.Property(q => q.SystemCreated);
-            builder.Property(q => q.SystemModified);
+            builder.HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(s => s.CompanyId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(c => c.Status)
+                .IsRequired();
+
+            builder.Property(q => q.Created)
+                .HasColumnType("Datetime")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            builder.Property(q => q.Modified)
+                .HasColumnType("Datetime");
 
         }
     }

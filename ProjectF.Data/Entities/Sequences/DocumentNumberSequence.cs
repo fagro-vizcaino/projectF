@@ -19,9 +19,6 @@ namespace ProjectF.Data.Entities.Sequences
         public int NextSequence { get; private set; }
         public int FinalSequence { get; private set; }
         public DateTime ValidUntil { get; private set; }
-        public bool? IsActive { get; private set; }
-        public DateTime Created { get; private set; }
-        public DateTime? Modified { get; private set;}
 
         protected DocumentNumberSequence() { }
 
@@ -31,9 +28,8 @@ namespace ProjectF.Data.Entities.Sequences
             int nextSequence,
             int finalSequence,
             DateTime validUntil,
-            bool? isActive,
             DateTime created,
-            DateTime? modified = null)
+            EntityStatus status = EntityStatus.Active)
         {
             Name            = name;
             Prefix          = prefix;
@@ -41,9 +37,8 @@ namespace ProjectF.Data.Entities.Sequences
             NextSequence    = nextSequence;
             FinalSequence   = finalSequence;
             ValidUntil      = validUntil;
-            IsActive        = isActive;
-            Created         = DateTime.MinValue == created ? DateTime.Now : created;
-            Modified        = modified;
+            Created         = DateTime.MinValue == created ? DateTime.Now : created;            
+            Status          = status;
         }
 
 
@@ -53,8 +48,7 @@ namespace ProjectF.Data.Entities.Sequences
             int nextSequence,
             int finalSequence,
             DateTime validUntil,
-            bool? isActive,
-            DateTime? modified = null)
+            EntityStatus status)
         {
             Name            = name;
             Prefix          = prefix;
@@ -62,8 +56,8 @@ namespace ProjectF.Data.Entities.Sequences
             NextSequence    = nextSequence;
             FinalSequence   = finalSequence;
             ValidUntil      = validUntil;
-            IsActive        = isActive;
-            Modified        = modified == null ? DateTime.Now : modified;
+            Modified        = DateTime.Now;
+            Status          = status;
         }
 
         public static implicit operator NumberSequenceDto(DocumentNumberSequence model)
@@ -74,9 +68,9 @@ namespace ProjectF.Data.Entities.Sequences
               model.NextSequence,
               model.FinalSequence,
               model.ValidUntil,
-              model.IsActive,
               model.Created,
-              model.Modified);
+              model.Modified,
+              model.Status);
 
     }
 }

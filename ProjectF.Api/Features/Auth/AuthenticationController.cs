@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Linq;
 using ProjectF.EmailService;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
-using System.Web;
 using System;
 using System.Text;
 
@@ -33,7 +30,7 @@ namespace ProjectF.Api.Features.Auth
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserDto user)
+        public async Task<IActionResult> Register(RegisterUserDto user)
         {
             var _user = _authUser.Register(user)
                 .Match(Left: e => null, Right: c => c);

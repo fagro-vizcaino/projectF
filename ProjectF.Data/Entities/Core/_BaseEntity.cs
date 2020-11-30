@@ -6,6 +6,9 @@ namespace ProjectF.Data.Entities.Common
     {
         public long Id { get; private set; }
         public EntityStatus Status { get; protected set; }
+        public long CompanyId { get; protected set; }
+        public DateTime Created { get; protected set; }
+        public DateTime? Modified { get; protected set; }
         protected _BaseEntity() { }
 
         protected _BaseEntity(long id, EntityStatus status) : this()

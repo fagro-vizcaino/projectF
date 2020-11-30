@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ProjectF.Data.Entities.Warehouses;
+using static ProjectF.Data.Entities.Warehouses.WarehouseMapper;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Repositories;
 using LanguageExt;
@@ -22,8 +23,7 @@ namespace ProjectF.Application.Werehouses
         public Either<Error, Warehouse> Create(WarehouseDto werehouseDto)
             => ValidateCode(werehouseDto)
             .Bind(ValidateName)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
 
@@ -42,7 +42,7 @@ namespace ProjectF.Application.Werehouses
              .Bind(Save);
 
         public IEnumerable<WarehouseDto> GetAll()
-            => _werehouseRepository.GetAll().Map(w => (WarehouseDto) w);
+            => _werehouseRepository.GetAll().Map(w => FromEntity(w));
 
         public Either<Error, Warehouse> Find(params object[] valueKeys)
             => _werehouseRepository.Find(valueKeys).Match(Some: t => t,
@@ -65,14 +65,12 @@ namespace ProjectF.Application.Werehouses
                 .Match(Succ: c => werehosueDto,
                     Fail: err => Left<Error, WarehouseDto>(Error.New(string.Join(":", err))));
 
-        Either<Error, Warehouse> CreateEntity(WarehouseDto werehouseDto)
-            => Right<Error, Warehouse>(werehouseDto);
 
-        Either<Error, Warehouse> UpdateEntity(WarehouseDto werehouseDto, Warehouse werehouse)
+        Either<Error, Warehouse> UpdateEntity(WarehouseDto dto, Warehouse werehouse)
         {
-            var code = new Code(werehouseDto.Code);
-            var name = new Name(werehouseDto.Name);
-            werehouse.EditWerehouse(code, name, werehouseDto.Location);
+            var code = new Code(dto.Code);
+            var name = new Name(dto.Name);
+            werehouse.EditWerehouse(code, name, dto.Location, dto.Status);
             return werehouse;
         }
 

@@ -6,6 +6,7 @@ using static ProjectF.Application.Validator.Validators;
 using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Banks;
+using static ProjectF.Data.Entities.Banks.BankAccountsMapper;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using System.Threading.Tasks;
 using ProjectF.Data.Entities.RequestFeatures;
@@ -25,8 +26,7 @@ namespace ProjectF.Application.Banks
 
         public Either<Error, BankAccount> Create(BankAccountDto bankAccountDto)
             => Validate(bankAccountDto)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save)
             .ToEither()
             .MapLeft(errors => Error.New(string.Join("; ", errors)));
@@ -36,10 +36,10 @@ namespace ProjectF.Application.Banks
             .Bind(Save)
             .ToEither()
             .MapLeft(errors => Error.New(string.Join("; ", errors)));
-            
-        public Validation<Error, BankAccount> UpdateOperation(long id, BankAccountDto bankAccountDto) 
-            => (Find(id), 
-                Validate(bankAccountDto), 
+
+        public Validation<Error, BankAccount> UpdateOperation(long id, BankAccountDto bankAccountDto)
+            => (Find(id),
+                Validate(bankAccountDto),
                 ValidateIsCorrectUpdate(id, bankAccountDto))
             .Apply((editObject, bankAccountObj, c) => UpdateEntity(bankAccountObj, editObject))
             .Map(c => c);
@@ -47,14 +47,14 @@ namespace ProjectF.Application.Banks
         public Task<Either<Error, (List<BankAccountDto> list, MetaData meta)>> GetBankAccountList(BankListParameters listParameters)
             => _bankRepository.GetBankAccountListAsync(listParameters, true)
             .MapT(c => (c.Select(i => (BankAccountDto)i).ToList(), c.MetaData));
-        
+
         public Validation<Error, BankAccount> Find(long id)
             => _bankRepository.Get(id)
             .Match(Some: c => Success<Error, BankAccount>(c),
                 None: Error.New($"bank account id {id} does not exits"));
 
         public Either<Error, BankAccount> Delete(long id)
-          => Find(id)            
+          => Find(id)
             .Bind(Delete)
             .Bind(Save)
             .ToEither()
@@ -67,7 +67,7 @@ namespace ProjectF.Application.Banks
                 ValidateAccountType(bankAccountDto),
                 AccountTypeMustExist(bankAccountDto),
                 BankAccountNameMustNotExist(bankAccountDto))
-            .Apply((z, y, x, w, g, f) => bankAccountDto.With(bankAccountType: g))
+            .Apply((z, y, x, w, g, f) => bankAccountDto with { BankAccountType = g })
             .Map(b => b);
 
         Validation<Error, bool> ValidateAccountNumber(BankAccountDto bankAccountDto)
@@ -76,7 +76,7 @@ namespace ProjectF.Application.Banks
 
         Validation<Error, BankAccountType> AccountTypeMustExist(BankAccountDto bankAccountDto)
           => _bankAccountTypeRepository.Get(bankAccountDto.BankAccountTypeId)
-          .ToValidation(Error.New($"bank account type {bankAccountDto.BankAccountTypeId} does not exits"));
+          .ToValidation(Error.New($"bcank account type {bankAccountDto.BankAccountTypeId} does not exits"));
 
         Validation<Error, BankAccountDto> ValidateAccountType(BankAccountDto bankAccountDto)
          => bankAccountDto.BankAccountTypeId > 0
@@ -91,26 +91,23 @@ namespace ProjectF.Application.Banks
             => AtLeast(0m)(bankAccountDto.InitialBalance).Bind(AtMost(99999999.99m));
 
         Validation<Error, BankAccountDto> ValidateIsCorrectUpdate(long id, BankAccountDto bankAccountDto)
-            => id == bankAccountDto.Id 
-            ? bankAccountDto 
+            => id == bankAccountDto.Id
+            ? bankAccountDto
             : Fail<Error, BankAccountDto>(Error.New("invalid bankaccount update id"));
 
         Validation<Error, Name> ValidateName(BankAccountDto bankAccountDto)
             => Name.Of(bankAccountDto.AccountName);
 
-        Validation<Error, BankAccount> CreateEntity(BankAccountDto bankAccountDto)
-         => Success<Error, BankAccount>(bankAccountDto);
-
         BankAccount UpdateEntity(BankAccountDto bankAccountDto, BankAccount bankAccount)
         {
-            BankAccount editAccount = bankAccountDto;
-            
+            BankAccount editAccount = FromDto(bankAccountDto);
+
             bankAccount.EditBank(editAccount.AccountName,
                 editAccount.AccountNumber,
                 editAccount.Description,
                 editAccount.InitialBalance,
                 editAccount.BankAccountType,
-                editAccount.Created);
+                editAccount.Status);
             return bankAccount;
         }
 

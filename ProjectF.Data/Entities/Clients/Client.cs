@@ -17,7 +17,7 @@ namespace ProjectF.Data.Entities.Clients
         public string HomeOrApartment { get; private set; }
         public string City { get; private set; }
         public string Street { get; private set; }
-        public virtual Country Country { get; private set; }
+        public virtual Country? Country { get; private set; }
 
         protected Client() { }
 
@@ -31,9 +31,11 @@ namespace ProjectF.Data.Entities.Clients
             , string homeOrApartment
             , string city
             , string street
-            , Country country) =>
-            (Code, Firstname, Lastname, Email, Phone, Rnc, Birthday, HomeOrApartment, City, Street, Country)
-            = (code, firstname, lastname, email, phone, rnc, birthday, homeOrApartment, city, street, country);
+            , Country? country
+            , DateTime created
+            , EntityStatus status) =>
+             (Code, Firstname, Lastname, Email, Phone, Rnc, Birthday, HomeOrApartment, City, Street, Country, Created, Status)
+            = (code, firstname, lastname, email, phone, rnc, birthday, homeOrApartment, city, street, country, created == DateTime.MinValue ? DateTime.Now : created, status);
 
 
         public void Deconstruct(out Code dcode
@@ -45,7 +47,10 @@ namespace ProjectF.Data.Entities.Clients
             , out string dhomeOrApartment
             , out string dcity
             , out string dstreet
-            , out Country dcountry)
+            , out Country dcountry
+            , out DateTime dcreated
+            , out DateTime? dmodified
+            , out EntityStatus dstatus)
         {
             dcode            = Code;
             dname            = Firstname;
@@ -57,6 +62,9 @@ namespace ProjectF.Data.Entities.Clients
             dcity            = City;
             dstreet          = Street;
             dcountry         = Country;
+            dcreated         = Created;
+            dmodified        = Modified;
+            dstatus          = Status;
 
         }
 
@@ -71,7 +79,8 @@ namespace ProjectF.Data.Entities.Clients
             , string homeOrApartment
             , string city
             , string street
-            , Country country)
+            , Country country
+            , EntityStatus status)
         {
             Code            = code;
             Firstname       = firstname;
@@ -84,6 +93,8 @@ namespace ProjectF.Data.Entities.Clients
             City            = city;
             Street          = street;
             Country         = country;
+            Modified        = DateTime.Now;
+            Status          = status;
         }
     }
 }

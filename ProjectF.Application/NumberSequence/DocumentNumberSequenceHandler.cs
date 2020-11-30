@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Sequences;
 using ProjectF.Data.Entities.Common.ValueObjects;
-using System.Linq;
 
 namespace ProjectF.Application.NumberSequence
 {
@@ -86,7 +85,7 @@ namespace ProjectF.Application.NumberSequence
                 numberSequenceDto.NextSequence,
                 numberSequenceDto.FinalSequence,
                 numberSequenceDto.ValidUntil,
-                numberSequenceDto.IsActive);
+                numberSequenceDto.Status);
 
             return originalDocumentSequence;
         }

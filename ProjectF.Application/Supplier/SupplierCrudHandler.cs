@@ -5,6 +5,7 @@ using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Suppliers;
+using static ProjectF.Data.Entities.Suppliers.SupplierMapper;
 using System;
 
 namespace ProjectF.Application.Suppliers
@@ -27,8 +28,7 @@ namespace ProjectF.Application.Suppliers
             .Bind(ValidatePhone)
             .Bind(ValidateCountry)
             .Bind(SetCountry)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
         public Either<Error, SupplierDto> Update(long id, SupplierDto supplierDto)
@@ -41,18 +41,7 @@ namespace ProjectF.Application.Suppliers
 
         public IEnumerable<SupplierDto> FindAll()
             => _supplierRepository.FindAll()
-                .Map(s => new SupplierDto(s.Id
-                    , s.Code.Value
-                    , s.Name.Value
-                    , s.Email
-                    , s.Phone.Value
-                    , s.Rnc
-                    , s.HomeOrApartment
-                    , s.City
-                    , s.Street
-                    , s.Country.Id
-                    , s.Country
-                    , s.IsIndependent));
+                .Map(s => FromEntity(s));
 
         public Either<Error, Supplier> Find(long key)
         {
@@ -67,20 +56,6 @@ namespace ProjectF.Application.Suppliers
             .Bind(Delete)
             .Bind(Save)
             .MapLeft(errors => Error.New(string.Join("; ", errors)));
-
-        public SupplierDto EntityToDto(Supplier supplier)
-           => new SupplierDto(supplier.Id
-                    , supplier.Code.Value
-                    , supplier.Name.Value
-                    , supplier.Email
-                    , supplier.Phone.Value
-                    , supplier.Rnc
-                    , supplier.HomeOrApartment
-                    , supplier.City
-                    , supplier.Street
-                    , supplier.Country.Id
-                    , supplier.Country
-                    , supplier.IsIndependent);
 
         //Missing Pagination
         Either<Error, SupplierDto> ValidateIsCorrectUpdate(long id, SupplierDto supplierDto)
@@ -125,48 +100,28 @@ namespace ProjectF.Application.Suppliers
             var country = _countryRepository.FromCountryId(supplier.SelectedCountry);
             if (country == null) return Error.New("couldn't find to country");
 
-            var nSupplier = supplier.With(country:country);
+            var nSupplier = supplier with { Country = country};
             return nSupplier;
         }
 
-        Either<Error, Supplier> CreateEntity(SupplierDto supplierDto)
+        Either<Error, Supplier> UpdateEntity(SupplierDto dto, Supplier supplier)
         {
-            var code = new Code(supplierDto.Code);
-            var name = new Name(supplierDto.Name);
-            var email = new Email(supplierDto.Email);
-            var phone = new Phone(supplierDto.Phone);
-
-            var supplier = new Data.Entities.Suppliers.Supplier(code
-                , name
-                , email
-                , phone
-                , supplierDto.Rnc
-                , supplierDto.HomeOrApartment
-                , supplierDto.City
-                , supplierDto.Street
-                , supplierDto.Country
-                , supplierDto.IsIndependent);
-
-            return supplier;
-        }
-
-        Either<Error, Supplier> UpdateEntity(SupplierDto supplierDto, Supplier supplier)
-        {
-            var code = new Code(supplierDto.Code);
-            var name = new Name(supplierDto.Name);
-            var email = new Email(supplierDto.Email);
-            var phone = new Phone(supplierDto.Phone);
+            var code = new Code(dto.Code);
+            var name = new Name(dto.Name);
+            var email = new Email(dto.Email);
+            var phone = new Phone(dto.Phone);
 
             supplier.EditSupplier(code
                 , name
                 , email
                 , phone
-                , supplierDto.Rnc
-                , supplierDto.HomeOrApartment
-                , supplierDto.City
-                , supplierDto.Street
-                , supplierDto.Country
-                , supplierDto.IsIndependent);
+                , dto.Rnc
+                , dto.HomeOrApartment
+                , dto.City
+                , dto.Street
+                , dto.Country
+                , dto.IsIndependent
+                , dto.Status);
 
             return supplier;
         }
@@ -202,7 +157,7 @@ namespace ProjectF.Application.Suppliers
             try
             {
                 _supplierRepository.Save();
-                return EntityToDto(supplier);
+                return FromEntity(supplier);
             }
             catch (System.Exception ex)
             {

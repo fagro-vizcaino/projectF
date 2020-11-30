@@ -1,6 +1,7 @@
 ﻿using System;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using ProjectF.Data.Entities.Core;
 
 namespace ProjectF.Data.Entities.Banks
 {
@@ -11,8 +12,6 @@ namespace ProjectF.Data.Entities.Banks
         public GeneralText Description { get; private set; }
         public decimal InitialBalance { get; private set; }
         public virtual BankAccountType BankAccountType { get; private set; }
-        public DateTime Created { get; private set; }
-        public DateTime? Modified { get; private set; }
 
         protected BankAccount() { }
 
@@ -21,7 +20,8 @@ namespace ProjectF.Data.Entities.Banks
             GeneralText description,
             decimal initialBalance,
             BankAccountType bankAccountType,
-            DateTime created)
+            DateTime created,
+            EntityStatus status)
         {
             AccountName      = accountName;
             AccountNumber    = accountNumber;
@@ -29,7 +29,8 @@ namespace ProjectF.Data.Entities.Banks
             InitialBalance   = initialBalance;
             AccountNumber    = accountNumber;
             BankAccountType  = bankAccountType;
-            Created          = created;
+            Created          = created == DateTime.MinValue ? DateTime.Now : created;
+            Status           = status;
         }
 
         public void EditBank(Name accountName,
@@ -37,7 +38,7 @@ namespace ProjectF.Data.Entities.Banks
             GeneralText description,
             decimal initialBalance,
             BankAccountType bankAccountType,
-            DateTime created)
+            EntityStatus status)
         {
             AccountName      = accountName;
             AccountNumber    = accountNumber;
@@ -45,15 +46,12 @@ namespace ProjectF.Data.Entities.Banks
             AccountNumber    = accountNumber;
             BankAccountType  = bankAccountType;
             InitialBalance   = initialBalance;
-            Created          = created;
             Modified         = DateTime.Now;
+            Status           = status;
         }
 
         public static implicit operator BankAccountDto(BankAccount entity)
             => CreateDto(entity);
-
-        //public static explicit operator BankAccountDto(BankAccount entity)
-        // => CreateDto(entity);
 
         static BankAccountDto CreateDto(BankAccount entity)
             => new BankAccountDto(entity.Id,
@@ -64,7 +62,8 @@ namespace ProjectF.Data.Entities.Banks
                     entity.BankAccountType?.Id ?? 0L,
                     entity.BankAccountType,
                     entity.Created,
-                    entity.Modified);
+                    entity.Modified,
+                    entity.Status);
 
 
     }

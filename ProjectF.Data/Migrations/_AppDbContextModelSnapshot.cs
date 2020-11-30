@@ -15,44 +15,241 @@ namespace ProjectF.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "641d164a-5bf8-4f2b-b3bb-537cf6a17941",
+                            ConcurrencyStamp = "55f660e6-fde5-41f2-a2e3-ac00607a33d0",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "b3d3d27a-b641-4f24-8ca4-a1319d1a4c42",
+                            ConcurrencyStamp = "5981d255-6b53-4a21-9ab0-eb2f375a30a9",
+                            Name = "Admin",
+                            NormalizedName = "Admin"
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
             modelBuilder.Entity("ProjectF.Data.Entities.Auth.User", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
                         .HasColumnName("UserId")
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
-                    b.Property<string>("Fullname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("Firstname")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(65)")
+                        .HasMaxLength(65);
 
-                    b.Property<byte[]>("PasswordSalt")
+                    b.Property<string>("Lastname")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(220)")
+                        .HasMaxLength(220);
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("CountryId");
 
-                    b.ToTable("User");
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Banks.BankAccount", b =>
@@ -76,6 +273,9 @@ namespace ProjectF.Data.Migrations
                     b.Property<long>("BankAccountTypeId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("Datetime");
@@ -91,9 +291,14 @@ namespace ProjectF.Data.Migrations
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("Datetime");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BankAccountTypeId");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("BankAccount");
                 });
@@ -106,17 +311,32 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(119)")
                         .HasMaxLength(119);
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("BankAccountType");
                 });
@@ -134,6 +354,16 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
@@ -142,7 +372,12 @@ namespace ProjectF.Data.Migrations
                     b.Property<bool>("ShowOn")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Category");
                 });
@@ -168,8 +403,14 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
-                    b.Property<int>("CountryId")
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("CountryId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -191,6 +432,9 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(120)")
                         .HasMaxLength(120);
 
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(11)")
@@ -201,12 +445,17 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("CountryId");
 
@@ -215,7 +464,7 @@ namespace ProjectF.Data.Migrations
 
             modelBuilder.Entity("ProjectF.Data.Entities.Company", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("CompanyId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("CompanyId")
                         .HasColumnType("bigint")
@@ -229,6 +478,9 @@ namespace ProjectF.Data.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("Datetime");
+
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int");
 
@@ -236,6 +488,12 @@ namespace ProjectF.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -247,13 +505,13 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(11)")
                         .HasMaxLength(11);
 
-                    b.Property<long>("RegimeTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Rnc")
                         .IsRequired()
                         .HasColumnType("nvarchar(18)")
                         .HasMaxLength(18);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Street")
                         .IsRequired()
@@ -264,13 +522,11 @@ namespace ProjectF.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CompanyId");
 
                     b.HasIndex("CountryId");
 
                     b.HasIndex("CurrencyId");
-
-                    b.HasIndex("RegimeTypeId");
 
                     b.ToTable("Company");
                 });
@@ -365,6 +621,12 @@ namespace ProjectF.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(16,2)");
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
@@ -373,12 +635,18 @@ namespace ProjectF.Data.Migrations
                     b.Property<long>("InvoiceHeaderId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ProductCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
                     b.Property<int>("Qty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TaxPercent")
@@ -407,8 +675,12 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(12,2)");
@@ -420,6 +692,12 @@ namespace ProjectF.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(220)")
                         .HasMaxLength(220);
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Ncf")
                         .IsRequired()
@@ -442,14 +720,11 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(12,2)");
-
-                    b.Property<DateTime>("SystemCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("SystemModified")
-                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("TaxTotal")
                         .HasColumnType("decimal(12,2)");
@@ -466,6 +741,8 @@ namespace ProjectF.Data.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("PaymentTermId");
 
                     b.ToTable("InvoiceHeader");
@@ -479,6 +756,13 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
                     b.Property<int>("DayValue")
                         .HasColumnType("int");
 
@@ -487,9 +771,55 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(120)")
                         .HasMaxLength(120);
 
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("PaymentTerm");
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.PaymentMethods.PaymentMethod", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PaymentMethodId")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("PaymentMethod");
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Sequences.DocumentNumberSequence", b =>
@@ -500,8 +830,12 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
 
                     b.Property<int>("FinalSequence")
                         .HasColumnType("int");
@@ -509,14 +843,8 @@ namespace ProjectF.Data.Migrations
                     b.Property<int>("InitialSequence")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
                     b.Property<DateTime?>("Modified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -531,10 +859,15 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ValidUntil")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("DocumentNumberSequence");
                 });
@@ -557,8 +890,15 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -572,6 +912,9 @@ namespace ProjectF.Data.Migrations
 
                     b.Property<bool>("IsIndependent")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -588,12 +931,17 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("CountryId");
 
@@ -608,17 +956,39 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CompanyId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CompanyId1")
+                        .IsUnique()
+                        .HasFilter("[CompanyId1] IS NOT NULL");
 
                     b.ToTable("TaxRegimeType");
                 });
@@ -631,6 +1001,16 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
@@ -639,7 +1019,12 @@ namespace ProjectF.Data.Migrations
                     b.Property<decimal>("PercentValue")
                         .HasColumnType("decimal(12,2)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Tax");
                 });
@@ -657,18 +1042,33 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Warehouse");
                 });
@@ -689,8 +1089,15 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(16,2)");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -701,6 +1108,9 @@ namespace ProjectF.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -724,30 +1134,89 @@ namespace ProjectF.Data.Migrations
                         .HasColumnType("nvarchar(60)")
                         .HasMaxLength(60);
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<long>("TaxId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("WerehouseId")
+                    b.Property<long>("WarehouseId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("TaxId");
 
-                    b.HasIndex("WerehouseId");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("ProjectF.Data.Entities.Auth.User", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
-                        .HasForeignKey("CountryId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Auth.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Auth.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectF.Data.Entities.Auth.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Auth.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.Auth.User", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Banks.BankAccount", b =>
@@ -757,15 +1226,43 @@ namespace ProjectF.Data.Migrations
                         .HasForeignKey("BankAccountTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.Banks.BankAccountType", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.Categories.Category", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Clients.Client", b =>
                 {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CountryId");
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Company", b =>
@@ -779,12 +1276,6 @@ namespace ProjectF.Data.Migrations
                     b.HasOne("ProjectF.Data.Entities.Currencies.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType.TaxRegimeType", "RegimeType")
-                        .WithMany()
-                        .HasForeignKey("RegimeTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -806,6 +1297,12 @@ namespace ProjectF.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ProjectF.Data.Entities.PaymentList.PaymentTerm", "PaymentTerm")
                         .WithMany()
                         .HasForeignKey("PaymentTermId")
@@ -813,12 +1310,76 @@ namespace ProjectF.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectF.Data.Entities.PaymentList.PaymentTerm", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.PaymentMethods.PaymentMethod", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.Sequences.DocumentNumberSequence", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProjectF.Data.Entities.Suppliers.Supplier", b =>
                 {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ProjectF.Data.Entities.Countries.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType.TaxRegimeType", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithOne("RegimeType")
+                        .HasForeignKey("ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType.TaxRegimeType", "CompanyId1");
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.Taxes.Tax", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.Warehouses.Warehouse", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -830,15 +1391,21 @@ namespace ProjectF.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ProjectF.Data.Entities.Taxes.Tax", "Tax")
                         .WithMany()
                         .HasForeignKey("TaxId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjectF.Data.Entities.Warehouses.Warehouse", "Werehouse")
+                    b.HasOne("ProjectF.Data.Entities.Warehouses.Warehouse", "Warehouse")
                         .WithMany("Products")
-                        .HasForeignKey("WerehouseId")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

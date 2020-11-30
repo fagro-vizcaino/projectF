@@ -3,6 +3,7 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using LanguageExt;
+using ProjectF.Data.Entities;
 
 namespace ProjectF.Data.EfConfiguration
 {
@@ -51,6 +52,11 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(s => s.Street)
                 .HasMaxLength(60);
+
+            builder.HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(s => s.CompanyId)
+                .OnDelete(DeleteBehavior.NoAction);
 
         }
     }

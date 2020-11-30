@@ -31,7 +31,7 @@ namespace ProjectF.Application.Clients
             .Bind(ValidatePhone)
             .Bind(ValidateCountry)
             .Bind(SetCountry)
-            .Bind(c => Add(DtoToEntity(c)))
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
         public Either<Error, Client> Update(long id, ClientDto clientDto)
@@ -46,7 +46,7 @@ namespace ProjectF.Application.Clients
         
         public Task<Either<Error, (List<ClientDto> list, MetaData meta)>> GetClientList(ClientListParameters listParameters)
             => _clientRepository.GetClientListAsync(listParameters, true)
-            .MapT(c => (ClientList: c.Select(i  => EntityToDto(i)).ToList(), MetaData: c.MetaData));
+            .MapT(c => (ClientList: c.Select(i  => FromEntity(i)).ToList(), MetaData: c.MetaData));
 
         public Either<Error, Client> Find(long id)
          => _clientRepository.FindByKey(id).Match(Some: t => t,
@@ -122,7 +122,8 @@ namespace ProjectF.Application.Clients
                     clientDto.HomeOrApartment,
                     clientDto.City,
                     clientDto.Street,
-                    clientDto.Country);
+                    clientDto.Country,
+                    clientDto.Status);
 
             return client;
         }

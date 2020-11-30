@@ -11,7 +11,5 @@ namespace ProjectF.Data.Entities.Payments
         public Code Code { get; private set; }
         public virtual Client Client { get; private set; }
         public virtual PaymentMethod PaymentMethod { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime? Modified { get; set; }
     }
 }

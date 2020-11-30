@@ -5,6 +5,7 @@ using static LanguageExt.Prelude;
 using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.PaymentList;
+using static ProjectF.Data.Entities.PaymentList.PaymentTermMapper;
 using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Application.PaymentTerms
@@ -18,8 +19,7 @@ namespace ProjectF.Application.PaymentTerms
 
         public Either<Error, PaymentTerm> Create(PaymentTermDto paymentTermDto)
             => ValidateName(paymentTermDto)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
         public Either<Error, PaymentTerm> Update(long id, PaymentTermDto paymentTermDto)
@@ -30,7 +30,7 @@ namespace ProjectF.Application.PaymentTerms
             .Bind(Save);
 
         public IEnumerable<PaymentTermDto> GetAll()
-            => _paymentTermRepository.GetAll().Map(pt => (PaymentTermDto) pt);
+            => _paymentTermRepository.GetAll().Map(pt => FromEntity(pt));
 
         public Either<Error, PaymentTerm> Find(params object[] valueKeys)
             => _paymentTermRepository
@@ -54,13 +54,12 @@ namespace ProjectF.Application.PaymentTerms
                 .Match(Succ: c => paymentTermDto,
                  Fail: err => Left<Error, PaymentTermDto>(Error.New(string.Join(";", err))));
 
-        Either<Error, PaymentTerm> CreateEntity(PaymentTermDto paymentTermDto)
-            => Right<Error, PaymentTerm>(paymentTermDto);
-
-        Either<Error, PaymentTerm> UpdateEntity(PaymentTermDto paymentTermDto, PaymentTerm paymentTerm)
+        Either<Error, PaymentTerm> UpdateEntity(PaymentTermDto dto, PaymentTerm paymentTerm)
         {
-            PaymentTerm editedPaymentTerm = paymentTermDto;
-            paymentTerm.EditPaymentDeadlines(editedPaymentTerm.Description, editedPaymentTerm.DayValue);
+            PaymentTerm editedPaymentTerm = FromDto(dto);
+            paymentTerm.EditPaymentDeadlines(editedPaymentTerm.Description
+                , editedPaymentTerm.DayValue
+                , editedPaymentTerm.Status);
             return paymentTerm;
         }
 

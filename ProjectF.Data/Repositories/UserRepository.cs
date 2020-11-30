@@ -9,23 +9,23 @@ namespace ProjectF.Data.Repositories
 {
     public class UserRepository : _BaseRepository<User>
     {
-      readonly Context._AppDbContext _context;
-      public UserRepository(Context._AppDbContext context): base(context)
-      {
-        _context = context;
-      }
+        readonly _AppDbContext _context;
+        public UserRepository(_AppDbContext context) : base(context)
+        {
+            _context = context;
+        }
 
-      public Either<Error, User> FindByUsername(string email)
-      {
-        var user = _context.Users
-          .Include(u => u.Country)
-          .FirstOrDefault(u => u.Email == email);
-          
-        if(user == null) return Error.New("user not found");
-        return user;
-      }
+        public Either<Error, User> FindByUsername(string email)
+        {
+            var user = _context.Users
+              .Include(u => u.Country)
+              .FirstOrDefault(u => u.Email == email);
 
-      public bool UserExits(string email)
-        => _context.Users.Any(u => u.Email == email);
+            if (user == null) return Error.New("user not found");
+            return user;
+        }
+
+        public bool UserExits(string email)
+          => _context.Users.Any(u => u.Email == email);
     }
 }

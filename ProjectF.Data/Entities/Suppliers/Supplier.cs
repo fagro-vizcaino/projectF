@@ -1,4 +1,5 @@
-﻿using ProjectF.Data.Entities.Common;
+﻿using System;
+using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
 
@@ -29,18 +30,24 @@ namespace ProjectF.Data.Entities.Suppliers
             , string city
             , string street
             , Country country
-            , bool IsIndependent)
+            , bool isIndependent
+            , DateTime created
+            , DateTime? modified = null
+            , EntityStatus status = EntityStatus.Active)
         {
-            Code = code;
-            Name = name;
-            Email = email;
-            Phone = phone;
-            Rnc = rnc;
+            Code            = code;
+            Name            = name;
+            Email           = email;
+            Phone           = phone;
+            Rnc             = rnc;
             HomeOrApartment = homeOrApartment;
-            City = city;
-            Street = street;
-            Country = country;
-            this.IsIndependent = IsIndependent;
+            City            = city;
+            Street          = street;
+            Country         = country;
+            IsIndependent   = isIndependent;
+            Created         = created == DateTime.MinValue ? DateTime.Now : created;
+            Modified        = modified;
+            Status          = status;
         }
 
         public void EditSupplier(
@@ -53,18 +60,21 @@ namespace ProjectF.Data.Entities.Suppliers
             , string city
             , string street
             , Country country
-            , bool isIndependent)
+            , bool isIndependent
+            , EntityStatus status)
         {
-            Code = code;
-            Name = name;
-            Email = email;
-            Phone = phone;
-            Rnc = rnc;
+            Code            = code;
+            Name            = name;
+            Email           = email;
+            Phone           = phone;
+            Rnc             = rnc;
             HomeOrApartment = homeOrApartment;
-            City = city;
-            Street = street;
-            IsIndependent = isIndependent;
-            Country = country;
+            City            = city;
+            Street          = street;
+            IsIndependent   = isIndependent;
+            Country         = country;
+            Status          = status;
+            Modified        = DateTime.Now;
         }
     }
 }

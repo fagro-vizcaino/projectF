@@ -41,7 +41,9 @@ namespace ProjectF.Data.EfConfiguration
             builder.Property(s => s.Rnc)
                 .HasMaxLength(15);
 
-            builder.HasOne(p => p.Country).WithMany();
+            builder.HasOne(p => p.Country)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(s => s.HomeOrApartment)
                 .HasMaxLength(200);
@@ -53,6 +55,22 @@ namespace ProjectF.Data.EfConfiguration
                 .HasMaxLength(60);
 
             builder.Property(s => s.IsIndependent);
+
+            builder.HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(s => s.CompanyId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(c => c.Status)
+                .IsRequired();
+
+            builder.Property(q => q.Created)
+                .HasColumnType("Datetime")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            builder.Property(q => q.Modified)
+                .HasColumnType("Datetime");
 
         }
     }

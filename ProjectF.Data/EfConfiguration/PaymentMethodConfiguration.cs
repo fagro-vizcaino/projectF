@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectF.Data.Entities;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.PaymentMethods;
 
@@ -23,10 +24,23 @@ namespace ProjectF.Data.EfConfiguration
                 .HasConversion(p => p.Value, p => new Name(p))
                 .IsRequired();
 
-            builder.Property(c => c.Created);
-            builder.Property(c => c.Modified);
+            builder.HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(s => s.CompanyId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            
+            builder.Property(c => c.Status)
+                .IsRequired();
+
+            builder.Property(q => q.Created)
+                .HasColumnType("Datetime")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            builder.Property(q => q.Modified)
+                .HasColumnType("Datetime");
+
+
         }
     }
 }

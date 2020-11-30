@@ -1,4 +1,5 @@
-﻿using ProjectF.Data.Entities.Common;
+﻿using System;
+using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.PaymentList
@@ -13,19 +14,20 @@ namespace ProjectF.Data.Entities.PaymentList
 
         protected PaymentTerm() { }
 
-        public PaymentTerm(Name description, int dayValue)
+        public PaymentTerm(Name description, int dayValue, DateTime created, EntityStatus status = EntityStatus.Active)
         {
             Description = description;
             DayValue    = dayValue;
+            Created     = created == DateTime.MinValue ? DateTime.Now : created;
+            Status      = status;
         }
 
-        public void EditPaymentDeadlines(Name description, int dayValue)
+        public void EditPaymentDeadlines(Name description, int dayValue, EntityStatus status)
         {
             Description = description;
             DayValue    = dayValue;
+            Status      = status;
+            Modified    = DateTime.Now;
         }
-
-         public static implicit operator PaymentTermDto(PaymentTerm entity)
-            =>  new PaymentTermDto(entity.Id, entity.Description.Value, entity.DayValue);
     }
 }
