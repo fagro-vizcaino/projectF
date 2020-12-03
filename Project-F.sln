@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectF.Application", "Pro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectF.Api", "ProjectF.Api\ProjectF.Api.csproj", "{0737900F-C9D7-4B3D-8C45-FE4925AAA555}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectF.EmailService", "ProjectF.EmailService\ProjectF.EmailService.csproj", "{BFE2703A-22B0-47C7-8324-85FA0FE03FCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectF.EmailService", "ProjectF.EmailService\ProjectF.EmailService.csproj", "{BFE2703A-22B0-47C7-8324-85FA0FE03FCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

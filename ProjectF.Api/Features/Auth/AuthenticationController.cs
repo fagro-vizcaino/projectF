@@ -38,11 +38,9 @@ namespace ProjectF.Api.Features.Auth
             var result = await _userManager.CreateAsync(FromDto(_user), user.Password);
             if(!result.Succeeded)
             {
-                foreach(var error in result.Errors)
-                {
-                    ModelState.TryAddModelError(error.Code, error.Description);
-                }
-                return BadRequest(ModelState);
+                var errors = result.Errors.Select(e => $"{e.Description}");
+                return BadRequest(new RegistrationResponseDto() { Errors = errors});
+                return BadRequest(new RegistrationResponseDto() { Errors = errors});
             }
 
             var savedUser = await _userManager.FindByEmailAsync(_user.Email);

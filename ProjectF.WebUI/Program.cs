@@ -26,7 +26,10 @@ namespace ProjectF.WebUI
 
             //Auth
             builder.Services.AddAuthorizationCore();
+            //builder.Services.AddFileReaderService(o => o.UseWasmSharedBuffer = true);
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<AuthenticationStateProvider, TestAuthStateProvider>();
+
 
             //Themes
             builder.Services.AddAntDesign();
@@ -70,8 +73,6 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<NumberSequence>, NumberSequenceValidator>();
 
             //themes 
-
-
             builder.Services.AddTransient<IFMessage, FMessage>();
 
             await builder.Build().RunAsync();

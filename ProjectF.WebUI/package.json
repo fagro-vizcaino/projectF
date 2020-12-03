@@ -1,9 +1,13 @@
 {
   "devDependencies": {
+    "postcss": "^8.0.0",
     "gulp": "^4.0.2",
-    "gulp-postcss": "^8.0.0",
+    "gulp-postcss": "^9.0.0",
     "precss": "^4.0.0",
-    "tailwindcss": "^1.8.10s",
+    "tailwindcss": "^2.0.0",
     "autoprefixer": "^9.7.4"
+  },
+  "peerDependencies": {
+    "postcss": "^8.0.0"
   }
 }

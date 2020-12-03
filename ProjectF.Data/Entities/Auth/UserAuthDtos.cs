@@ -18,4 +18,10 @@ namespace ProjectF.Data.Entities.Auth
     public record UserForgotPasswordDto(string Email);
     public record UserResetPasswordDto(string Password, string ConfirmPassword);
 
+    public class RegistrationResponseDto
+    {
+        public bool IsSuccessfulRegistration { get; set; }
+        public IEnumerable<string> Errors { get; set; }
+    }
+
 }

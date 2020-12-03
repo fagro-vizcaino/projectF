@@ -8,6 +8,6 @@ namespace ProjectF.WebUI.Services
 {
     public interface IAuthenticationService
     {
-        Task<RegisterUserDto> RegisterUser(RegisterUserDto userForRegistration);
+        Task<RegistrationResponseDto> RegisterUser(UserRegisterDto userForRegistration);
     }
 }
