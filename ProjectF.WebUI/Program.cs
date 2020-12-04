@@ -13,6 +13,7 @@ using ProjectF.WebUI.Pages.Invoices.List;
 using ProjectF.WebUI.Pages.NumberSequences;
 using ProjectF.WebUI.AuthProviders;
 using Microsoft.AspNetCore.Components.Authorization;
+using ProjectF.WebUI.Pages.Auth;
 
 namespace ProjectF.WebUI
 {
@@ -71,6 +72,8 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<Supplier>, SupplierValidator>();
             builder.Services.AddTransient<IValidator<Product>, ProductValidator>();
             builder.Services.AddTransient<IValidator<NumberSequence>, NumberSequenceValidator>();
+            builder.Services.AddTransient<IValidator<UserRegisterDto>, UserRegisterValidator>();
+
 
             //themes 
             builder.Services.AddTransient<IFMessage, FMessage>();

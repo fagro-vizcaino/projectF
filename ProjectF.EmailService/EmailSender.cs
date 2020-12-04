@@ -133,7 +133,8 @@ namespace ProjectF.EmailService
                     }
                 case EmailTemplateType.Register:
                     {
-                        return "";
+                        var template = FindHtmlTemplate(_authTemplate.RegisterAccount);
+                        return template.Replace("{$link}", messageContent);
                     }
                 case EmailTemplateType.Default: return messageContent;
                 default:

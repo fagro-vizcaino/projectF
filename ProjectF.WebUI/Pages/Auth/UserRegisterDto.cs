@@ -3,7 +3,7 @@ using ProjectF.WebUI.Models;
 
 namespace ProjectF.WebUI.Pages.Auth
 {
-    public class UserRegisterDto
+    public class UserRegisterDto 
     {
         public string Id { get; set; }
         public string FirstName { get; set; }

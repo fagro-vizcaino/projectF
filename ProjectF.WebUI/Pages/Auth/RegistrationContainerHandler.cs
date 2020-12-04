@@ -12,9 +12,9 @@ namespace ProjectF.WebUI.Pages.Auth
     {
         protected UserRegisterDto _model = new();
         public Country[] Countries { get; set; } = Array.Empty<Country>();
-
-        [Inject]
-        public IBaseDataService<Country> CountryDataService { get; set; }
+        [Parameter] public string Token { get; set; }
+        [Parameter] public string Email { get; set; }
+        [Inject] public IBaseDataService<Country> CountryDataService { get; set; }
         [Inject] public IAuthenticationService AuthenticationService { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
         public bool ShowRegistrationErros { get; set; }

@@ -40,7 +40,6 @@ namespace ProjectF.Api.Features.Auth
             {
                 var errors = result.Errors.Select(e => $"{e.Description}");
                 return BadRequest(new RegistrationResponseDto() { Errors = errors});
-                return BadRequest(new RegistrationResponseDto() { Errors = errors});
             }
 
             var savedUser = await _userManager.FindByEmailAsync(_user.Email);
@@ -55,13 +54,10 @@ namespace ProjectF.Api.Features.Auth
             
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(savedUser);
 
-            var confirmationLink = Url.Action(nameof(ConfirmEmail)
-                , "api/authentication"
-                , new { token = "mtoken", email = user.Email }, Request.Scheme);
-            confirmationLink = confirmationLink.Replace("%2F", "/");
-            confirmationLink = confirmationLink.Replace("mtoken", token);
+            var confirmationLink = 
+                $"{Request.Scheme}/api/{nameof(AuthenticationController).Replace("Controller","")}/{token}/{user.Email}";
 
-            var message = new Message(new string[] { user.Email }, "Confirmation email link"
+            var message = new Message(new string[] { user.Email }, "Confirmar Email"
                 , confirmationLink
                 , null);
 
