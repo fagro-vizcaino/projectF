@@ -16,7 +16,7 @@
                 </h2>
                 <hr class="my-2 mx-auto" />
                 <div class="mt-1">
-                    <EditForm Model="_model">
+                    <EditForm Model="_model" OnValidSubmit="@((context) => Register(context))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
                         <FluentValidator></FluentValidator>
                         <div class="mb-1">
                             <FLabel Value="Nombre" LabelFor="Name" />
@@ -65,7 +65,7 @@
 
                     </EditForm>
                 </div>
-                <div class="mt-4">
+                <div class="mt-2">
                     <span class="text-sm font-semibold tracking-wide">Ya tienes una cuenta?</span>
                     <a href="/signin" o class="text-sm font-extrabold text-indigo-600">Inicia Sesi&oacute;n</a>
                 </div>
@@ -114,5 +114,6 @@
 </div>
 
 @code {
-
+    public Dictionary<string, object> formcss =
+        new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
 }

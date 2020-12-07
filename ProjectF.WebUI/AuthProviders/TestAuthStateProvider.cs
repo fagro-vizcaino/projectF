@@ -9,7 +9,7 @@ namespace ProjectF.WebUI.AuthProviders
     {
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            await Task.Delay(1500);
+            await Task.Delay(450);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, "John Doe"),

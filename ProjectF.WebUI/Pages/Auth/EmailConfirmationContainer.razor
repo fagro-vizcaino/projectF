@@ -1,5 +1,5 @@
 ﻿@layout BlankLayout
-@page "/confirmemail/{token:string}/{email:string}"
+@page "/confirmemail/{Token}/{Email}"
 @inherits RegistrationContainerHandler
 
 <div class="fixed inset-0 flex items-center justify-center" style="background-color: rgba(0,0,0,0.3);">
@@ -13,9 +13,10 @@
         </h3>
         <p>Para empezar a usar <span class="text-base text-indigo-600 font-semibold">Project-F</span>, has clic en <span class="font-bold">Iniciar Sesi&oacute;n</span>.</p>
         <div class="mt-8 pt-8 sm:pt-4 border-t -mx-8 px-8 flex flex-col sm:flex-row justify-end leading-relaxed">
-            <a class="font-bold mt-4 sm:mt-0 sm:ml-4 px-8 py-3 sm:py-2 rounded bg-purple-700 text-gray-100 hover:bg-purple-900 transition duration-300 text-center" href="/signin" >
+            <button @onclick="ConfirmedEmail"
+                    class="font-bold mt-4 sm:mt-0 sm:ml-4 px-8 py-3 sm:py-2 rounded bg-purple-700 text-gray-100 hover:bg-purple-900 transition duration-300 text-center" href="/signin" >
                 Iniciar Sesi&oacute;n
-            </a>
+            </button>
         </div>
     </div>
 </div>

@@ -61,6 +61,9 @@ namespace ProjectF.WebUI
                 => client.BaseAddress = new Uri(baseUrl));
             builder.Services.AddHttpClient<IBaseDataService<NumberSequence>, NumberSequenceDataService>(client
                 => client.BaseAddress = new Uri(baseUrl));
+            
+            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(c 
+                => c.BaseAddress = new Uri(baseUrl));
 
             builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
             builder.Services.AddTransient<IValidator<Warehouse>, WarehouseValidator>();

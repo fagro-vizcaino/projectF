@@ -32,5 +32,8 @@
   <None Update="EmailTemplates\auth\ForgotPassword.html">
     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
   </None>
+  <None Update="EmailTemplates\auth\Register.html">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </None>
 </ItemGroup>
 </Project>

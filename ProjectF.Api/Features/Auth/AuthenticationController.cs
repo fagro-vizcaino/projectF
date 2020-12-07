@@ -54,13 +54,26 @@ namespace ProjectF.Api.Features.Auth
             
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(savedUser);
 
-            var confirmationLink = 
-                $"{Request.Scheme}/api/{nameof(AuthenticationController).Replace("Controller","")}/{token}/{user.Email}";
+            var confirmationLink = Url.Action(""
+               , "confirmemail"
+               , new { token = "mtoken" }
+               , Request.Scheme);
+
+           
+            var bytesEmail = Encoding.UTF8.GetBytes(user.Email);
+            var encodeEmail = Convert.ToBase64String(bytesEmail);
+
+            confirmationLink = confirmationLink.Replace("%2F", "/");
+            confirmationLink = confirmationLink.Replace("?token", "/");
+            confirmationLink = confirmationLink.Replace("mtoken", token);
+            confirmationLink = $"{confirmationLink}/{encodeEmail}";
+            confirmationLink = confirmationLink.Replace("http://localhost:5000/", "http://localhost:5001/");
 
             var message = new Message(new string[] { user.Email }, "Confirmar Email"
                 , confirmationLink
                 , null);
 
+            System.Diagnostics.Debug.WriteLine($"message {message}");
             await _emailSender.SendEmailAsync(message, EmailTemplateType.Register);
 
             return StatusCode(201);
@@ -69,10 +82,16 @@ namespace ProjectF.Api.Features.Auth
         [HttpGet("confirmemail", Name ="confirmemail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var decodedTokenBytes = Convert.FromBase64String(token);
+            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+
+            var decodedEmailBytes = Convert.FromBase64String(email);
+            var decodedEmail = Encoding.UTF8.GetString(decodedEmailBytes);
+
+            var user = await _userManager.FindByEmailAsync(decodedEmail);
             if (user is null) return NotFound("Confirmation email not found");
 
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
             return result.Succeeded 
                 ? Ok("email confirmed") 
                 : BadRequest(string.Join(" ",result.Errors.Select(c => $"{c.Code} - {c.Description}")));
@@ -127,34 +146,6 @@ namespace ProjectF.Api.Features.Auth
             }
             return Ok();
         }
-        //  Either<Error, string> GenerateClaims(UserDto user)
-        //  {
-        //      var claims = new[]
-        //      {
-        //  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        //  new Claim(ClaimTypes.Email, user.Email)
-        //};
 
-        //      SymmetricSecurityKey key = null;
-        //      try
-        //      {
-        //          key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
-        //      }
-        //      catch (System.Exception ex)
-        //      {
-        //          Error.New(ex.Message);
-        //      }
-
-        //      var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-        //      var tokenDescriptor = new SecurityTokenDescriptor();
-        //      tokenDescriptor.Subject = new ClaimsIdentity(claims);
-        //      tokenDescriptor.Expires = DateTime.Now.AddDays(1);
-        //      tokenDescriptor.SigningCredentials = credential;
-
-        //      var tokenHandler = new JwtSecurityTokenHandler();
-
-        //      var token = tokenHandler.CreateToken(tokenDescriptor);
-        //      return tokenHandler.WriteToken(token);
-        //  }
     }
 }

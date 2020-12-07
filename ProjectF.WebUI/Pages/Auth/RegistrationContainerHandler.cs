@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Text.Json.JsonSerializer;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using ProjectF.WebUI.Models;
 using ProjectF.WebUI.Services;
+using System.Text;
+using ProjectF.WebUI.Components.Common;
 
 namespace ProjectF.WebUI.Pages.Auth
 {
@@ -17,6 +21,7 @@ namespace ProjectF.WebUI.Pages.Auth
         [Inject] public IBaseDataService<Country> CountryDataService { get; set; }
         [Inject] public IAuthenticationService AuthenticationService { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
+        [Inject] public IFMessage FMessage { get; set; }
         public bool ShowRegistrationErros { get; set; }
         public IEnumerable<string> Errors { get; set; }
 
@@ -25,10 +30,14 @@ namespace ProjectF.WebUI.Pages.Auth
             Countries = (await CountryDataService.GetAll()).ToArray();
         }
 
-        public async Task Register()
+        public async Task Register(EditContext context)
         {
+            UserRegisterDto model = context.Model as UserRegisterDto;
+            model = AssignUsername(model);
+            model = AssignUserRole(model);
+
             ShowRegistrationErros = false;
-            var result = await AuthenticationService.RegisterUser(_model);
+            var result = await AuthenticationService.RegisterUser(model);
             if (!result.IsSuccessfulRegistration)
             {
                 Errors = result.Errors;
@@ -36,7 +45,38 @@ namespace ProjectF.WebUI.Pages.Auth
             }
             else
             {
-                NavigationManager.NavigateTo("/");
+                await FMessage.Success($"Registro completado, favor verificar su email", 8);
+            }
+        }
+
+        public UserRegisterDto AssignUsername(UserRegisterDto dto)
+        {
+            dto.UserName = dto.Email;
+            return dto;
+        }
+
+        public UserRegisterDto AssignUserRole(UserRegisterDto dto)
+        {
+            dto.Roles = new [] {"Admin" };
+            return dto;
+        }
+
+        public void OnFinishFailed(EditContext editContext)
+        {
+            Console.WriteLine($"Failed:{Serialize(editContext.Model)}");
+        }
+
+        public async Task ConfirmedEmail()
+        {
+            ShowRegistrationErros = false;
+            var result = await AuthenticationService.ConfirmedEmail(Token, Email);
+            if (result == 0)
+            {
+               //Show Errors
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"/signin/{Email}");
             }
         }
     }

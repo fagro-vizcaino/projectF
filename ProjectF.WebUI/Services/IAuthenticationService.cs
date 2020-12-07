@@ -9,5 +9,6 @@ namespace ProjectF.WebUI.Services
     public interface IAuthenticationService
     {
         Task<RegistrationResponseDto> RegisterUser(UserRegisterDto userForRegistration);
+        Task<int> ConfirmedEmail(string token, string email);
     }
 }

@@ -21,7 +21,7 @@ namespace ProjectF.WebUI.Pages.Auth
                 .WithMessage("Máximo Carateres 40");
 
             RuleFor(x => x.Email).NotEmpty()
-                .WithMessage("Nombre Requerido")
+                .WithMessage("Email Requerido")
                 .MaximumLength(40)
                 .WithMessage("Máximo Carateres 40")
                 .EmailAddress()
