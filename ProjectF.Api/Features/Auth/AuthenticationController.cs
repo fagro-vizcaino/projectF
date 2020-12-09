@@ -9,6 +9,7 @@ using System.Linq;
 using ProjectF.EmailService;
 using System;
 using System.Text;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace ProjectF.Api.Features.Auth
 {
@@ -59,13 +60,13 @@ namespace ProjectF.Api.Features.Auth
                , new { token = "mtoken" }
                , Request.Scheme);
 
-           
-            var bytesEmail = Encoding.UTF8.GetBytes(user.Email);
-            var encodeEmail = Convert.ToBase64String(bytesEmail);
+          
+            var encodeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var encodeEmail = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Email));
 
             confirmationLink = confirmationLink.Replace("%2F", "/");
-            confirmationLink = confirmationLink.Replace("?token", "/");
-            confirmationLink = confirmationLink.Replace("mtoken", token);
+            confirmationLink = confirmationLink.Replace("?token=", "/");
+            confirmationLink = confirmationLink.Replace("mtoken", encodeToken);
             confirmationLink = $"{confirmationLink}/{encodeEmail}";
             confirmationLink = confirmationLink.Replace("http://localhost:5000/", "http://localhost:5001/");
 
@@ -82,16 +83,13 @@ namespace ProjectF.Api.Features.Auth
         [HttpGet("confirmemail", Name ="confirmemail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            var decodedTokenBytes = Convert.FromBase64String(token);
-            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
-
-            var decodedEmailBytes = Convert.FromBase64String(email);
-            var decodedEmail = Encoding.UTF8.GetString(decodedEmailBytes);
+            var decodeToken =  Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+            var decodedEmail = Encoding.UTF8.GetString(Convert.FromBase64String(email));
 
             var user = await _userManager.FindByEmailAsync(decodedEmail);
             if (user is null) return NotFound("Confirmation email not found");
 
-            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+            var result = await _userManager.ConfirmEmailAsync(user, decodeToken);
             return result.Succeeded 
                 ? Ok("email confirmed") 
                 : BadRequest(string.Join(" ",result.Errors.Select(c => $"{c.Code} - {c.Description}")));

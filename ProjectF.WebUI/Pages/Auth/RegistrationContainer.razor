@@ -11,7 +11,7 @@
                          src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" />
                     <div class="text-indigo-800 font-semibold text-lg ml-4">Project-F</div>
                 </div>
-                <h2 class="mt-5 text-lg font-semibold antialiased text-gray-800">
+                <h2 class="mt-5 font-semibold antialiased text-gray-800">
                     Registra una cuenta
                 </h2>
                 <hr class="my-2 mx-auto" />
@@ -34,13 +34,13 @@
                             <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
                         </div>
 
-                        <div class="mb-2">
+                        <div class="mb-1">
                             <FLabel Value="Contraseña" LabelFor="password" />
                             <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
                             <FCustomValidationMessage For="@(() => _model.Password)" Class="mt-2 font-semibold text-red-600" />
                         </div>
 
-                        <div class="mb-2">
+                        <div class="mb-1">
                             <FLabel Value="País" LabelFor="SelectedCountry" />
                             <div class="inline-block relative w-full">
                                 <FInputSelect @bind-Value="_model.SelectedCountry">
@@ -58,17 +58,22 @@
                                 <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
                             </div>
                         </div>
-
-                        <button type="submit" class="w-full mt-5 bg-indigo-600 text-white font-semibold text-lg tracking-wide hover:bg-indigo-800 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        <div class="my-1 w-full">
+                            <span class="text-xs text-gray-400">
+                                Acepto los términos, la política de privacidad y las tarifas.
+                            </span>
+                        </div>
+                        <button type="submit"
+                                class="w-full mt-2 bg-indigo-600 text-white font-semibold tracking-wide hover:bg-indigo-800 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Crear Cuenta
                         </button>
-
+                        <div class="flex items-center justify-end mt-2">
+                            <span class="text-xs font-semibold tracking-wide px-2">Ya tienes una cuenta?</span>
+                            <a href="/signin" o class="my-2 text-xs font-extrabold text-indigo-600">Inicia Sesi&oacute;n</a>
+                        </div>
                     </EditForm>
                 </div>
-                <div class="mt-2">
-                    <span class="text-sm font-semibold tracking-wide">Ya tienes una cuenta?</span>
-                    <a href="/signin" o class="text-sm font-extrabold text-indigo-600">Inicia Sesi&oacute;n</a>
-                </div>
+                
             </div>
         </div>
         <div class="invisible sm:visible md:w-2/3 sm:bg-indigo-500 sm:bg-repeat " style="background-image: url('img/background.png')">

@@ -70,13 +70,14 @@ namespace ProjectF.WebUI.Pages.Auth
         {
             ShowRegistrationErros = false;
             var result = await AuthenticationService.ConfirmedEmail(Token, Email);
-            if (result == 0)
+            Console.WriteLine($"returned values from email confirmation {result}");
+            if (result >= 1)
             {
-               //Show Errors
+                NavigationManager.NavigateTo($"/signin");
             }
             else
             {
-                NavigationManager.NavigateTo($"/signin/{Email}");
+                //Show Errors
             }
         }
     }

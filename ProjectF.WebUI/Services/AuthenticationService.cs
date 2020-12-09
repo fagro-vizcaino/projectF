@@ -43,13 +43,13 @@ namespace ProjectF.WebUI.Services
         public async Task<int> ConfirmedEmail(string token, string email)
         {
             const string EMAILCONFIRMED = "authentication/confirmemail";
-            var serverUrl = $"{_client.BaseAddress}{EMAILCONFIRMED}?token={token}&email={email}";
+            var serverUrl = $"{_client.BaseAddress}{EMAILCONFIRMED}?token={token.Trim()}&email={email.Trim()}";
 
             Console.WriteLine($"confirmed email : { serverUrl }");
             var response = await _client.GetAsync(serverUrl);
 
             var registrationContent = await response.Content.ReadAsStringAsync();
-            const int noneResult = 0;
+            
             if (!response.IsSuccessStatusCode)
             {
                 var result = JsonSerializer
@@ -57,7 +57,7 @@ namespace ProjectF.WebUI.Services
                     , new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 return result;
             }
-            return noneResult;
+            return response.IsSuccessStatusCode ? 1 : 0;
         }
     }
 }
