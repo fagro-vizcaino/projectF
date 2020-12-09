@@ -41,7 +41,7 @@ namespace ProjectF.Application.Auth
 
         public async Task<bool> ValidateUser(UserLoginDto userLoginDto)
         {
-            _user = await _userManager.FindByNameAsync(userLoginDto.Username);
+            _user = await _userManager.FindByNameAsync(userLoginDto.Email);
             return (_user is not null 
                 && await _userManager.CheckPasswordAsync(_user, userLoginDto.Password)
                 && await _userManager.IsEmailConfirmedAsync(_user));

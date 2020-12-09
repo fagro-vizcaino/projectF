@@ -14,7 +14,6 @@
         color: white;
         opacity: 0;
         position: absolute;
-       
     }
 
     .w1 {
@@ -111,67 +110,66 @@
     }
 </style>
 
-<div class="h-screen bg-gray-300">
-    <div class="flex items-stretch h-full">
-        <div class="w-full bg-white md:w-1/3">
-            <div class="py-5 px-20 antialiased">
-                <div class="flex items-center">
-                    <img class="w-12 h-12 block rounded object-cover object-top"
-                         src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" />
-                    <div class="text-indigo-800 font-semibold text-lg ml-4">Project-F</div>
+<div class="min-h-screen bg-white flex antialiased">
+    <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <div class="mx-auto w-full max-w-sm">
+            <div class="flex items-center">
+                <img class="w-12 h-12 block rounded object-cover object-top"
+                     src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" />
+                <div class="text-indigo-800 font-semibold text-lg ml-4">Project-F</div>
+            </div>
+            <h2 class="px-4 mt-10 text-lg leading-7 font-semibold antialiased text-gray-800">
+                Iniciar Sesi&oacute;n
+            </h2>
+            <div class="px-4 mt-5 flex items-center justify-end">
+                <div class="text-sm leading-5">
+                    <span class="text-gray-500 font-semibold tracking-wide">
+                        Bienviedo a <span class="text-indigo-800">Project-f</span>, desde aqu&Iacute; maneja, organiza y conoces el estado de tu PYME.
+                    </span>
                 </div>
-                <h2 class="px-4 mt-10 text-lg font-semibold antialiased text-gray-800">
-                    Iniciar Sesi&oacute;n
-                </h2>
-                <div class="px-4 mt-5 flex items-center justify-end">
-                    <div class="text-sm leading-5">
-                        <span class="text-xs text-gray-500 font-semibold tracking-wide">
-                            Bienviedo a <span class="text-indigo-800">Project-f</span> , desde aqu&Iacute; maneja, organiza y conoces el estado de tu PYME.
-                        </span>
+            </div>
+
+            <hr class="my-5 mx-auto px-4" />
+            <div class="mt-5">
+                <EditForm Model="_model" OnValidSubmit="@((context) => SignIn(context))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+                    <FluentValidator></FluentValidator>
+
+                    <div class="mb-4">
+                        <FLabel Value="Email" LabelFor="email" />
+                        <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"email", "email" }, { "autocomplete","off"} })" />
+                        <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
                     </div>
-                </div>
-                
-                <hr class="my-5 mx-auto px-4" />
-                <div class="mt-5">
-                    <EditForm Model="_model" OnValidSubmit="@((context) => SignIn(context))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
-                        <FluentValidator></FluentValidator>
 
-                        <div class="mb-4">
-                            <FLabel Value="Email" LabelFor="email" />
-                            <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"email", "email" }, { "autocomplete","off"} })" />
-                            <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
+                    <div class="mb-2">
+                        <FLabel Value="Contraseña" LabelFor="password" />
+                        <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Password)" Class="mt-2 font-semibold text-red-600" />
+
+                    </div>
+
+                    <div class="flex items-center justify-end">
+                        <div class="text-sm leading-5">
+                            <span class="text-xs font-semibold tracking-wide">
+                                Olvidaste
+                            </span>
+                            <a href="/forgotpassword" class="text-indigo-500 text-xs font-semibold tracking-wide">
+                                tu contraseña?
+                            </a>
                         </div>
-
-                        <div class="mb-2">
-                            <FLabel Value="Contraseña" LabelFor="password" />
-                            <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
-                            <FCustomValidationMessage For="@(() => _model.Password)" Class="mt-2 font-semibold text-red-600" />
-
-                        </div>
-
-                        <div class="flex items-center justify-end">
-                            <div class="text-sm leading-5">
-                                <span class="text-xs font-semibold tracking-wide">
-                                    Olvidaste
-                                </span>
-                                <a href="/forgotpassword" class="text-indigo-500 text-xs font-semibold tracking-wide">
-                                    tu contraseña?
-                                </a>
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full mt-5 bg-indigo-600 text-white font-semibold text-lg tracking-wide hover:bg-indigo-800 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Acceder
-                        </button>
-                        <div class="flex items-center justify-end mt-2">
-                            <span class="text-xs font-semibold tracking-wide">A&uacute;n no tienes una cuenta?</span>
-                            <a href="/signup" o class="text-xs font-semibold text-indigo-500 px-1">Registrate</a>
-                        </div>
-                    </EditForm>
-                </div>
-
+                    </div>
+                    <button type="submit" class="w-full mt-5 bg-indigo-600 text-white font-semibold text-lg tracking-wide hover:bg-indigo-800 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Acceder
+                    </button>
+                    <div class="flex items-center justify-end mt-2">
+                        <span class="text-xs font-semibold tracking-wide">A&uacute;n no tienes una cuenta?</span>
+                        <a href="/signup" o class="text-xs font-semibold text-indigo-500 px-1">Registrate</a>
+                    </div>
+                </EditForm>
             </div>
         </div>
-        <div class="invisible sm:visible md:w-2/3 sm:bg-indigo-500 sm:bg-repeat " style="background-image: url('img/background.png')">
+          
+        </div>
+        <div class="hidden lg:block relative w-0 flex-1 sm:bg-indigo-500 sm:bg-repeat" style="background-image: url('img/background.png')">
             <div class="flex flex-col items-center min-h-screen">
                 <div class="flex-grow items-end py-20">
                     <h2 class="text-white text-5xl font-semibold tracking-wide py-5">Manos a la obra</h2>
@@ -183,7 +181,7 @@
                         <span class="tracking-wide text-2xl word w4">Organiza tus PYMES</span>
                         <span class="tracking-wide text-2xl word w5">Todo con r&aacute;pidez</span>
                     </div>
-                    
+
                     <div class="flex items-center justify-center mt-10">
                         <span class="text-gray-300 text-base">
                             Un aplicaci&oacute;n
@@ -203,8 +201,6 @@
             </div>
         </div>
     </div>
-</div>
-
 @code {
     public Dictionary<string, object> formcss =
         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
