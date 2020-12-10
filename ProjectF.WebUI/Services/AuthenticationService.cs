@@ -59,5 +59,19 @@ namespace ProjectF.WebUI.Services
             }
             return response.IsSuccessStatusCode ? 1 : 0;
         }
+
+        public async Task<bool> ForgotPassword(UserForgotPasswordDto dto)
+        {
+            const string currentBaseUrl = "authentication/forgotpassword";
+            var serverUrl = $"{_client.BaseAddress}{currentBaseUrl}";
+
+            var elementJson =
+               new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
+
+            Console.WriteLine($"forgot password : { await elementJson.ReadAsStringAsync() }");
+            var response = await _client.PostAsync(serverUrl, elementJson);
+
+           return response.IsSuccessStatusCode;
+        }
     }
 }

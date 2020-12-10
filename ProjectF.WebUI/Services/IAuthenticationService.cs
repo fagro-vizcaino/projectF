@@ -10,5 +10,6 @@ namespace ProjectF.WebUI.Services
     {
         Task<RegistrationResponseDto> RegisterUser(UserRegisterDto userForRegistration);
         Task<int> ConfirmedEmail(string token, string email);
+        Task<bool> ForgotPassword(UserForgotPasswordDto forgotPasswordDto);
     }
 }
