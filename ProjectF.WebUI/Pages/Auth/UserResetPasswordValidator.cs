@@ -13,7 +13,7 @@ namespace ProjectF.WebUI.Pages.Auth
             RuleFor(c => c.Password)
                 .NotEmpty()
                 .WithMessage("Contraseña Requerida")
-                .MinimumLength(12)
+                .MinimumLength(11)
                 .WithMessage("Su contraseña debe contener mas de 11 caracteres");
 
             RuleFor(c => c.ConfirmPassword)

@@ -110,18 +110,20 @@ namespace ProjectF.Api.Features.Auth
             if(user is null) return BadRequest("user not valid");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var callback = Url.Action(nameof(ResetPassword)
-                , "api/authentication"
-                , new { token = "mtoken", email = user.Email }
+            var callback = Url.Action(""
+                , nameof(ResetPassword)
+                , new { token = "mtoken" }
                 , Request.Scheme);
             callback = callback.Replace("%2F","/");
 
             var bytesToken = Encoding.UTF8.GetBytes(token);
             var encodeToken = Convert.ToBase64String(bytesToken);
 
-            callback = callback.Replace("token=", "/");
+            var encodeEmail = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Email));
+
+            callback = callback.Replace("?token=", "/");
             callback = callback.Replace("mtoken", encodeToken);
-            callback = $"{callback}/{user.Email}";
+            callback = $"{callback}/{encodeEmail}";
             callback = callback.Replace("http://localhost:5000/", "http://localhost:5001/");
 
             var message = new Message(new [] { user.Email}, "restablezca su contraseña", callback, null);
@@ -134,7 +136,9 @@ namespace ProjectF.Api.Features.Auth
         public async Task<IActionResult> ResetPassword(string token, string email
             , [FromBody] UserResetPasswordDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+
+            var decodedEmail = Encoding.UTF8.GetString(Convert.FromBase64String(email));
+            var user = await _userManager.FindByEmailAsync(decodedEmail);
             if(user is null) return BadRequest("Invalid user");
 
             var decodedBytes = Convert.FromBase64String(token);
