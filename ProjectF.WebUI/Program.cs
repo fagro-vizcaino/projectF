@@ -77,7 +77,7 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<NumberSequence>, NumberSequenceValidator>();
             builder.Services.AddTransient<IValidator<UserRegisterDto>, UserRegisterValidator>();
             builder.Services.AddTransient<IValidator<UserForgotPasswordDto>, UserForgotPasswordValidator>();
-
+            builder.Services.AddTransient<IValidator<UserResetPasswordDto>, UserResetPasswordValidator>();
 
             //themes 
             builder.Services.AddTransient<IFMessage, FMessage>();

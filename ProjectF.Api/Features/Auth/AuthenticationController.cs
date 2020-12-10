@@ -118,7 +118,11 @@ namespace ProjectF.Api.Features.Auth
 
             var bytesToken = Encoding.UTF8.GetBytes(token);
             var encodeToken = Convert.ToBase64String(bytesToken);
+
+            callback = callback.Replace("token=", "/");
             callback = callback.Replace("mtoken", encodeToken);
+            callback = $"{callback}/{user.Email}";
+            callback = callback.Replace("http://localhost:5000/", "http://localhost:5001/");
 
             var message = new Message(new [] { user.Email}, "restablezca su contraseña", callback, null);
             await _emailSender.SendEmailAsync(message, EmailTemplateType.ForgotPassword);
@@ -127,7 +131,7 @@ namespace ProjectF.Api.Features.Auth
         }
 
         [HttpPost("resetpassword")]
-        public async Task<IActionResult> ResetPassword([FromQuery] string token, [FromQuery] string email
+        public async Task<IActionResult> ResetPassword(string token, string email
             , [FromBody] UserResetPasswordDto dto)
         {
             var user = await _userManager.FindByEmailAsync(email);
