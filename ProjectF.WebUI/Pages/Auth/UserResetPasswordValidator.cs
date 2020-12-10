@@ -17,7 +17,8 @@ namespace ProjectF.WebUI.Pages.Auth
                 .WithMessage("Su contraseña debe contener mas de 11 caracteres");
 
             RuleFor(c => c.ConfirmPassword)
-                .Equal(c => c.Password);
+                .Equal(c => c.Password)
+                .WithMessage("Ambas contraseñas deben ser iguales");
             
         }
     }

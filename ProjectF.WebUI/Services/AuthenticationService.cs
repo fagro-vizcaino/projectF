@@ -73,5 +73,19 @@ namespace ProjectF.WebUI.Services
 
            return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> ResetPassword(string token, string email, UserResetPasswordDto dto)
+        {
+            const string EMAILCONFIRMED = "authentication/resetpassword";
+            var serverUrl = $"{_client.BaseAddress}{EMAILCONFIRMED}?token={token.Trim()}&email={email.Trim()}";
+
+            var elementJson =
+               new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json");
+
+            Console.WriteLine($"forgot password : { await elementJson.ReadAsStringAsync() }");
+            var response = await _client.PostAsync(serverUrl, elementJson);
+
+            return response.IsSuccessStatusCode;
+        }
     }
 }
