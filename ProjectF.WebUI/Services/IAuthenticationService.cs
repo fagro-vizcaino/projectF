@@ -12,5 +12,6 @@ namespace ProjectF.WebUI.Services
         Task<int> ConfirmedEmail(string token, string email);
         Task<bool> ForgotPassword(UserForgotPasswordDto forgotPasswordDto);
         Task<bool> ResetPassword(string token, string email, UserResetPasswordDto userResetPasswordDto);
+        Task<AuthReponseDto> SignIn(UserLoginDto userLoginDto);
     }
 }

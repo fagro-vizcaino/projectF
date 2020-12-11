@@ -11,7 +11,7 @@ namespace ProjectF.WebUI.Pages.Auth
 {
     public class SignInContainerHandler : ComponentBase
     {
-        protected UserRegisterDto _model = new();
+        protected UserLoginDto _model = new();
 
         [Inject] public IAuthenticationService AuthenticationService { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
@@ -20,15 +20,14 @@ namespace ProjectF.WebUI.Pages.Auth
         public IEnumerable<string> Errors { get; set; }
         public bool IsSubmitting { get; set; } = false;
 
-        public void SignIn(EditContext context)
+        public async Task SignIn(EditContext context)
         {
             IsSubmitting = true;
-            //UserRegisterDto model = context.Model as UserRegisterDto;
-            //model = AssignUsername(model);
-            //model = AssignUserRole(model);
+            var model = context.Model as UserLoginDto;
+           
 
-            //ShowRegistrationErros = false;
-            //var result = await AuthenticationService.RegisterUser(model);
+            ShowRegistrationErros = false;
+            var result = await AuthenticationService.SignIn(model);
             //if (!result.IsSuccessfulRegistration)
             //{
             //    Errors = result.Errors;
@@ -38,7 +37,7 @@ namespace ProjectF.WebUI.Pages.Auth
             //{
             //    IsSubmitting = false;
             //    NavigationManager.NavigateTo("/");
-                
+
             //}
         }
 

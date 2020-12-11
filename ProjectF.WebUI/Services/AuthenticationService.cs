@@ -17,6 +17,27 @@ namespace ProjectF.WebUI.Services
             _client = client;
         }
 
+        public async Task<AuthReponseDto> SignIn(UserLoginDto userLoginDto)
+        {
+            //const string SignInUrl = "authentication/login";
+            //var serverUrl = $"{_client.BaseAddress}{SignInUrl}";
+
+            //var content = JsonSerializer.Serialize(userLoginDto);
+            //var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            //var authResult = await _client.PostAsync("https://localhost:5011/api/accounts/login", bodyContent);
+            //var authContent = await authResult.Content.ReadAsStringAsync();
+            
+            //var result = JsonSerializer.Deserialize<Auth>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            //if (!authResult.IsSuccessStatusCode)
+            //    return result;
+            //await _localStorage.SetItemAsync("authToken", result.Token);
+            
+            //((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Email);
+            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
+            //return new AuthResponseDto { IsAuthSuccessful = true };
+            return new();
+        }
+
         public async Task<RegistrationResponseDto> RegisterUser(UserRegisterDto dto)
         {
             var serverUrl = $"{_client.BaseAddress}{_baseUrl}";
