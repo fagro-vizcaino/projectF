@@ -24,7 +24,7 @@ namespace ProjectF.WebUI.Pages.Auth
         [Inject] public IFMessage FMessage { get; set; }
         public bool ShowRegistrationErros { get; set; }
         public IEnumerable<string> Errors { get; set; }
-
+        public bool IsSubmitting { get; set; } = false;
         protected override async Task OnInitializedAsync()
         {
             Countries = (await CountryDataService.GetAll()).ToArray();
@@ -32,6 +32,7 @@ namespace ProjectF.WebUI.Pages.Auth
 
         public async Task Register(EditContext context)
         {
+            IsSubmitting = true;
             UserRegisterDto model = context.Model as UserRegisterDto;
             model = AssignUsername(model);
             model = AssignUserRole(model);
@@ -46,6 +47,7 @@ namespace ProjectF.WebUI.Pages.Auth
             else
             {
                 await FMessage.Success($"Registro completado, favor verificar su email", 8);
+                IsSubmitting = false;
             }
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -17,10 +15,11 @@ namespace ProjectF.WebUI.Pages.Auth
         [Inject] public IFMessage FMessage { get; set; }
         public bool ShowRegistrationErros { get; set; }
         public IEnumerable<string> Errors { get; set; }
-
+        public bool IsSubmitting { get; set; } = false;
 
         public async Task ForgotPassword(EditContext context)
-        {
+        { 
+            IsSubmitting = true;
             var model = context.Model as UserForgotPasswordDto;
             
             ShowRegistrationErros = false;
@@ -29,6 +28,7 @@ namespace ProjectF.WebUI.Pages.Auth
             {
                 await FMessage
                     .Success($"Los pasos para cambiar su contraseña fueron enviados a su Email", 8);
+                IsSubmitting = false;
             }
         }
 

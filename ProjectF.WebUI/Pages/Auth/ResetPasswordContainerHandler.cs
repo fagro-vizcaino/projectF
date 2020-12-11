@@ -17,9 +17,11 @@ namespace ProjectF.WebUI.Pages.Auth
         [Inject] public IFMessage FMessage { get; set; }
         public bool ShowRegistrationErros { get; set; }
         public IEnumerable<string> Errors { get; set; }
+        public bool IsSubmitting { get; set; } = false;
 
         public async Task ResetPassword(EditContext context)
         {
+            IsSubmitting = true;
             var model = context.Model as UserResetPasswordDto;
 
             ShowRegistrationErros = false;
@@ -27,7 +29,9 @@ namespace ProjectF.WebUI.Pages.Auth
             if (result)
             {
                 await FMessage
-                    .Success($"Los pasos para cambiar su contraseña fueron enviados a su Email", 8);
+                    .Success($"Contraseña ha sido actualizada, puedes iniciar sesion", 8);
+                Model = new UserResetPasswordDto(string.Empty, string.Empty);
+                IsSubmitting = false;
             }
         }
 

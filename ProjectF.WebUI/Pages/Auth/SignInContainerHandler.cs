@@ -18,11 +18,28 @@ namespace ProjectF.WebUI.Pages.Auth
         [Inject] public IFMessage FMessage { get; set; }
         public bool ShowRegistrationErros { get; set; }
         public IEnumerable<string> Errors { get; set; }
-
+        public bool IsSubmitting { get; set; } = false;
 
         public void SignIn(EditContext context)
         {
+            IsSubmitting = true;
+            //UserRegisterDto model = context.Model as UserRegisterDto;
+            //model = AssignUsername(model);
+            //model = AssignUserRole(model);
 
+            //ShowRegistrationErros = false;
+            //var result = await AuthenticationService.RegisterUser(model);
+            //if (!result.IsSuccessfulRegistration)
+            //{
+            //    Errors = result.Errors;
+            //    ShowRegistrationErros = true;
+            //}
+            //else
+            //{
+            //    IsSubmitting = false;
+            //    NavigationManager.NavigateTo("/");
+                
+            //}
         }
 
 
