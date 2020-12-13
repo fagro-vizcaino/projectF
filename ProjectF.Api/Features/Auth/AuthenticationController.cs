@@ -10,6 +10,7 @@ using ProjectF.EmailService;
 using System;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectF.Api.Features.Auth
 {
@@ -31,6 +32,7 @@ namespace ProjectF.Api.Features.Auth
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterUserDto user)
         {
             var _user = _authUser.Register(user)
@@ -81,6 +83,7 @@ namespace ProjectF.Api.Features.Auth
         }
 
         [HttpGet("confirmemail", Name ="confirmemail")]
+        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
             var decodeToken =  Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
@@ -96,14 +99,17 @@ namespace ProjectF.Api.Features.Auth
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Authenticate(UserLoginDto user)
         {
-            if(!await _authUser.ValidateUser(user)) return Unauthorized();
+            if(!await _authUser.ValidateUser(user)) 
+                return Unauthorized(new AuthResponseDto(false, "Autenticacion invalidad", string.Empty));
 
-            return Ok(new { Token = await _authUser.CreateToken()});
+            return Ok(new AuthResponseDto(true, string.Empty, await _authUser.CreateToken()));
         }
 
         [HttpPost("forgotpassword")]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(UserForgotPasswordDto forgotPasswordDto)
         {
             var user = await _userManager.FindByEmailAsync(forgotPasswordDto.Email);
@@ -133,6 +139,7 @@ namespace ProjectF.Api.Features.Auth
         }
 
         [HttpPost("resetpassword")]
+        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(string token, string email
             , [FromBody] UserResetPasswordDto dto)
         {

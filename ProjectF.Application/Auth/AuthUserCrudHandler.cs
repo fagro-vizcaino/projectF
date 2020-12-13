@@ -47,6 +47,9 @@ namespace ProjectF.Application.Auth
                 && await _userManager.IsEmailConfirmedAsync(_user));
         }
 
+
+
+
         public async Task<string> CreateToken()
         {
             var signingCredentials = GetSigningCredentials();
@@ -87,7 +90,7 @@ namespace ProjectF.Application.Auth
                 issuer: jwtSettings.GetSection("validIssuer").Value,
                 audience: jwtSettings.GetSection("validAudience").Value,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expiresInMinutes").Value)),
                 signingCredentials: signingCredentials
             );
 

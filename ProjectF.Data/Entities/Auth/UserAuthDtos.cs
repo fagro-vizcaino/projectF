@@ -15,6 +15,7 @@ namespace ProjectF.Data.Entities.Auth
           , Country? Country);
 
     public record UserLoginDto(string Email, string Password);
+    public record AuthResponseDto(bool IsAuthSuccessful, string ErrorMessage, string Token);
     public record UserForgotPasswordDto(string Email);
     public record UserResetPasswordDto(string Password, string ConfirmPassword);
 

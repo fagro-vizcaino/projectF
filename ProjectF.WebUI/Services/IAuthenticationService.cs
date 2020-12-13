@@ -13,5 +13,6 @@ namespace ProjectF.WebUI.Services
         Task<bool> ForgotPassword(UserForgotPasswordDto forgotPasswordDto);
         Task<bool> ResetPassword(string token, string email, UserResetPasswordDto userResetPasswordDto);
         Task<AuthReponseDto> SignIn(UserLoginDto userLoginDto);
+        Task Logout();
     }
 }

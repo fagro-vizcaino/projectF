@@ -16,8 +16,8 @@ namespace ProjectF.WebUI.Pages.Auth
         [Inject] public IAuthenticationService AuthenticationService { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public IFMessage FMessage { get; set; }
-        public bool ShowRegistrationErros { get; set; }
-        public IEnumerable<string> Errors { get; set; }
+        public bool ShowSignInErrors { get; set; }
+        public string Errors { get; set; }
         public bool IsSubmitting { get; set; } = false;
 
         public async Task SignIn(EditContext context)
@@ -25,20 +25,18 @@ namespace ProjectF.WebUI.Pages.Auth
             IsSubmitting = true;
             var model = context.Model as UserLoginDto;
            
-
-            ShowRegistrationErros = false;
+            ShowSignInErrors = false;
             var result = await AuthenticationService.SignIn(model);
-            //if (!result.IsSuccessfulRegistration)
-            //{
-            //    Errors = result.Errors;
-            //    ShowRegistrationErros = true;
-            //}
-            //else
-            //{
-            //    IsSubmitting = false;
-            //    NavigationManager.NavigateTo("/");
-
-            //}
+            if (!result.IsAuthSuccessful)
+            {
+                Errors = result.ErrorMessage;
+                ShowSignInErrors = true;
+            }
+            else
+            {
+                IsSubmitting = false;
+                NavigationManager.NavigateTo("/");
+            }
         }
 
 

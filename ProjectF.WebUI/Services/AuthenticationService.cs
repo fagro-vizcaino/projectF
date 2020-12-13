@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
+using ProjectF.WebUI.AuthProviders;
 using ProjectF.WebUI.Pages.Auth;
 
 namespace ProjectF.WebUI.Services
@@ -10,36 +14,38 @@ namespace ProjectF.WebUI.Services
     public class AuthenticationService : IAuthenticationService
     {
         readonly HttpClient _client;
-        const string _baseUrl = "authentication/register";
+        readonly AuthenticationStateProvider _authStateProvider;
+        readonly ILocalStorageService _localStorage;
         
-        public AuthenticationService(HttpClient client)
-        {
-            _client = client;
-        }
+        
+        public AuthenticationService(HttpClient client
+            , AuthenticationStateProvider authStateProvider
+            , ILocalStorageService localStorage)
+            => (_client, _authStateProvider, _localStorage) = (client, authStateProvider, localStorage);
 
         public async Task<AuthReponseDto> SignIn(UserLoginDto userLoginDto)
         {
-            //const string SignInUrl = "authentication/login";
-            //var serverUrl = $"{_client.BaseAddress}{SignInUrl}";
+            const string SignInUrl = "authentication/login";
+            var serverUrl = $"{_client.BaseAddress}{SignInUrl}";
 
-            //var content = JsonSerializer.Serialize(userLoginDto);
-            //var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
-            //var authResult = await _client.PostAsync("https://localhost:5011/api/accounts/login", bodyContent);
-            //var authContent = await authResult.Content.ReadAsStringAsync();
-            
-            //var result = JsonSerializer.Deserialize<Auth>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            //if (!authResult.IsSuccessStatusCode)
-            //    return result;
-            //await _localStorage.SetItemAsync("authToken", result.Token);
-            
-            //((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Email);
-            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
-            //return new AuthResponseDto { IsAuthSuccessful = true };
-            return new();
+            var content = JsonSerializer.Serialize(userLoginDto);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var authResult = await _client.PostAsync(serverUrl, bodyContent);
+            var authContent = await authResult.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<AuthReponseDto>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (!authResult.IsSuccessStatusCode) return result;
+
+            await _localStorage.SetItemAsync("authToken", result.Token);
+
+            ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userLoginDto.Email);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
+            return new AuthReponseDto { IsAuthSuccessful = true };
         }
 
         public async Task<RegistrationResponseDto> RegisterUser(UserRegisterDto dto)
         {
+            const string _baseUrl = "authentication/register";
             var serverUrl = $"{_client.BaseAddress}{_baseUrl}";
 
             var elementJson =
@@ -107,6 +113,13 @@ namespace ProjectF.WebUI.Services
             var response = await _client.PostAsync(serverUrl, elementJson);
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task Logout()
+        {
+            await _localStorage.RemoveItemAsync("authToken");
+            ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
+            _client.DefaultRequestHeaders.Authorization = null;
         }
     }
 }

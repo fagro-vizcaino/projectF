@@ -14,6 +14,7 @@ using ProjectF.WebUI.Pages.NumberSequences;
 using ProjectF.WebUI.AuthProviders;
 using Microsoft.AspNetCore.Components.Authorization;
 using ProjectF.WebUI.Pages.Auth;
+using Blazored.LocalStorage;
 
 namespace ProjectF.WebUI
 {
@@ -27,9 +28,11 @@ namespace ProjectF.WebUI
 
             //Auth
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
+
             //builder.Services.AddFileReaderService(o => o.UseWasmSharedBuffer = true);
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddScoped<AuthenticationStateProvider, TestAuthStateProvider>();
+            builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 
 
             //Themes
@@ -76,9 +79,10 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<Product>, ProductValidator>();
             builder.Services.AddTransient<IValidator<NumberSequence>, NumberSequenceValidator>();
             builder.Services.AddTransient<IValidator<UserRegisterDto>, UserRegisterValidator>();
+            builder.Services.AddTransient<IValidator<UserLoginDto>, UserLoginValidator>();
             builder.Services.AddTransient<IValidator<UserForgotPasswordDto>, UserForgotPasswordValidator>();
             builder.Services.AddTransient<IValidator<UserResetPasswordDto>, UserResetPasswordValidator>();
-
+            
             //themes 
             builder.Services.AddTransient<IFMessage, FMessage>();
 
