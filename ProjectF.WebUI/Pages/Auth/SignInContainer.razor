@@ -36,8 +36,6 @@
         animation: w5anim 10s infinite;
     }
 
-
-
     @@keyframes w1anim {
         0% {
             opacity: 0;
@@ -118,38 +116,38 @@
                      src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" />
                 <div class="text-indigo-800 font-semibold text-lg ml-4">Project-F</div>
             </div>
-            <h2 class="px-4 mt-10 text-lg leading-7 font-semibold antialiased text-gray-800">
-                Iniciar Sesi&oacute;n
-            </h2>
-            <div class="px-4 mt-5 flex items-center justify-end">
-                <div class="text-sm leading-5">
-                    <span class="text-gray-500 font-semibold tracking-wide">
-                        Bienviedo a <span class="text-indigo-800">Project-f</span>, desde aqu&Iacute; maneja, organiza y conoces el estado de tu PYME.
-                    </span>
-                </div>
-            </div>
-
-            <hr class="my-5 mx-auto px-4" />
             <div class="mt-5">
                 @if (ShowSignInErrors)
                 {
-                <div class="flex items-center justify-center mt-2">
-                    <div class="bg-red-100 p-5 w-full sm:w-1/2">
-                        <div class="flex space-x-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="flex-none fill-current text-red-500 h-4 w-4">
-                                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.597 17.954l-4.591-4.55-4.555 4.596-1.405-1.405 4.547-4.592-4.593-4.552 1.405-1.405 4.588 4.543 4.545-4.589 1.416 1.403-4.546 4.587 4.592 4.548-1.403 1.416z" />
-                            </svg>
-                            <div class="leading-tight flex flex-col space-y-2">
-                                <div class="text-sm font-medium text-red-700">Ocurrio algunos errores</div>
-                                <div class="flex-1 leading-snug text-sm text-red-600">
-                                    @Errors
+                    <div class="flex items-center justify-center mt-2">
+                        <div class="bg-red-100 p-5 w-full">
+                            <div class="flex space-x-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="flex-none fill-current text-red-500 h-4 w-4">
+                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.597 17.954l-4.591-4.55-4.555 4.596-1.405-1.405 4.547-4.592-4.593-4.552 1.405-1.405 4.588 4.543 4.545-4.589 1.416 1.403-4.546 4.587 4.592 4.548-1.403 1.416z" />
+                                </svg>
+                                <div class="leading-tight flex flex-col space-y-2">
+                                    <div class="text-sm font-medium text-red-700">Ocurrio algunos errores</div>
+                                    <div class="flex-1 leading-snug text-sm text-red-600">
+                                        @Errors
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 }
-                
+                <h2 class="px-4 mt-10 text-lg leading-7 font-semibold antialiased text-gray-800">
+                    Iniciar Sesi&oacute;n
+                </h2>
+                <div class="px-4 mt-5 flex items-center justify-end">
+                    <div class="text-sm leading-5">
+                        <span class="text-gray-500 font-semibold tracking-wide">
+                            Bienviedo a <span class="text-indigo-800">Project-f</span>, desde aqu&Iacute; maneja, organiza y conoces el estado de tu PYME.
+                        </span>
+                    </div>
+                </div>
+
+                <hr class="my-5 mx-auto px-4" />
+
                 <EditForm Model="_model" OnValidSubmit="@((context) => SignIn(context))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
                     <FluentValidator></FluentValidator>
 
@@ -161,7 +159,8 @@
 
                     <div class="mb-2">
                         <FLabel Value="Contraseña" LabelFor="password" />
-                        <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
+                        <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" 
+                                       AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
                         <FCustomValidationMessage For="@(() => _model.Password)" Class="mt-2 font-semibold text-red-600" />
 
                     </div>

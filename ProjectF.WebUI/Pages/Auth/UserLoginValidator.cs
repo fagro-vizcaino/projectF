@@ -22,7 +22,7 @@ namespace ProjectF.WebUI.Pages.Auth
              .MaximumLength(60)
              .WithMessage("Máximo Carateres 40")
              .MinimumLength(11)
-             .WithMessage("Su contraseña debe tener mas de 4 caracteres");
+             .WithMessage("Su contraseña debe tener mas de 10 caracteres");
         }
     }
 }
