@@ -117,24 +117,7 @@
                 <div class="text-indigo-800 font-semibold text-lg ml-4">Project-F</div>
             </div>
             <div class="mt-5">
-                @if (ShowSignInErrors)
-                {
-                    <div class="flex items-center justify-center mt-2">
-                        <div class="bg-red-100 p-5 w-full">
-                            <div class="flex space-x-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="flex-none fill-current text-red-500 h-4 w-4">
-                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.597 17.954l-4.591-4.55-4.555 4.596-1.405-1.405 4.547-4.592-4.593-4.552 1.405-1.405 4.588 4.543 4.545-4.589 1.416 1.403-4.546 4.587 4.592 4.548-1.403 1.416z" />
-                                </svg>
-                                <div class="leading-tight flex flex-col space-y-2">
-                                    <div class="text-sm font-medium text-red-700">Ocurrio algunos errores</div>
-                                    <div class="flex-1 leading-snug text-sm text-red-600">
-                                        @Errors
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+                <FAlertNotification />
                 <h2 class="px-4 mt-10 text-lg leading-7 font-semibold antialiased text-gray-800">
                     Iniciar Sesi&oacute;n
                 </h2>
@@ -159,7 +142,7 @@
 
                     <div class="mb-2">
                         <FLabel Value="Contraseña" LabelFor="password" />
-                        <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" 
+                        <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                                        AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
                         <FCustomValidationMessage For="@(() => _model.Password)" Class="mt-2 font-semibold text-red-600" />
 
@@ -185,39 +168,39 @@
                 </EditForm>
             </div>
         </div>
-          
-        </div>
-        <div class="hidden lg:block relative w-0 flex-1 sm:bg-indigo-500 sm:bg-repeat" style="background-image: url('img/background.png')">
-            <div class="flex flex-col items-center min-h-screen">
-                <div class="flex-grow items-end py-20">
-                    <h2 class="text-white text-4xl font-semibold leading-relaxed py-2">Manos a la obra</h2>
-                    <div class="flex items-end justify-items-end mt-5  leading-relaxed">
-                        <span class="text-xl word w1">Organiza tus N&uacute;meros</span>
-                        <span class="text-xl word w2">Maneja tu Contabilidad</span>
-                        <span class="text-xl word w3">Conoce tus Finanzas</span>
-                        <span class="text-xl word w4">Organiza tus PYMES</span>
-                        <span class="text-xl word w5">Todo con r&aacute;pidez</span>
-                    </div>
 
-                    <div class="flex items-center justify-center mt-5">
-                        <span class="text-gray-300 text-base">
-                            Un aplicaci&oacute;n
-                            <span class="text-gray-300 text-base">
-                                con las opciones que necesitas para manegar tú
-                                <span class="tracking-wide text-base text-gray-100"> PYME.</span>
-                            </span>
-                        </span>
-                    </div>
+    </div>
+    <div class="hidden lg:block relative w-0 flex-1 sm:bg-indigo-500 sm:bg-repeat" style="background-image: url('img/background.png')">
+        <div class="flex flex-col items-center min-h-screen">
+            <div class="flex-grow items-end py-20">
+                <h2 class="text-white text-4xl font-semibold leading-relaxed py-2">Manos a la obra</h2>
+                <div class="flex items-end justify-items-end mt-5  leading-relaxed">
+                    <span class="text-xl word w1">Organiza tus N&uacute;meros</span>
+                    <span class="text-xl word w2">Maneja tu Contabilidad</span>
+                    <span class="text-xl word w3">Conoce tus Finanzas</span>
+                    <span class="text-xl word w4">Organiza tus PYMES</span>
+                    <span class="text-xl word w5">Todo con r&aacute;pidez</span>
                 </div>
-                <svg class="object-none object-right-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                    <path fill="#6366f1"
-                          fill-opacity="1"
-                          d="M0,256L48,229.3C96,203,192,149,288,154.7C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-                    </path>
-                </svg>
+
+                <div class="flex items-center justify-center mt-5">
+                    <span class="text-gray-300 text-base">
+                        Un aplicaci&oacute;n
+                        <span class="text-gray-300 text-base">
+                            con las opciones que necesitas para manegar tú
+                            <span class="tracking-wide text-base text-gray-100"> PYME.</span>
+                        </span>
+                    </span>
+                </div>
             </div>
+            <svg class="object-none object-right-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#6366f1"
+                      fill-opacity="1"
+                      d="M0,256L48,229.3C96,203,192,149,288,154.7C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+                </path>
+            </svg>
         </div>
     </div>
+</div>
 @code {
     public Dictionary<string, object> formcss =
         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };

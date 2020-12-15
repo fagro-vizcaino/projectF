@@ -16,6 +16,8 @@ namespace ProjectF.WebUI.Pages.Auth
         [Inject] public IAuthenticationService AuthenticationService { get; set; }
         [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public IFMessage FMessage { get; set; }
+
+        [Inject] AlertService AlertService { get; set; }
         public bool ShowSignInErrors { get; set; }
         public string Errors { get; set; }
         public bool IsSubmitting { get; set; } = false;
@@ -29,7 +31,7 @@ namespace ProjectF.WebUI.Pages.Auth
             var result = await AuthenticationService.SignIn(model);
             if (!result.IsAuthSuccessful)
             {
-                Errors = result.ErrorMessage;
+                AlertService.addMessage(new Alert(result.ErrorMessage, Alerts.Error));
                 ShowSignInErrors = true;
             }
             else

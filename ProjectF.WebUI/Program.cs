@@ -82,7 +82,9 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<UserLoginDto>, UserLoginValidator>();
             builder.Services.AddTransient<IValidator<UserForgotPasswordDto>, UserForgotPasswordValidator>();
             builder.Services.AddTransient<IValidator<UserResetPasswordDto>, UserResetPasswordValidator>();
-            
+
+            builder.Services.AddSingleton<AlertService>();
+
             //themes 
             builder.Services.AddTransient<IFMessage, FMessage>();
 
