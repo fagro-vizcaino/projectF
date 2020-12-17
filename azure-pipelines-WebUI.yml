@@ -28,3 +28,14 @@ steps:
     
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI) WebUI'
+  inputs:
+    command: publish
+    publishWebProjects: yes
+    projects: 'ProjectF.WebUI/ProjectF.WebUI.csproj'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI)'
+    zipAfterPublish: true
+- task: PublishBuildArtifacts@1
+  displayName: 'publish artifacts WebUI'
