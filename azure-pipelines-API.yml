@@ -13,7 +13,6 @@ trigger:
      - ProjectF.Api/ProjectF.Api.csproj
    exclude:
      - ProjectF.WebUI/ProjectF.WebUI.csproj
-
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -30,12 +29,12 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI) WebUI'
+  displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectoryWebApi) API'
   inputs:
     command: publish
     publishWebProjects: false
     projects: 'ProjectF.Api/ProjectF.Api.csproj'
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI)'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectoryWebApi)'
     zipAfterPublish: true
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifacts API'
