@@ -33,7 +33,7 @@ steps:
   displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI) WebUI'
   inputs:
     command: publish
-    publishWebProjects: yes
+    publishWebProjects: true
     projects: 'ProjectF.WebUI/ProjectF.WebUI.csproj'
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI)'
     zipAfterPublish: true
