@@ -14,7 +14,7 @@ namespace ProjectF.Api.Features.Test
         [HttpGet]
         public IActionResult GetAll()
         {
-            var items = Enumerable.Range(1, 100);
+            var items = Enumerable.Range(1, 50);
             return Ok(items);
         }
     }
