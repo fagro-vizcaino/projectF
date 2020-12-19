@@ -21,13 +21,14 @@ variables:
 
 steps:
 - task: UseDotNet@2
+  displayName: 'Use .NET Core sdk 5.x'
   inputs:
-    packageType: 'sdk'
-    version: '5.x'
-    
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-
+    version: 5.x
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/ProjectF.Api.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
   inputs:
@@ -38,4 +39,7 @@ steps:
     zipAfterPublish: true
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifacts'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: project-f.webapi
   
