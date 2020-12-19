@@ -24,11 +24,10 @@ steps:
   displayName: 'Use .NET Core sdk 5.x'
   inputs:
     version: 5.x
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/ProjectF.Api.csproj'
-    arguments: '--configuration $(BuildConfiguration)'
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
   inputs:
