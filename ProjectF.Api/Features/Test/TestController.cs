@@ -8,6 +8,7 @@ namespace ProjectF.Api.Features.Test
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class TestController : ControllerBase
     {
         [HttpGet]
