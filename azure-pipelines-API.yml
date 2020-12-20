@@ -11,8 +11,6 @@ trigger:
  paths:
    include:
      - ProjectF.Api/ProjectF.Api.csproj
-   exclude:
-     - ProjectF.WebUI/ProjectF.WebUI.csproj
 pool:
   vmImage: 'ubuntu-latest'
 
