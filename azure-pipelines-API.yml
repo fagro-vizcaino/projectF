@@ -32,7 +32,7 @@ steps:
   displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
   inputs:
     command: 'publish'
-    publishWebProjects: false
+    publishWebProjects: true
     projects: 'ProjectF.Api/ProjectF.Api.csproj'
     arguments: '--configuration release --output $(build.artifactstagingdirectory) --self-contained true --runtime win-x64'
     zipAfterPublish: true
