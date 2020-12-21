@@ -11,6 +11,8 @@ trigger:
  paths:
    include:
      - ProjectF.Api/ProjectF.Api.csproj
+   exclude:
+     - ProjectF.WebUI/ProjectF.WebUI.csproj
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -33,7 +35,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
-    projects: 'ProjectF.Api/ProjectF.Api.csproj'
+    projects: '**/ProjectF.Api.csproj'
     arguments: '--configuration release --output $(build.artifactstagingdirectory) --self-contained true --runtime win-x64'
     zipAfterPublish: true
     
