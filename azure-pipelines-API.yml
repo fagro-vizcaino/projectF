@@ -35,7 +35,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: '**/ProjectF.Api.csproj'
+    projects: '**/ProjectF.Api.csproj' 
     arguments: '--configuration release --output $(build.artifactstagingdirectory) --self-contained true --runtime linux-x64'
     zipAfterPublish: true
     
