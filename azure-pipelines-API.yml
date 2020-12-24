@@ -21,10 +21,12 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET Core sdk 5.x'
+  displayName: 'Use .NET sdk 5.x'
   inputs:
     packageType: 'sdk'
-    version: 5.x
+    version: '5.0.100'
+    includePreviewVersions: true
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
