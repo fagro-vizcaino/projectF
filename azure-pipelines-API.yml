@@ -24,7 +24,7 @@ steps:
   displayName: 'Use .NET sdk 5.x'
   inputs:
     packageType: 'sdk'
-    version: '5.0.100'
+    version: '5.0.101'
     includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
