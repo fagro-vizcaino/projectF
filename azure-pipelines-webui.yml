@@ -38,7 +38,7 @@ steps:
     publishWebProjects: true
     projects: '**/ProjectF.WebUI.csproj' 
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: true
+    zipAfterPublish: false
     
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifacts'
