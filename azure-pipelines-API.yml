@@ -3,7 +3,6 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-
 trigger:
  branches:
    include:
@@ -43,22 +42,22 @@ steps:
     zipAfterPublish: true
 
 - task: efcore-migration-script-generator-task@0
-  displayName: '$(Build.SourcesDirectory)'
+  displayName: 'Ef Core Migrations'
   inputs:
     installDependencies: true # required for net 3.1+
     projectPath: '$(Build.SourcesDirectory)/**/ProjectF.Data.csproj' # path to project that has your DbContext
     databaseContexts: '_AppDbContext'
-    startupprojectpath: '$(Build.SourcesDirectory)/**/ProjectF.Data.csproj'
+    startupprojectpath: '$(Build.SourcesDirectory)/ProjectF.Data/ProjectF.Data.csproj'
     targetfolder: '$(build.ArtifactStagingDirectory)/migrations'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'publish artifacts'
+  displayName: 'publish web api artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: project-f.webapi
 
 - task: PublishPipelineArtifact@1
-  displayName: 'Publish migrations'
+  displayName: 'Publish  ef core migrations'
   inputs:
     targetPath: '$(build.ArtifactStagingDirectory)/migrations'
     artifact: 'migrations'
