@@ -1,20 +1,20 @@
 stages:
-  - stage: ReleaseProd
-    displayName: 'Deploy to SQL to Prod'
-    dependsOn: Build
-    variables:
-    - group: AzureSqlConnection #1: pull in DB connection from library
-    jobs:
-    - deployment: MigrateDatabase
-      environment: 'prod' #2: you'll need to define an env
-      displayName: Migrate Database
-      variables:
-       namespace: prod # define some variables
-      pool:
-       vmImage: windows-latest # this task only works in windows
-      strategy:
-       runOnce:
-         deploy:
+ - stage: ReleaseProd
+   displayName: 'Deploy to SQL to Prod'
+   dependsOn: Build
+   variables:
+   - group: AzureSqlConnection #1: pull in DB connection from library
+   jobs:
+   - deployment: MigrateDatabase
+     environment: 'prod' #2: you'll need to define an env
+     displayName: Migrate Database
+     variables:
+      namespace: prod # define some variables
+     pool:
+      vmImage: windows-latest # this task only works in windows
+     strategy:
+      runOnce:
+        deploy:
           steps:
            - task: DownloadPipelineArtifact@2
              displayName: 'download migration script'
