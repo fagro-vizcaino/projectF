@@ -45,7 +45,7 @@ steps:
   displayName: 'Ef Core Migrations'
   inputs:
     installDependencies: true # required for net 3.1+
-    projectPath: '$(Build.SourcesDirectory)/**/ProjectF.Data.csproj' # path to project that has your DbContext
+    projectPath: '$(Build.SourcesDirectory)/ProjectF.Data/ProjectF.Data.csproj' # path to project that has your DbContext
     databaseContexts: '_AppDbContext'
     startupprojectpath: '$(Build.SourcesDirectory)/ProjectF.Data/ProjectF.Data.csproj'
     targetfolder: '$(build.ArtifactStagingDirectory)/migrations'
