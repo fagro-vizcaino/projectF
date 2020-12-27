@@ -25,8 +25,8 @@ stages:
              displayName: 'run sql migrations'
              inputs:
               azureConnectionType: connectedServiceNameARM
-              azureSubscription: 'Azure subscription (6fc9dca7-98eb-4b8b-ab95-f0c82a30943e)'
+              azureSubscription: 'Azure subscription (6fc9dca7-98eb-4b8b-ab95-f0c82a30943e)' #3: name of your Service Connection to azure ARM
               authenticationType: connectionString
-              connectionString: $(azuresqlconnectionkey)
+              connectionString: $(azuresqlconnectionkey) #4: this variable is fed by #1 above so you don't commit sensitive strings
               deployType: sqlTask
               sqlFile: $(System.ArtifactsDirectory)/migrations/_AppDbContext.sql
