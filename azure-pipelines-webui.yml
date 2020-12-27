@@ -41,7 +41,7 @@ steps:
     zipAfterPublish: false
     
 - task: PublishBuildArtifacts@1
-  displayName: 'publish artifacts'
+  displayName: 'publish web ui artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: project-f.webui
