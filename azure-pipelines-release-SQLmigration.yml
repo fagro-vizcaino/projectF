@@ -1,4 +1,3 @@
-stages:
 - stage: ReleaseProd
   displayName: 'Deploy to Prod'
   dependsOn: Build
