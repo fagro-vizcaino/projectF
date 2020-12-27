@@ -11,9 +11,9 @@ stages:
     variables:
       namespace: prod # define some variables
       pool:
-       vmImage: windows-latest # this task only works in windows
-       strategy:
-       runOnce:
+        vmImage: windows-latest # this task only works in windows
+        strategy:
+        runOnce:
         deploy:
           steps:
            - task: DownloadPipelineArtifact@2
