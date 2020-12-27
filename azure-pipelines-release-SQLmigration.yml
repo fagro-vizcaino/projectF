@@ -1,32 +1,32 @@
 stages:
 - stage: ReleaseProd
-  displayName: 'Deploy to SQL to Prod'
+  displayName: 'Deploy to Prod'
   dependsOn: Build
   variables:
-  - group: AzureSqlConnection #1: pull in DB connection from library
+    - group: AzureSqlConnection #1: pull in DB connection from library
   jobs:
-  - deployment: MigrateDatabase
-    environment: 'prod' #2: you'll need to define an env
-    displayName: Migrate Database
-    variables:
-      namespace: prod # define some variables
+    - deployment: MigrateDatabase
+      environment: 'prod' #2: you'll need to define an env
+      displayName: Migrate Database
+      variables:
+        namespace: prod # define some variables
       pool:
-      vmImage: windows-latest # this task only works in windows
+        vmImage: windows-latest # this task only works in windows
       strategy:
         runOnce:
-        deploy:
-          steps:
-           - task: DownloadPipelineArtifact@2
-             displayName: 'download migration script'
-             inputs:
-               artifactName: 'migrations'
-               downloadPath: '$(System.ArtifactsDirectory)/migrations'
-           - task: SqlAzureDacpacDeployment@1
-             displayName: 'run sql migrations'
-             inputs:
-               azureConnectionType: connectedServiceNameARM
-               azureSubscription: 'Azure subscription (6fc9dca7-98eb-4b8b-ab95-f0c82a30943e)' #3: name of your Service Connection to azure ARM
-               authenticationType: connectionString
-               connectionString: $(azuresqlconnectionkey) #4: this variable is fed by #1 above so you don't commit sensitive strings
-               deployType: sqlTask
-               sqlFile: $(System.ArtifactsDirectory)/migrations/_AppDbContext.sql
+          deploy:
+            steps:
+             - task: DownloadPipelineArtifact@2
+               displayName: download migration script
+               inputs:
+                 artifactName: 'migrations'
+                 downloadPath: '$(System.ArtifactsDirectory)/migrations'
+             - task: SqlAzureDacpacDeployment@1
+               displayName: run sql migrations
+               inputs:
+                 azureConnectionType: connectedServiceNameARM
+                 azureSubscription: 'Azure subscription (6fc9dca7-98eb-4b8b-ab95-f0c82a30943e)' #3: name of your Service Connection to azure ARM
+                 authenticationType: connectionString
+                 connectionString: $(azuresqlconnectionkey) #4: this variable is fed by #1 above so you don't commit sensitive strings
+                 deployType: sqlTask
+                 sqlFile: $(System.ArtifactsDirectory)/migrations/_AppDbContext.sql
