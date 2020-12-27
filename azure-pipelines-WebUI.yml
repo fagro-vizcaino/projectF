@@ -3,7 +3,6 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-
 trigger:
  branches:
    include:
@@ -13,7 +12,6 @@ trigger:
      - ProjectF.WebUI/ProjectF.WebUI.csproj
    exclude:
      - ProjectF.Api/ProjectF.Api.csproj
-
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -22,20 +20,28 @@ variables:
 
 steps:
 - task: UseDotNet@2
+  displayName: 'Use .NET sdk 5.x'
   inputs:
     packageType: 'sdk'
-    version: '5.x'
-    
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+    version: '5.0.101'
+    includePreviewVersions: true
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI) WebUI'
   inputs:
-    command: publish
+    command: 'build'
+    projects: '**/ProjectF.WebUI.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+  inputs:
+    command: 'publish'
     publishWebProjects: true
-    projects: 'ProjectF.WebUI/ProjectF.WebUI.csproj'
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectoryWebUI)'
-    zipAfterPublish: true
+    projects: '**/ProjectF.WebUI.csproj' 
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: false
+    
 - task: PublishBuildArtifacts@1
-  displayName: 'publish artifacts WebUI'
+  displayName: 'publish artifacts'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: project-f.webui

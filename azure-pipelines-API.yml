@@ -32,6 +32,7 @@ steps:
     command: 'build'
     projects: '**/ProjectF.Api.csproj'
     arguments: '--configuration $(BuildConfiguration)'
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
   inputs:
@@ -40,10 +41,25 @@ steps:
     projects: '**/ProjectF.Api.csproj' 
     arguments: '-r linux-x64 -c Release --output $(build.artifactstagingdirectory)'
     zipAfterPublish: true
-    
+
+- task: efcore-migration-script-generator-task@0
+  displayName: '$(Build.SourcesDirectory)'
+  inputs:
+    installDependencies: true # required for net 3.1+
+    projectPath: '$(Build.SourcesDirectory)/**/ProjectF.Data.csproj' # path to project that has your DbContext
+    databaseContexts: '_AppDbContext'
+    startupprojectpath:'$(Build.SourcesDirectory)/**/ProjectF.Data.csproj'
+    targetfolder: '$(build.ArtifactStagingDirectory)/migrations'
+
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: project-f.webapi
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish migrations'
+  inputs:
+    targetPath: '$(build.ArtifactStagingDirectory)/migrations'
+    artifact: 'migrations'
   
