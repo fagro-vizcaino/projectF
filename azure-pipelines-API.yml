@@ -13,7 +13,7 @@ trigger:
    exclude:
      - ProjectF.WebUI/ProjectF.WebUI.csproj
 stages:
-- stage: build web-api
+- stage: build webapi
   jobs:
   - job: build
     pool:
