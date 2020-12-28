@@ -65,6 +65,7 @@ stages:
       inputs:
         targetPath: '$(build.ArtifactStagingDirectory)/migrations'
         artifact: 'migrations'
+
 - stage: release_SQL_migration_prod
   displayName: 'Deploy sql to Prod'
   dependsOn: build_webapi
@@ -93,6 +94,6 @@ stages:
             azureConnectionType: connectedServiceNameARM
             azureSubscription: 'Azure subscription (6fc9dca7-98eb-4b8b-ab95-f0c82a30943e)' #3: name of your Service Connection to azure ARM
             authenticationType: connectionString
-            connectionString: $(azuresqlconnectionkey) #4: this variable is fed by #1 above so you don't commit sensitive strings
+            connectionString: $(azuresqlsecret) #4: this variable is fed by #1 above so you don't commit sensitive strings
             deployType: sqlTask
             sqlFile: $(System.ArtifactsDirectory)/migrations/_AppDbContext.sql
