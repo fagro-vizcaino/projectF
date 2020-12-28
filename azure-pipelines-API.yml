@@ -13,7 +13,7 @@ trigger:
    exclude:
      - ProjectF.WebUI/ProjectF.WebUI.csproj
 stages:
-- stage: build webapi
+- stage: build_webapi
   jobs:
   - job: build
     pool:
@@ -66,7 +66,7 @@ stages:
         targetPath: '$(build.ArtifactStagingDirectory)/migrations'
         artifact: 'migrations'
 
-- stage: release SQL migration to prod
+- stage: release_SQL_migration_prod
   displayName: 'Deploy sql to Prod'
   dependsOn: Build
   variables:
