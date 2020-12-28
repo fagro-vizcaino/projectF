@@ -65,10 +65,9 @@ stages:
       inputs:
         targetPath: '$(build.ArtifactStagingDirectory)/migrations'
         artifact: 'migrations'
-
 - stage: release_SQL_migration_prod
   displayName: 'Deploy sql to Prod'
-  dependsOn: Build
+  dependsOn: build_webapi
   variables:
     - group: AzureSqlConnection #1: pull in DB connection from library
   jobs:
