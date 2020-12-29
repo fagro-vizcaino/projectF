@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ProjectF.Application.Countries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectF.Api.Features.Countries
 {
@@ -18,6 +19,7 @@ namespace ProjectF.Api.Features.Countries
 
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var items = await _countryOperation.GetAll();

@@ -23,6 +23,7 @@ using ProjectF.Application.PaymentMethods;
 using ProjectF.EmailService;
 using Microsoft.AspNetCore.Routing;
 using ProjectF.EmailService.Auth;
+using System;
 
 namespace ProjectF.Api
 {
@@ -103,6 +104,10 @@ namespace ProjectF.Api
             var emailConfig = Configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
+
+            emailConfig.UserName = Environment.GetEnvironmentVariable("emailusername") ?? string.Empty;
+            emailConfig.Password = Environment.GetEnvironmentVariable("emailpassword") ?? string.Empty;
+
             services.AddSingleton(emailConfig);
             services.AddScoped<IEmailSender, EmailSender>();
 
