@@ -33,7 +33,8 @@ namespace ProjectF.WebUI
             };
             builder.Services.AddScoped(sp => http);
 
-            using var response = await http.GetAsync("appsettings.json");
+            using var response = await http
+                .GetAsync($"appsettings.{builder.HostEnvironment.Environment}.json");
             using var stream = await response.Content.ReadAsStreamAsync();
 
             builder.Configuration.AddJsonStream(stream);
