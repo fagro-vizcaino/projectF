@@ -15,6 +15,8 @@ using ProjectF.WebUI.AuthProviders;
 using Microsoft.AspNetCore.Components.Authorization;
 using ProjectF.WebUI.Pages.Auth;
 using Blazored.LocalStorage;
+using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace ProjectF.WebUI
 {
@@ -22,9 +24,21 @@ namespace ProjectF.WebUI
     {
         public static async Task Main(string[] args)
         {
-            const string baseUrl = "http://localhost:5000/api/";
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
+
+            var http = new HttpClient()
+            {
+                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+            };
+            builder.Services.AddScoped(sp => http);
+
+            using var response = await http.GetAsync("appsettings.json");
+            using var stream = await response.Content.ReadAsStreamAsync();
+
+            builder.Configuration.AddJsonStream(stream);
+            var baseUrl = builder.Configuration.GetValue<string>("httpService");
+            
 
             //Auth
             builder.Services.AddAuthorizationCore();
