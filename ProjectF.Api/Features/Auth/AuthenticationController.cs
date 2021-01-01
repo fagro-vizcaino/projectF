@@ -11,6 +11,7 @@ using System;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace ProjectF.Api.Features.Auth
 {
@@ -21,14 +22,17 @@ namespace ProjectF.Api.Features.Auth
         readonly UserManager<User> _userManager;
         readonly AuthUserCrudHandler _authUser;
         readonly IEmailSender _emailSender;
+        readonly IConfiguration _config;
         
         public AuthenticationController(UserManager<User> userManager
             , AuthUserCrudHandler authUser
-            , IEmailSender emailSender)
+            , IEmailSender emailSender
+            , IConfiguration configuration)
         {
             _userManager        = userManager;
             _authUser           = authUser;
             _emailSender        = emailSender;
+            _config             = configuration;
         }
 
         [HttpPost("register")]
@@ -61,8 +65,8 @@ namespace ProjectF.Api.Features.Auth
                , "confirmemail"
                , new { token = "mtoken" }
                , Request.Scheme);
+            Uri confirmUri = new(confirmationLink);
 
-          
             var encodeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             var encodeEmail = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Email));
 
@@ -70,7 +74,8 @@ namespace ProjectF.Api.Features.Auth
             confirmationLink = confirmationLink.Replace("?token=", "/");
             confirmationLink = confirmationLink.Replace("mtoken", encodeToken);
             confirmationLink = $"{confirmationLink}/{encodeEmail}";
-            confirmationLink = confirmationLink.Replace("http://localhost:5000/", "http://localhost:5001/");
+            confirmationLink = confirmationLink.Replace($"{confirmUri.Scheme}{Uri.SchemeDelimiter}{confirmUri.Host}:{confirmUri.Port}/", 
+                _config.GetValue<string>("AppSettings:webui"));
 
             var message = new Message(new string[] { user.Email }, "Confirmar Email"
                 , confirmationLink

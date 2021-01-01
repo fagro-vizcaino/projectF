@@ -2,82 +2,81 @@
 @page "/signup"
 @inherits RegistrationContainerHandler
 
-<div class="h-screen bg-gray-300">
-    <div class="flex items-stretch h-full">
-        <div class="w-full bg-white md:w-2/5">
-            <div class="py-4 px-16 antialiased">
-                <div class="flex items-center">
-                    <img class="w-12 h-12 block rounded object-cover object-top"
-                         src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" />
-                    <div class="text-indigo-800 font-semibold text-lg ml-4">Project-F</div>
-                </div>
-                <h2 class="mt-5 font-semibold antialiased text-gray-800">
-                    Registra una cuenta
-                </h2>
-                <hr class="my-2 mx-auto" />
-                <div class="mt-1">
-                    <EditForm Model="_model" OnValidSubmit="@((context) => Register(context))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
-                        <FluentValidator></FluentValidator>
-                        <div class="mb-1">
-                            <FLabel Value="Nombre" LabelFor="Name" />
-                            <FInputText @bind-Value="_model.FirstName" AdditionalAttributes="@(new Dictionary<string, object> {{"firstname", "firstname" }, { "autocomplete","off"} })" />
-                            <FCustomValidationMessage For="@(() => _model.FirstName)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
-                        <div class="mb-1">
-                            <FLabel Value="Apellido" LabelFor="Lastname" />
-                            <FInputText @bind-Value="_model.LastName" AdditionalAttributes="@(new Dictionary<string, object> {{"lastname", "lastname" }, { "autocomplete","off"}})" />
-                            <FCustomValidationMessage For="@(() => _model.LastName)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
-                        <div class="mb-1">
-                            <FLabel Value="Email" LabelFor="email" />
-                            <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"email", "email" }, { "autocomplete","off"} })" />
-                            <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
+<div class="min-h-screen bg-white flex antialiased">
+    
+    <div class="flex-1 flex flex-col justify-center py-12 px-2 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <div class="mx-auto w-full max-w-sm">
+            <div class="flex items-center">
+                <img class="w-12 h-12 block rounded object-cover object-top"
+                     src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" />
+                <div class="text-indigo-800 font-semibold text-lg ml-4">Project-F</div>
+            </div>
+            <h2 class="mt-5 font-semibold antialiased text-gray-800">
+                Registra una cuenta
+            </h2>
+            <hr class="my-2 mx-auto" />
+            <div class="mt-1">
+                <EditForm Model="_model" OnValidSubmit="@((context) => Register(context))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+                    <FluentValidator></FluentValidator>
+                    <div class="mb-1">
+                        <FLabel Value="Nombre" LabelFor="Name" />
+                        <FInputText @bind-Value="_model.FirstName" AdditionalAttributes="@(new Dictionary<string, object> {{"firstname", "firstname" }, { "autocomplete","off"} })" />
+                        <FCustomValidationMessage For="@(() => _model.FirstName)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div class="mb-1">
+                        <FLabel Value="Apellido" LabelFor="Lastname" />
+                        <FInputText @bind-Value="_model.LastName" AdditionalAttributes="@(new Dictionary<string, object> {{"lastname", "lastname" }, { "autocomplete","off"}})" />
+                        <FCustomValidationMessage For="@(() => _model.LastName)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div class="mb-1">
+                        <FLabel Value="Email" LabelFor="email" />
+                        <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"email", "email" }, { "autocomplete","off"} })" />
+                        <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
 
-                        <div class="mb-1">
-                            <FLabel Value="Contraseña" LabelFor="password" />
-                            <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
-                            <FCustomValidationMessage For="@(() => _model.Password)" Class="mt-2 font-semibold text-red-600" />
-                        </div>
+                    <div class="mb-1">
+                        <FLabel Value="Contraseña" LabelFor="password" />
+                        <InputPassword @bind-Value="_model.Password" Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"password", "password" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Password)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
 
-                        <div class="mb-1">
-                            <FLabel Value="País" LabelFor="SelectedCountry" />
-                            <div class="inline-block relative w-full">
-                                <FInputSelect @bind-Value="_model.SelectedCountry">
-                                    <option value="0">Seleccione un país</option>
-                                    @foreach (var type in Countries)
-                                    {
-                                        <option value="@type.Id">@type.Name</option>
-                                    }
-                                </FInputSelect>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                    </svg>
-                                </div>
-                                <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
+                    <div class="mb-1">
+                        <FLabel Value="País" LabelFor="SelectedCountry" />
+                        <div class="inline-block relative w-full">
+                            <FInputSelect @bind-Value="_model.SelectedCountry">
+                                <option value="0">Seleccione un país</option>
+                                @foreach (var type in Countries)
+                                {
+                                    <option value="@type.Id">@type.Name</option>
+                                }
+                            </FInputSelect>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
                             </div>
+                            <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
                         </div>
-                        <div class="my-1 w-full">
-                            <span class="text-xs text-gray-400">
-                                Acepto los términos, la política de privacidad y las tarifas.
-                            </span>
-                        </div>
-                        <button type="submit"
-                                disabled="@IsSubmitting"
-                                class="w-full mt-2 bg-indigo-600 text-white font-semibold tracking-wide hover:bg-indigo-800 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Crear Cuenta
-                        </button>
-                        <div class="flex items-center justify-end mt-2">
-                            <span class="text-xs font-semibold tracking-wide px-2">Ya tienes una cuenta?</span>
-                            <a href="/signin" o class="my-2 text-xs font-semibold text-indigo-500">Inicia Sesi&oacute;n</a>
-                        </div>
-                    </EditForm>
-                </div>
-                
+                    </div>
+                    <div class="my-1 w-full">
+                        <span class="text-xs text-gray-400">
+                            Acepto los términos, la política de privacidad y las tarifas.
+                        </span>
+                    </div>
+                    <button type="submit"
+                            disabled="@IsSubmitting"
+                            class="w-full mt-2 bg-indigo-600 text-white font-semibold tracking-wide hover:bg-indigo-800 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Crear Cuenta
+                    </button>
+                    <div class="flex items-center justify-end mt-2">
+                        <span class="text-xs font-semibold tracking-wide px-2">Ya tienes una cuenta?</span>
+                        <a href="/signin" o class="my-2 text-xs font-semibold text-indigo-500">Inicia Sesi&oacute;n</a>
+                    </div>
+                </EditForm>
             </div>
         </div>
-        <div class="invisible sm:visible md:w-3/5 sm:bg-indigo-500 sm:bg-repeat " style="background-image: url('img/background.png')">
+    </div>
+        <div class="hidden lg:block relative w-0 flex-1 sm:bg-indigo-500 sm:bg-repeat" style="background-image: url('img/background.png')">
             <div class="flex flex-col items-center min-h-screen">
                 <div class="flex-grow items-end py-20">
                     <h2 class="text-white text-5xl font-semibold tracking-wide py-5">Bienvenido</h2>
@@ -115,8 +114,8 @@
                     </path>
                 </svg>
             </div>
-        </div>     
-    </div>
+        </div>
+    
 </div>
 
 
