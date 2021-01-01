@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ProjectF.Api.Features.Auth
 {
@@ -23,16 +24,19 @@ namespace ProjectF.Api.Features.Auth
         readonly AuthUserCrudHandler _authUser;
         readonly IEmailSender _emailSender;
         readonly IConfiguration _config;
-        
+        readonly ILogger _logger;
+
         public AuthenticationController(UserManager<User> userManager
             , AuthUserCrudHandler authUser
             , IEmailSender emailSender
-            , IConfiguration configuration)
+            , IConfiguration configuration
+            , ILoggerFactory logger)
         {
             _userManager        = userManager;
             _authUser           = authUser;
             _emailSender        = emailSender;
             _config             = configuration;
+            _logger             = logger.CreateLogger("Authorization"); ;
         }
 
         [HttpPost("register")]
@@ -66,8 +70,12 @@ namespace ProjectF.Api.Features.Auth
                , new { token = "mtoken" }
                , Request.Scheme);
             Uri confirmUri = new(confirmationLink);
+            _logger.LogInformation($"confirmation link: {confirmationLink}");
 
-            var encodeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            _logger.LogInformation($"confirmation uri: {confirmUri.Scheme}{Uri.SchemeDelimiter}{confirmUri.Host}:{confirmUri.Port}/");
+            _logger.LogInformation($"appsettings webui: {_config.GetValue<string>("AppSettings:webui")}");
+            
+                var encodeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             var encodeEmail = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Email));
 
             confirmationLink = confirmationLink.Replace("%2F", "/");
