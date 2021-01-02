@@ -9,9 +9,9 @@ trigger:
      - master
  paths:
    include:
-     - ProjectF.WebUI/ProjectF.WebUI.csproj
+     - ProjectF.WebUI/**
    exclude:
-     - ProjectF.Api/ProjectF.Api.csproj
+     - ProjectF.Api/**
 pool:
   vmImage: 'ubuntu-latest'
 
