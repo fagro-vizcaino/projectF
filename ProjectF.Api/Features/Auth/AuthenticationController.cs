@@ -69,21 +69,23 @@ namespace ProjectF.Api.Features.Auth
                , "confirmemail"
                , new { token = "mtoken" }
                , Request.Scheme);
-            Uri confirmUri = new(confirmationLink);
-            _logger.LogInformation($"confirmation link: {confirmationLink}");
-
-            _logger.LogInformation($"confirmation uri: {confirmUri.Scheme}{Uri.SchemeDelimiter}{confirmUri.Host}:{confirmUri.Port}/");
-            _logger.LogInformation($"appsettings webui: {_config.GetValue<string>("AppSettings:webui")}");
             
-                var encodeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            Uri confirmUri = new(confirmationLink);
+            var uri = $"{confirmUri.Scheme}" + 
+                $"{Uri.SchemeDelimiter}{confirmUri.Host}" +
+                $"{ (confirmationLink.Substring(7, confirmationLink.Length - 8).Contains(":") ? ":" + confirmUri.Port : "/") }";
+
+
+            var encodeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
             var encodeEmail = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Email));
 
             confirmationLink = confirmationLink.Replace("%2F", "/");
             confirmationLink = confirmationLink.Replace("?token=", "/");
             confirmationLink = confirmationLink.Replace("mtoken", encodeToken);
             confirmationLink = $"{confirmationLink}/{encodeEmail}";
-            confirmationLink = confirmationLink.Replace($"{confirmUri.Scheme}{Uri.SchemeDelimiter}{confirmUri.Host}:{confirmUri.Port}/", 
-                _config.GetValue<string>("AppSettings:webui"));
+
+            confirmationLink = confirmationLink
+                .Replace($"{uri}/", _config.GetValue<string>("AppSettings:webui"));
 
             var message = new Message(new string[] { user.Email }, "Confirmar Email"
                 , confirmationLink
