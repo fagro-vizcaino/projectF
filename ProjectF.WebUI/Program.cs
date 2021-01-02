@@ -17,6 +17,7 @@ using ProjectF.WebUI.Pages.Auth;
 using Blazored.LocalStorage;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace ProjectF.WebUI
 {
@@ -27,61 +28,44 @@ namespace ProjectF.WebUI
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            var http = new HttpClient()
-            {
-                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-            };
-            builder.Services.AddScoped(sp => http);
-
-            using var response = await http
-                .GetAsync($"appsettings.{builder.HostEnvironment.Environment}.json");
+            HttpClient appSettingConfig = new() { BaseAddress = new(builder.HostEnvironment.BaseAddress) };
+            
+            using var response = await appSettingConfig.GetAsync($"appsettings.{builder.HostEnvironment.Environment}.json");
             using var stream = await response.Content.ReadAsStreamAsync();
 
             builder.Configuration.AddJsonStream(stream);
             var baseUrl = builder.Configuration.GetValue<string>("httpService");
             
+            //Base HttpClient
+            HttpClient httpClient = new() { BaseAddress = new(baseUrl) };
+            builder.Services.AddScoped(sp => httpClient);
 
             //Auth
-            builder.Services.AddAuthorizationCore();
-            builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
-
-            //builder.Services.AddFileReaderService(o => o.UseWasmSharedBuffer = true);
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true);
+            builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
-
 
             //Themes
             builder.Services.AddAntDesign();
 
-            builder.Services.AddHttpClient<IBaseDataService<Category>, CategoryDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Warehouse>, WarehouseDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Tax>, TaxesDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<PaymentTerm>, PaymentTermDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Bank>, BankDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<BankAccountType>, BankAccountTypeDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Country>, CountryDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Client>, ClientDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Supplier>, SupplierDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Product>, ProductDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<Invoice>, InvoiceDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<InvoiceMainList>, InvoiceListDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
-            builder.Services.AddHttpClient<IBaseDataService<NumberSequence>, NumberSequenceDataService>(client
-                => client.BaseAddress = new Uri(baseUrl));
+            builder.Services.AddScoped<IBaseDataService<Tax>, TaxesDataService>();
+            builder.Services.AddScoped<IBaseDataService<PaymentTerm>, PaymentTermDataService>();
+            builder.Services.AddScoped<IBaseDataService<Bank>, BankDataService>();
+            builder.Services.AddScoped<IBaseDataService<BankAccountType>, BankAccountTypeDataService>();
+            builder.Services.AddScoped<IBaseDataService<Country>, CountryDataService>();
+
+            builder.Services.AddScoped<IBaseDataService<Client>, ClientDataService>();
+            builder.Services.AddScoped<IBaseDataService<Supplier>, SupplierDataService>();
+
+            builder.Services.AddScoped<IBaseDataService<Product>, ProductDataService>();
+            builder.Services.AddScoped<IBaseDataService<Category>, CategoryDataService>();
+            builder.Services.AddScoped<IBaseDataService<Warehouse>, WarehouseDataService>();
+
+            builder.Services.AddScoped<IBaseDataService<Invoice>, InvoiceDataService>();
+            builder.Services.AddScoped<IBaseDataService<InvoiceMainList>, InvoiceListDataService>();
+            builder.Services.AddScoped<IBaseDataService<NumberSequence>, NumberSequenceDataService>();
             
-            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(c 
-                => c.BaseAddress = new Uri(baseUrl));
 
             builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
             builder.Services.AddTransient<IValidator<Warehouse>, WarehouseValidator>();
