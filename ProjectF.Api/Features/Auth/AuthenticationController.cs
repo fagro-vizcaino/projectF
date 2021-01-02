@@ -84,6 +84,11 @@ namespace ProjectF.Api.Features.Auth
             confirmationLink = confirmationLink.Replace("mtoken", encodeToken);
             confirmationLink = $"{confirmationLink}/{encodeEmail}";
 
+
+            _logger.LogInformation($"confirmation link: {confirmationLink}");
+            _logger.LogInformation($"confirmation uri: {uri}");
+            _logger.LogInformation($"confirmation replace: {_config.GetValue<string>("AppSettings:webui")}"); 
+
             confirmationLink = confirmationLink
                 .Replace($"{uri}/", _config.GetValue<string>("AppSettings:webui"));
 
