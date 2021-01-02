@@ -90,15 +90,13 @@ namespace ProjectF.Api.Features.Auth
             _logger.LogInformation($"confirmation replace: {_config.GetValue<string>("AppSettings:webui")}"); 
 
             confirmationLink = confirmationLink
-                .Replace($"{uri}/", _config.GetValue<string>("AppSettings:webui"));
+                .Replace(uri, _config.GetValue<string>("AppSettings:webui"));
 
             var message = new Message(new string[] { user.Email }, "Confirmar Email"
                 , confirmationLink
                 , null);
 
-            System.Diagnostics.Debug.WriteLine($"message {message}");
             await _emailSender.SendEmailAsync(message, EmailTemplateType.Register);
-
             return StatusCode(201);
         }
 
