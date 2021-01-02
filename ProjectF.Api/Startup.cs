@@ -39,64 +39,13 @@ namespace ProjectF.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<CategoryCrudHandler>();
-            services.AddScoped<CategoryRepository>();
-            services.AddScoped<WerehouseCrudHandler>();
-            services.AddScoped<WerehouseRepository>();
+            services.ConfigureCors();
+            services.ConfigureAppServices();
 
-            services.AddScoped<UserRepository>();
-            services.AddScoped<CountryRepository>();
-            services.AddScoped<CountryCrudOperation>();
-            services.AddScoped<ProductCrudHandler>();
-            services.AddScoped<ProductRepository>();
-            services.AddScoped<InvoiceCrudHandler>();
-            services.AddScoped<InvoiceMainListHandler>();
-            services.AddScoped<InvoiceRepository>();
-            services.AddScoped<ClientCrudHandler>();
-            services.AddScoped<ClientRepository>();
-            services.AddScoped<SupplierRepository>();
-            services.AddScoped<SupplierCrudHandler>();
-            services.AddScoped<TaxRepository>();
-            services.AddScoped<TaxCrudHandler>();
-            services.AddScoped<PaymentTermRepository>();
-            services.AddScoped<PaymentTermCrudHandler>();
-            services.AddScoped<BankAccountTypeRepository>();
-            services.AddScoped<BankAccountRepository>();
-            services.AddScoped<BankAccountCrudHandler>();
-            services.AddScoped<BankAccountTypeCrudHandler>();
-            services.AddScoped<DocumentNumberSequenceRepository>();
-            services.AddScoped<DocumentNumberSequenceHandler>();
-            services.AddScoped<PaymentMethodHandler>(); 
-            services.AddScoped<PaymentMethodRepository>();
+            services.ConfigureAppDb(Configuration);
 
-            //Db Related stuffs.
-            services.AddDbContext<_AppDbContext>(options =>
-                options
-                .UseLoggerFactory(_AppDbContext.GetLoggerFactory())
-                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddMvc(o => o.Conventions.Add(new FeatureConvention()))
-           .AddRazorOptions(options =>
-               {
-                   // Replace normal view location entirely
-                   // {0} - Action Name
-                   // {1} - Controller Name
-                   // {2} - Area Name
-                   // {3} - Feature Name
-                   options.AreaViewLocationFormats.Clear();
-                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{1}/{0}.cshtml");
-                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{0}.cshtml");
-                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/Shared/{0}.cshtml");
-                   options.AreaViewLocationFormats.Add("/Areas/Shared/{0}.cshtml");
-
-                   // replace normal view location entirely
-                   options.ViewLocationFormats.Clear();
-                   options.ViewLocationFormats.Add("/Features/{3}/{1}/{0}.cshtml");
-                   options.ViewLocationFormats.Add("/Features/{3}/{0}.cshtml");
-                   options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
-                   options.ViewLocationExpanders.Add(new FeatureFoldersRazorViewEngine());
-               });
-
+            services.ConfigureMvcViews();
+            
             services.AddAuthentication();
             services.ConfigureIdentity();
             services.ConfigureJWT(Configuration);
@@ -117,7 +66,7 @@ namespace ProjectF.Api
 
             services.AddSingleton(authHtmlTemplate);
 
-            services.AddScoped<AuthUserCrudHandler>();
+            
             services.AddControllers();
             services.Configure<RouteOptions>(options =>
             {
@@ -134,15 +83,20 @@ namespace ProjectF.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers().RequireAuthorization();
