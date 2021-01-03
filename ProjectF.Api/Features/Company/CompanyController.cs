@@ -24,12 +24,21 @@ namespace ProjectF.Api.Features.Company
                     Right: pt => CreatedAtRoute(nameof(GetCompanyById),
                         new { id = dto.Id }, dto));
 
+        [HttpPut("{id}")]
+        public ActionResult Update(long id, CompanyDto model)
+            => _companyCrudHandler.Update(id, model)
+                 .Match<ActionResult>(
+                    Left: err => BadRequest(err.Message),
+                    Right: pt => CreatedAtRoute(nameof(GetCompanyById),
+                        new { id = pt.Id }, model));
+
 
         [HttpGet("{id}", Name = "GetCompanyById")]
         public IActionResult GetCompanyById(long id)
            => _companyCrudHandler.Find(id).Match<ActionResult>(
                    Left: err => NotFound(err.Message),
                    Right: c => Ok(FromEntity(c)));
+
 
 
         [HttpGet]

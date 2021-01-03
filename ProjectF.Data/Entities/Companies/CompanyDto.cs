@@ -5,6 +5,7 @@ using ProjectF.Data.Entities.Countries;
 namespace ProjectF.Data.Entities.Companies
 {
     public record CompanyDto(long Id
+        , long CompanyId
         , string Name
         , string Rnc
         , string HomeOrApartment

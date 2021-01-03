@@ -18,7 +18,8 @@ namespace ProjectF.Data.Entities.Companies
                 , dto.Status);
 
         public static CompanyDto FromEntity(Company model)
-            => new CompanyDto(model.Id
+            => new CompanyDto(model.CompanyId
+                , model.CompanyId
                 , model.Name.Value
                 , model.Rnc
                 , model.HomeOrApartment
