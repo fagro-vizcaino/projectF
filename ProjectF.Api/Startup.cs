@@ -4,26 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectF.Api.Infrastructure;
-using ProjectF.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using ProjectF.Application.Categories;
-using ProjectF.Data.Repositories;
-using ProjectF.Application.Auth;
-using ProjectF.Application.Countries;
-using ProjectF.Application.Werehouses;
-using ProjectF.Application.Products;
-using ProjectF.Application.Invoice;
-using ProjectF.Application.Clients;
-using ProjectF.Application.Suppliers;
-using ProjectF.Application.PaymentTerms;
-using ProjectF.Application.Banks;
-using ProjectF.Application.Taxes;
-using ProjectF.Application.NumberSequence;
-using ProjectF.Application.PaymentMethods;
 using ProjectF.EmailService;
 using Microsoft.AspNetCore.Routing;
 using ProjectF.EmailService.Auth;
 using System;
+using FluentValidation.AspNetCore;
+using ProjectF.Application.Companies;
 
 namespace ProjectF.Api
 {
@@ -67,7 +53,9 @@ namespace ProjectF.Api
             services.AddSingleton(authHtmlTemplate);
 
             
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CompanyValidator>());
+
             services.Configure<RouteOptions>(options =>
             {
                 options.LowercaseUrls = true;

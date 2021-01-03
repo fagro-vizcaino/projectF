@@ -14,12 +14,14 @@ namespace ProjectF.Data.Entities.Taxes
         public Tax(Name name, decimal value,
             DateTime created,
             DateTime? modified = null,
+            long companyId = 0,
             EntityStatus status = EntityStatus.Active)
         {
             Name         = name;
             PercentValue = value;
             Created      = created == DateTime.MinValue ? DateTime.Now : created;
             Modified     = modified;
+            CompanyId    = companyId;
             Status       = status;
         }
 

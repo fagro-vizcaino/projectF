@@ -35,10 +35,6 @@ namespace ProjectF.Data.EfConfiguration
                 .HasMaxLength(11)
                 .HasConversion(p => p.Value, p => new Phone(p));
 
-            builder.HasOne(p => p.RegimeType);
-
-            builder.HasOne(p => p.Currency);
-
             builder.Property(c => c.Status)
                 .IsRequired();
             

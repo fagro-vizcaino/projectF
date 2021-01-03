@@ -10,8 +10,8 @@ using ProjectF.Data.Context;
 namespace ProjectF.Data.Migrations
 {
     [DbContext(typeof(_AppDbContext))]
-    [Migration("20201124215019_initialstate")]
-    partial class initialstate
+    [Migration("20210103193306_baseMigration")]
+    partial class baseMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,17 +50,24 @@ namespace ProjectF.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "641d164a-5bf8-4f2b-b3bb-537cf6a17941",
-                            ConcurrencyStamp = "55f660e6-fde5-41f2-a2e3-ac00607a33d0",
+                            Id = "7eacc7c8-a3de-48c6-ac5e-f8204ed185cb",
+                            ConcurrencyStamp = "3144aefd-1e7c-4661-9cb5-09cf66ad2801",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "b3d3d27a-b641-4f24-8ca4-a1319d1a4c42",
-                            ConcurrencyStamp = "5981d255-6b53-4a21-9ab0-eb2f375a30a9",
+                            Id = "216121c3-1287-4b3f-9d2d-bbfe0afbd73e",
+                            ConcurrencyStamp = "9932408e-2d9c-4524-bcdb-5ffd98fadc8e",
                             Name = "Admin",
                             NormalizedName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "6e72257e-5827-48d4-80bf-3229f04dab1a",
+                            ConcurrencyStamp = "109272ea-ff2b-433b-9c35-4e13a358e4a1",
+                            Name = "Visitor",
+                            NormalizedName = "Visitor"
                         });
                 });
 
@@ -483,9 +490,6 @@ namespace ProjectF.Data.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("Datetime");
 
-                    b.Property<int>("CurrencyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("HomeOrApartment")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
@@ -527,8 +531,6 @@ namespace ProjectF.Data.Migrations
                     b.HasKey("CompanyId");
 
                     b.HasIndex("CountryId");
-
-                    b.HasIndex("CurrencyId");
 
                     b.ToTable("Company");
                 });
@@ -961,9 +963,6 @@ namespace ProjectF.Data.Migrations
                     b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CompanyId1")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("Datetime");
@@ -987,10 +986,6 @@ namespace ProjectF.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("CompanyId1")
-                        .IsUnique()
-                        .HasFilter("[CompanyId1] IS NOT NULL");
 
                     b.ToTable("TaxRegimeType");
                 });
@@ -1274,12 +1269,6 @@ namespace ProjectF.Data.Migrations
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ProjectF.Data.Entities.Currencies.Currency", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Invoices.InvoiceDetail", b =>
@@ -1361,10 +1350,6 @@ namespace ProjectF.Data.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("ProjectF.Data.Entities.Company", null)
-                        .WithOne("RegimeType")
-                        .HasForeignKey("ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType.TaxRegimeType", "CompanyId1");
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Taxes.Tax", b =>

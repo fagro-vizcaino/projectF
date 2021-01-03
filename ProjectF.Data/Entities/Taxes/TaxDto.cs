@@ -9,6 +9,7 @@ namespace ProjectF.Data.Entities.Taxes
     public record TaxDto(long Id
         , string Name
         , decimal PercentValue
+        , long CompanyId
         , DateTime Created
         , DateTime? Modified
         , EntityStatus Status);

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProjectF.Data.Migrations
 {
-    public partial class initialstate : Migration
+    public partial class baseMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,8 +86,7 @@ namespace ProjectF.Data.Migrations
                     Street = table.Column<string>(maxLength: 220, nullable: false),
                     CountryId = table.Column<int>(nullable: false),
                     Phone = table.Column<string>(maxLength: 11, nullable: false),
-                    Website = table.Column<string>(nullable: false),
-                    CurrencyId = table.Column<int>(nullable: false)
+                    Website = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,12 +96,6 @@ namespace ProjectF.Data.Migrations
                         column: x => x.CountryId,
                         principalTable: "Country",
                         principalColumn: "CountryId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Company_Currency_CurrencyId",
-                        column: x => x.CurrencyId,
-                        principalTable: "Currency",
-                        principalColumn: "CurrencyId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -374,8 +367,7 @@ namespace ProjectF.Data.Migrations
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
                     Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
                     Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Description = table.Column<string>(maxLength: 60, nullable: false),
-                    CompanyId1 = table.Column<long>(nullable: true)
+                    Description = table.Column<string>(maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -385,12 +377,6 @@ namespace ProjectF.Data.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Company",
                         principalColumn: "CompanyId");
-                    table.ForeignKey(
-                        name: "FK_TaxRegimeType_Company_CompanyId1",
-                        column: x => x.CompanyId1,
-                        principalTable: "Company",
-                        principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -667,8 +653,9 @@ namespace ProjectF.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "641d164a-5bf8-4f2b-b3bb-537cf6a17941", "55f660e6-fde5-41f2-a2e3-ac00607a33d0", "Manager", "MANAGER" },
-                    { "b3d3d27a-b641-4f24-8ca4-a1319d1a4c42", "5981d255-6b53-4a21-9ab0-eb2f375a30a9", "Admin", "Admin" }
+                    { "7eacc7c8-a3de-48c6-ac5e-f8204ed185cb", "3144aefd-1e7c-4661-9cb5-09cf66ad2801", "Manager", "MANAGER" },
+                    { "216121c3-1287-4b3f-9d2d-bbfe0afbd73e", "9932408e-2d9c-4524-bcdb-5ffd98fadc8e", "Admin", "Admin" },
+                    { "6e72257e-5827-48d4-80bf-3229f04dab1a", "109272ea-ff2b-433b-9c35-4e13a358e4a1", "Visitor", "Visitor" }
                 });
 
             migrationBuilder.InsertData(
@@ -776,11 +763,6 @@ namespace ProjectF.Data.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Company_CurrencyId",
-                table: "Company",
-                column: "CurrencyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DocumentNumberSequence_CompanyId",
                 table: "DocumentNumberSequence",
                 column: "CompanyId");
@@ -856,13 +838,6 @@ namespace ProjectF.Data.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TaxRegimeType_CompanyId1",
-                table: "TaxRegimeType",
-                column: "CompanyId1",
-                unique: true,
-                filter: "[CompanyId1] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Warehouse_CompanyId",
                 table: "Warehouse",
                 column: "CompanyId");
@@ -887,6 +862,9 @@ namespace ProjectF.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "BankAccount");
+
+            migrationBuilder.DropTable(
+                name: "Currency");
 
             migrationBuilder.DropTable(
                 name: "DocumentNumberSequence");
@@ -938,9 +916,6 @@ namespace ProjectF.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Country");
-
-            migrationBuilder.DropTable(
-                name: "Currency");
         }
     }
 }

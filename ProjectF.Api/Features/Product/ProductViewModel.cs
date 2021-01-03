@@ -48,6 +48,7 @@ namespace ProjectF.Api.Features.Product
                 , Tax.PercentValue
                 , Tax.Created
                 , Tax.Modified
+                , Tax.CompanyId
                 , Tax.Status);
 
             return new ProductDto(Id

@@ -49,10 +49,9 @@ namespace ProjectF.Api.Features.ContactClient
         public async Task<ActionResult> GetClients([FromQuery] ClientListParameters clientListParameters)
         => (await _clientCrudHandler.GetClientList(clientListParameters))
                 .Match<ActionResult>(Left: err => NotFound(err.Message),
-                        Right: c => {
-                            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
-                            return Ok(c.list);
-                            });
+                        Right: c => { Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
+                            return Ok(c.list); 
+                         });
 
 
         [HttpDelete("{id}")]

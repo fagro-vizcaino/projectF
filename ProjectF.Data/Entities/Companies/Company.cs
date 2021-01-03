@@ -2,8 +2,6 @@
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
-using ProjectF.Data.Entities.Currencies;
-using ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType;
 
 namespace ProjectF.Data.Entities
 {
@@ -17,8 +15,6 @@ namespace ProjectF.Data.Entities
         public virtual Country Country { get; private set; }
         public Phone Phone { get; private set; }
         public string Website { get; private set; }
-        public virtual TaxRegimeType RegimeType { get; private set; }
-        public virtual Currency Currency {get; private set;}
 
         protected Company() { }
 
@@ -30,8 +26,6 @@ namespace ProjectF.Data.Entities
             , Country country
             , Phone phone
             , string website
-            , TaxRegimeType regimeType
-            , Currency currency
             , long companyId
             , DateTime created
             , EntityStatus status = EntityStatus.Active)
@@ -44,8 +38,6 @@ namespace ProjectF.Data.Entities
             Country         = country;
             Phone           = phone;
             Website         = website;
-            RegimeType      = regimeType;
-            Currency        = currency;
             CompanyId       = companyId;
             Created         = created == DateTime.MinValue ? DateTime.Now : created;
             Status          = status;
@@ -60,8 +52,6 @@ namespace ProjectF.Data.Entities
             , Country country
             , Phone phone
             , string website
-            , TaxRegimeType regimeType
-            , Currency currency
             , EntityStatus status)
         {
             Name            = name;
@@ -72,8 +62,6 @@ namespace ProjectF.Data.Entities
             Country         = country;
             Phone           = phone;
             Website         = website;
-            RegimeType      = regimeType;
-            Currency        = currency;
             Status          = status;
             Modified        = DateTime.Now;
         }
