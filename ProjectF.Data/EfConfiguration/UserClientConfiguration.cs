@@ -4,11 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using LanguageExt;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class UserClientConfiguration : IEntityTypeConfiguration<Client>
     {
+        readonly long _companyId;
+
+        public UserClientConfiguration(){}
+        public UserClientConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<Client> builder)
         {
             builder.ToTable("Client").HasKey(s => s.Id);
@@ -57,6 +65,10 @@ namespace ProjectF.Data.EfConfiguration
                 .WithMany()
                 .HasForeignKey(s => s.CompanyId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+          && x.Status == EntityStatus.Active);
 
         }
     }

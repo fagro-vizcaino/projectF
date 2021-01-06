@@ -23,6 +23,7 @@ namespace ProjectF.Data.Context
 {
     public class _AppDbContext : IdentityDbContext<User>
     {
+        readonly long _companyId;
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Warehouse> Werehouses { get; set; }
@@ -41,7 +42,15 @@ namespace ProjectF.Data.Context
         public DbSet<DocumentNumberSequence> DocumentNumberSequences { get; set; }
         public DbSet<TaxRegimeType> TaxRegimeTypes { get; set; }
         public DbSet<PaymentTerm> PaymentMethods { get; set; }
-        public _AppDbContext(DbContextOptions<_AppDbContext> options) : base(options) { }
+        public _AppDbContext(DbContextOptions<_AppDbContext> options, IGetClaimsProvider userData) 
+            : base(options)
+        {
+            if(long.TryParse(userData.CompanyId, out var companyId))
+             {
+                _companyId = companyId;
+             }
+            _companyId = 0;
+        }
 
         public static ILoggerFactory GetLoggerFactory()
         {
@@ -68,7 +77,10 @@ namespace ProjectF.Data.Context
             modelBuilder.ApplyConfiguration(new UserClientConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentTermConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new TaxConfiguration());
+            
+            modelBuilder.ApplyConfiguration(new TaxConfiguration(_companyId));
+            
+            
             modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceHeaderConfiguration());

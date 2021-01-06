@@ -10,6 +10,9 @@ using ProjectF.EmailService.Auth;
 using System;
 using FluentValidation.AspNetCore;
 using ProjectF.Application.Companies;
+using Microsoft.AspNetCore.Identity;
+using ProjectF.Api.Infrastructure.Factory;
+using ProjectF.Data.Entities.Auth;
 
 namespace ProjectF.Api
 {
@@ -45,6 +48,7 @@ namespace ProjectF.Api
 
             services.AddSingleton(emailConfig);
             services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
 
             var authHtmlTemplate = Configuration
                 .GetSection("AuthTemplates")

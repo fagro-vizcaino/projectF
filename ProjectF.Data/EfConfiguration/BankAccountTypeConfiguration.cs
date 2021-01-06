@@ -6,11 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class BankAccountTypeConfiguration : IEntityTypeConfiguration<BankAccountType>
     {
+        readonly long _companyId;
+
+        public BankAccountTypeConfiguration() { }
+        public BankAccountTypeConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
+
         public void Configure(EntityTypeBuilder<BankAccountType> builder)
         {
             builder.ToTable("BankAccountType").HasKey(w => w.Id);
@@ -40,6 +49,9 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+            && x.Status == EntityStatus.Active);
         }
     }
 }

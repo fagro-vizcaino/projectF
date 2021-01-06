@@ -2,11 +2,19 @@ using ProjectF.Data.Entities;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class CompanyConfiguration : IEntityTypeConfiguration<Company>
     {
+        readonly long _companyId;
+
+        public CompanyConfiguration() { }
+        public CompanyConfiguration(long companyId): this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<Company> builder)
         {
             builder.ToTable("Company").HasKey(c => c.CompanyId);
@@ -44,6 +52,10 @@ namespace ProjectF.Data.EfConfiguration
             
             builder.Property(c => c.Modified)
                 .HasColumnType("Datetime");
+            
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+            && x.Status == EntityStatus.Active);
+
 
         }
     }

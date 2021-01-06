@@ -3,11 +3,19 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class UserConfiguration : IEntityTypeConfiguration<User>
     {
+        readonly long _companyId;
+
+        public UserConfiguration(){ }
+        public UserConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
        public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("User").HasKey(u => u.Id);
@@ -30,6 +38,7 @@ namespace ProjectF.Data.EfConfiguration
                 .HasForeignKey(s => s.CompanyId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            //builder.HasQueryFilter(x => x.CompanyId == _companyId);
         }
     }
 }

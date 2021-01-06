@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.PaymentMethods;
 
@@ -8,6 +9,13 @@ namespace ProjectF.Data.EfConfiguration
 {
     class PaymentMethodConfiguration : IEntityTypeConfiguration<PaymentMethod>
     {
+        readonly long _companyId;
+
+        public PaymentMethodConfiguration(){ }
+        public PaymentMethodConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<PaymentMethod> builder)
         {
             builder.ToTable("PaymentMethod").HasKey(c => c.Id);
@@ -40,7 +48,8 @@ namespace ProjectF.Data.EfConfiguration
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
 
-
+            builder.HasQueryFilter(x => x.CompanyId == _companyId 
+            && x.Status == EntityStatus.Active);
         }
     }
 }

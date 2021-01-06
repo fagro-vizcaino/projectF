@@ -2,11 +2,19 @@
 using ProjectF.Data.Entities.Invoices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class InvoiceDetailConfiguration : IEntityTypeConfiguration<InvoiceDetail>
     {
+        readonly long _companyId;
+
+        public InvoiceDetailConfiguration() { }
+        public InvoiceDetailConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<InvoiceDetail> builder)
         {
             builder.ToTable("InvoiceDetail").HasKey(c => c.Id);
@@ -32,6 +40,9 @@ namespace ProjectF.Data.EfConfiguration
                 .HasColumnType("decimal(16,2)");
 
             builder.HasOne(c => c.InvoiceHeader);
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+            && x.Status == EntityStatus.Active);
         }
     }
 }

@@ -3,11 +3,19 @@ using ProjectF.Data.Entities.Sequences;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class DocumentNumberSequenceConfiguration : IEntityTypeConfiguration<DocumentNumberSequence>
     {
+        readonly long _companyId;
+
+        public DocumentNumberSequenceConfiguration() { }
+        public DocumentNumberSequenceConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<DocumentNumberSequence> builder)
         {
              builder.ToTable("DocumentNumberSequence").HasKey(c => c.Id);
@@ -48,6 +56,9 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+            && x.Status == EntityStatus.Active);
 
         }
     }

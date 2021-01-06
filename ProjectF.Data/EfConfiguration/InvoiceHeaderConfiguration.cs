@@ -3,11 +3,19 @@ using ProjectF.Data.Entities.Invoices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class InvoiceHeaderConfiguration : IEntityTypeConfiguration<InvoiceHeader>
     {
+        readonly long _companyId;
+
+        public InvoiceHeaderConfiguration() { }
+        public InvoiceHeaderConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<InvoiceHeader> builder)
         {
             builder.ToTable("InvoiceHeader").HasKey(c => c.Id);
@@ -79,7 +87,9 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
-
+            
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+          && x.Status == EntityStatus.Active);
         }
     }
 }

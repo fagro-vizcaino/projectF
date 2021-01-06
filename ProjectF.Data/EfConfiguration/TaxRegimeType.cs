@@ -3,11 +3,19 @@ using ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     public class TaxRegimeTypeConfiguration : IEntityTypeConfiguration<TaxRegimeType>
     {
+        readonly long _companyId;
+
+        public TaxRegimeTypeConfiguration(){}
+        public TaxRegimeTypeConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<TaxRegimeType> builder)
         {
              builder.ToTable("TaxRegimeType").HasKey(s => s.Id);
@@ -38,6 +46,9 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+          && x.Status == EntityStatus.Active);
         }
     }
 }

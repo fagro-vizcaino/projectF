@@ -3,11 +3,18 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
+        readonly long _companyId;
+        public CategoryConfiguration() { }
+        public CategoryConfiguration(long companyId) : this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.ToTable("Category").HasKey(c => c.Id);
@@ -27,7 +34,6 @@ namespace ProjectF.Data.EfConfiguration
                 .HasColumnType("bit")
                 .IsRequired();
 
-
             builder.HasOne<Company>()
                 .WithMany()
                 .HasForeignKey(s => s.CompanyId)
@@ -43,6 +49,9 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId 
+            && x.Status == EntityStatus.Active);
 
         }
     }

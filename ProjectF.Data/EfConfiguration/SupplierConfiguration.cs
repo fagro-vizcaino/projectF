@@ -13,6 +13,14 @@ namespace ProjectF.Data.EfConfiguration
 {
     class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
     {
+        readonly long _companyId;
+
+        public SupplierConfiguration(){}
+        public SupplierConfiguration(long companyId): this()
+        {
+            _companyId = companyId;
+        }
+
         public void Configure(EntityTypeBuilder<Supplier> builder)
         {
             builder.ToTable("Supplier").HasKey(s => s.Id);
@@ -71,6 +79,9 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+          && x.Status == EntityStatus.Active);
 
         }
     }

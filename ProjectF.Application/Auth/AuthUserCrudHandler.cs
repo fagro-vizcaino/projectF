@@ -1,10 +1,8 @@
 using ProjectF.Data.Repositories;
 using System;
-using System.Linq;
 using LanguageExt;
 using LanguageExt.Common;
 using ProjectF.Data.Entities.Auth;
-using ProjectF.Data.Entities.Common.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +11,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
+using ProjectF.Data.Entities.Countries;
 
 namespace ProjectF.Application.Auth
 {
@@ -48,8 +47,6 @@ namespace ProjectF.Application.Auth
         }
 
 
-
-
         public async Task<string> CreateToken()
         {
             var signingCredentials = GetSigningCredentials();
@@ -69,7 +66,8 @@ namespace ProjectF.Application.Auth
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, _user.UserName)
+                new (ClaimTypes.Name, _user.UserName)
+                , new (ClaimTypes.NameIdentifier, _user.Id)
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
@@ -99,20 +97,17 @@ namespace ProjectF.Application.Auth
 
       
         Either<Error, RegisterUserDto> ValidateCountry(RegisterUserDto user)
-        {
-            if (user.Country is null && user.SelectedCountry == 0)
-                return Error.New("country is required");
-
-            return user;
-        }
+            => (user.SelectedCountry > 0 || user.Country != null) switch {
+                true => user,
+                _ => Error.New("country is required")
+            };
+        
 
         Either<Error, RegisterUserDto> SetCountry(RegisterUserDto user)
-        {
-            var country = _countryRepository.FromCountryId(user.SelectedCountry);
-            if (country == null) return Error.New("couldn't find to country");
-
-            var currentUser = user with { Country = country };
-            return currentUser;
-        }
+            => _countryRepository.FromCountryId(user.SelectedCountry) switch
+            {
+                Country c => user with { Country = c},
+                _ => Error.New("couldn't find to country")
+            };
     }
 }
