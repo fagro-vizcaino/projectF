@@ -109,5 +109,15 @@ namespace ProjectF.Application.Auth
                 Country c => user with { Country = c},
                 _ => Error.New("couldn't find to country")
             };
+
+        public async Task<bool> UpdateUserCompany(long companyId, string userId)
+        {
+            var authUser = await _userManager.FindByIdAsync(userId);
+            authUser.EditUser(authUser.Firstname, authUser.Lastname, companyId);
+
+            var result = await _userManager.UpdateAsync(authUser);
+
+            return result.Succeeded;
+        }
     }
 }

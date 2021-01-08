@@ -10,6 +10,10 @@ using ProjectF.Data.Entities.Companies;
 using static ProjectF.Data.Entities.Companies.CompanyMapper;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
+using ProjectF.Application.Auth;
+using ProjectF.Data.Entities.Auth;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace ProjectF.Application.Companies
 {
@@ -17,25 +21,42 @@ namespace ProjectF.Application.Companies
     {
         readonly CompanyRepository _companyRepository;
         readonly CountryRepository _countryRepository;
+        readonly AuthUserCrudHandler _authUserCrudHandler;
+        readonly IGetClaimsProvider _userData;
+        readonly UserManager<User> _userManager;
 
         public CompanyCrudHandler(CompanyRepository companyRepository
-            , CountryRepository countryRepository)
-            => (_companyRepository, _countryRepository) = (companyRepository, countryRepository);
+            , CountryRepository countryRepository
+            , AuthUserCrudHandler authUserCrud
+            , IGetClaimsProvider userData
+            , UserManager<User> userManager)
+            => (_companyRepository
+            , _countryRepository
+            , _authUserCrudHandler
+            , _userData
+            , _userManager)
+            = (companyRepository
+            , countryRepository
+            , authUserCrud
+            , userData
+            , userManager);
 
-        public Either<Error, Company> Create(CompanyDto CompanyDto)
-          => validateCompany(CompanyDto)
+        public Task<Either<Error, Company>> Create(CompanyDto CompanyDto)
+          => ValidateCompany(CompanyDto)
           .Bind(SetCountry)
           .Bind(SetStatus)
           .Bind(c => Add(FromDto(c)))
-          .Bind(Save);
+          .BindAsync(LimitCompanyCreation)
+          .BindAsync(Save)
+          .BindAsync(SetUserCompany);
 
 
-        public Either<Error, Company> Update(long id, CompanyDto CompanyDto)
+        public Task<Either<Error, Company>> Update(long id, CompanyDto CompanyDto)
             => ValidateIsCorrectUpdate(id, CompanyDto)
-            .Bind(validateCompany)
+            .Bind(ValidateCompany)
             .Bind(c => Find(c.Id))
             .Bind(c => UpdateEntity(CompanyDto, c))
-            .Bind(Save);
+            .BindAsync(Save);
 
         //public Either<Error, Company> Delete(long id)
         //  => Find(id)
@@ -50,16 +71,16 @@ namespace ProjectF.Application.Companies
                 None: Left<Error, Company>(Error.New("Couldn't find Company")));
 
         ////Missing Pagination
-
         Either<Error, CompanyDto> ValidateIsCorrectUpdate(long id, CompanyDto dto)
-            => (id == dto.Id) 
-            switch { true => dto, _ => Error.New("Invalid update entity id")};
+            => (id == dto.Id)
+            switch
+            { true => dto, _ => Error.New("Invalid update entity id") };
 
-        Either<Error, CompanyDto> SetStatus(CompanyDto dto) 
+        Either<Error, CompanyDto> SetStatus(CompanyDto dto)
             => dto with { Status = Data.Entities.Common.EntityStatus.Active };
 
-        Either<Error, CompanyDto> validateCompany(CompanyDto companyDto)
-            => new CompanyValidator().Validate(companyDto).IsValid 
+        Either<Error, CompanyDto> ValidateCompany(CompanyDto companyDto)
+            => new CompanyValidator().Validate(companyDto).IsValid
             ? companyDto
             : Error.New(string.Join(";", new CompanyValidator()
                 .Validate(companyDto)
@@ -71,6 +92,28 @@ namespace ProjectF.Application.Companies
                 Country n => dto with { Country = n },
                 _ => Error.New("couldn't find country"),
             };
+
+        async Task<Either<Error, Company>> LimitCompanyCreation(Company entity)
+        {
+            var usera = await _userManager.FindByIdAsync(_userData.UserId);
+
+            var company = _companyRepository
+             .FindByCondition(c => c.CompanyId == usera.CompanyId, false)
+             .FirstOrDefault();
+
+            if ((company?.Id ?? 0) > 0)
+                return Left<Error, Company>(Error.New("There is a company already created"));
+
+            return entity;
+        }
+
+        async Task<Either<Error, Company>> SetUserCompany(Company company)
+        {
+            var result = await _authUserCrudHandler
+                .UpdateUserCompany(company.Id, _userData.UserId);
+
+            return result ? company : Error.New("Couldn't update user companyId");
+        }
 
         Either<Error, Company> UpdateEntity(CompanyDto dto, Company Company)
         {
@@ -100,11 +143,12 @@ namespace ProjectF.Application.Companies
             }
         }
 
-        Either<Error, Company> Save(Company Company)
+        async Task<Either<Error, Company>> Save(Company Company)
         {
             try
             {
-                _companyRepository.Save();
+                await _companyRepository.SaveAsync();
+                _companyRepository.GetSavedEntry(Company);
                 return Company;
             }
             catch (Exception ex)
@@ -112,6 +156,8 @@ namespace ProjectF.Application.Companies
                 return Error.New($"{ex.Message}\n{ex.StackTrace}");
             }
         }
+
+
 
         //Either<Error, Tax> Delete(Tax tax)
         //{

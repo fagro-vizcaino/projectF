@@ -14,5 +14,6 @@ namespace ProjectF.Data.Repositories
 
         public CompanyRepository(_AppDbContext context) : base(context)
             => _context = context;
+
     }
 }

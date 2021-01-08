@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Application.Companies;
 using ProjectF.Data.Entities.Companies;
@@ -18,15 +19,15 @@ namespace ProjectF.Api.Features.Company
         }
 
         [HttpPost]
-        public ActionResult Create(CompanyDto dto)
-            => _companyCrudHandler.Create(dto).Match<ActionResult>(
+        public async Task<ActionResult> Create(CompanyDto dto)
+            => (await _companyCrudHandler.Create(dto)).Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
                     Right: pt => CreatedAtRoute(nameof(GetCompanyById),
                         new { id = dto.Id }, dto));
 
         [HttpPut("{id}")]
-        public ActionResult Update(long id, CompanyDto model)
-            => _companyCrudHandler.Update(id, model)
+        public async Task<ActionResult> Update(long id, CompanyDto model)
+            => (await _companyCrudHandler.Update(id, model))
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
                     Right: pt => CreatedAtRoute(nameof(GetCompanyById),

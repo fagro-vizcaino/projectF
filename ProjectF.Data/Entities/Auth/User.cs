@@ -34,10 +34,12 @@ namespace ProjectF.Data.Entities.Auth
         }
 
         public void EditUser(string firstname
-          , string lastname)
+          , string lastname
+          , long companyId)
         {
             Firstname = firstname;
             Lastname  = lastname;
+            CompanyId = companyId;
         }
 
     }

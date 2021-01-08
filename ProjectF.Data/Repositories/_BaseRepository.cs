@@ -56,14 +56,25 @@ namespace ProjectF.Data.Repositories
             _context.Set<T>().Remove(element);
         }
 
-        public void Save()
+        public virtual void Save()
         {
             _context.SaveChanges();
+        }
+
+        public virtual Task<int> SaveAsync()
+        {
+            return _context.SaveChangesAsync();
         }
 
         public void Attach(T entity)
         {
             _context.Attach(entity);
+        }
+
+        public T GetSavedEntry(T entity)
+        {
+            _context.Entry(entity).GetDatabaseValues();
+            return entity ;
         }
     }
 }

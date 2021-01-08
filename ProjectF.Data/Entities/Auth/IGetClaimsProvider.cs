@@ -3,5 +3,6 @@
     public interface IGetClaimsProvider
     {
         string CompanyId { get; }
+        string UserId { get;}
     }
 }

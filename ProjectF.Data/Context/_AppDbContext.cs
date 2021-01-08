@@ -24,6 +24,7 @@ namespace ProjectF.Data.Context
     public class _AppDbContext : IdentityDbContext<User>
     {
         readonly long _companyId;
+        readonly string _userId;
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Warehouse> Werehouses { get; set; }
@@ -45,11 +46,12 @@ namespace ProjectF.Data.Context
         public _AppDbContext(DbContextOptions<_AppDbContext> options, IGetClaimsProvider userData) 
             : base(options)
         {
-            if(long.TryParse(userData.CompanyId, out var companyId))
+            _companyId = 0;
+            if (long.TryParse(userData.CompanyId, out var companyId))
              {
                 _companyId = companyId;
              }
-            _companyId = 0;
+            _userId = userData.UserId;
         }
 
         public static ILoggerFactory GetLoggerFactory()
@@ -96,5 +98,6 @@ namespace ProjectF.Data.Context
             
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }
