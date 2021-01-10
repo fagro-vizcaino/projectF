@@ -65,6 +65,12 @@ namespace ProjectF.Data.Entities.Common
             return type;
         }
 
+        public void SetCompany(long id)
+            => CompanyId = id;
+
+        public void SetStatus(EntityStatus status)
+            => Status = status;
+
     }
 
     public enum EntityStatus

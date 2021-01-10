@@ -14,7 +14,7 @@ namespace ProjectF.Data.Entities.Banks
         public BankAccountType(Name name, 
             GeneralText description, 
             DateTime created,
-            EntityStatus status)
+            EntityStatus status = EntityStatus.Active)
             => (Name, Description, Created, Status) 
             =  (name, description, created == DateTime.MinValue ? DateTime.Now : created, status);
 

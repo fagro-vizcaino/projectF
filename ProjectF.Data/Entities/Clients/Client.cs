@@ -33,9 +33,11 @@ namespace ProjectF.Data.Entities.Clients
             , string street
             , Country? country
             , DateTime created
-            , EntityStatus status) =>
-             (Code, Firstname, Lastname, Email, Phone, Rnc, Birthday, HomeOrApartment, City, Street, Country, Created, Status)
-            = (code, firstname, lastname, email, phone, rnc, birthday, homeOrApartment, city, street, country, created == DateTime.MinValue ? DateTime.Now : created, status);
+            , EntityStatus status = EntityStatus.Active) =>
+             (Code, Firstname, Lastname, Email, Phone, Rnc, Birthday
+            , HomeOrApartment, City, Street, Country, Created, Status)
+            = (code, firstname, lastname, email, phone, rnc, birthday
+            , homeOrApartment, city, street, country, created == DateTime.MinValue ? DateTime.Now : created, status);
 
 
         public void Deconstruct(out Code dcode

@@ -27,5 +27,9 @@ namespace ProjectF.Data.Repositories
 
         public bool UserExits(string email)
           => _context.Users.Any(u => u.Email == email);
+
+
+        public long GetUserCompanyId(string userId)
+            => _context.Users.FirstOrDefault(c => c.Id == userId)?.CompanyId ?? 0;
     }
 }

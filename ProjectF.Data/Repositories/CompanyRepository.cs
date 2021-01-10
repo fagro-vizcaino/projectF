@@ -15,5 +15,22 @@ namespace ProjectF.Data.Repositories
         public CompanyRepository(_AppDbContext context) : base(context)
             => _context = context;
 
+        public IEnumerable<Company> GetAll(string userId)
+        {
+            //var result =TableA.Join(TableB, left => left.Id, right => right.ForeignKeyToTableA, (left, right) => new { TableAColumns = left, TableBColumns = right });
+            var companies = _context.Companies
+                .Join(_context.Users, left => left.CompanyId, right => right.CompanyId, (left, right) => new { _Comp = left, _User = right })
+                .Where(c => c._User.Id == userId)
+                .Select(c => c._Comp)
+                .ToList();
+
+            return companies;
+
+        }
+
+
+        //public virtual IEnumerable<T> GetAll()
+        //   => _context.Set<T>().Select(c => c).AsEnumerable();
+
     }
 }

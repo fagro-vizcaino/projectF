@@ -6,6 +6,7 @@ using ProjectF.Data.Context;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using LanguageExt;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.Repositories
 {
@@ -76,5 +77,8 @@ namespace ProjectF.Data.Repositories
             _context.Entry(entity).GetDatabaseValues();
             return entity ;
         }
+
+
+
     }
 }

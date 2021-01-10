@@ -100,7 +100,10 @@ namespace ProjectF.Application.Categories
         {
             try
             {
-                _categoryRepository.Delete(category);
+                category.EditCategory(category.Code
+                    , category.Name
+                    , category.ShowOn
+                    , Data.Entities.Common.EntityStatus.Deleted);
                 return category;
             }
             catch (Exception ex)

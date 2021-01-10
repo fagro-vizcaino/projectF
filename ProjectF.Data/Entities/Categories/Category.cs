@@ -12,7 +12,11 @@ namespace ProjectF.Data.Entities.Categories
 
         protected Category() { }
 
-        public Category(Code code, Name name, bool showOn, DateTime created, EntityStatus status)
+        public Category(Code code
+            , Name name
+            , bool showOn
+            , DateTime created
+            , EntityStatus status = EntityStatus.Active)
         {
             Code    = code;
             Name    = name;

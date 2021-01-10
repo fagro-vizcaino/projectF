@@ -56,7 +56,6 @@ namespace ProjectF.Api
 
             services.AddSingleton(authHtmlTemplate);
 
-            
             services.AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CompanyValidator>());
 

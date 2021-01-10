@@ -105,7 +105,9 @@ namespace ProjectF.Application.Banks
         {
             try
             {
-                _bankAccountTypeRepository.Delete(bankAccountType);
+                bankAccountType.EditBankAccountType(bankAccountType.Name
+                    , bankAccountType.Description
+                    , Data.Entities.Common.EntityStatus.Deleted);
                 return bankAccountType;
             }
             catch (Exception ex)

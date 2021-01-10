@@ -39,7 +39,7 @@ namespace ProjectF.Data.Products
             , decimal price3
             , decimal price4
             , DateTime created
-            , EntityStatus status)
+            , EntityStatus status = EntityStatus.Active)
         {
             Code        = code;
             Name        = name;

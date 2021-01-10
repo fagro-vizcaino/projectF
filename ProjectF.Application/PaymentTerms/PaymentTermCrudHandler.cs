@@ -19,6 +19,7 @@ namespace ProjectF.Application.PaymentTerms
 
         public Either<Error, PaymentTerm> Create(PaymentTermDto paymentTermDto)
             => ValidateName(paymentTermDto)
+            .Bind(SetStatus)
             .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
@@ -34,7 +35,7 @@ namespace ProjectF.Application.PaymentTerms
 
         public Either<Error, PaymentTerm> Find(params object[] valueKeys)
             => _paymentTermRepository
-            .Find(valueKeys).Match(Some: p => p, 
+            .Find(valueKeys).Match(Some: p => p,
                 None: Left<Error, PaymentTerm>(Error.New("Couldn't find payment term")));
 
         public Either<Error, PaymentTerm> Delete(long id)
@@ -48,6 +49,9 @@ namespace ProjectF.Application.PaymentTerms
             if (id == paymentTermDto.Id) return paymentTermDto;
             return Error.New("Invalid update entity id");
         }
+
+        Either<Error, PaymentTermDto> SetStatus(PaymentTermDto dto)
+            => dto with { Status = Data.Entities.Common.EntityStatus.Active };
 
         Either<Error, PaymentTermDto> ValidateName(PaymentTermDto paymentTermDto)
             => Name.Of(paymentTermDto.Description)
@@ -93,7 +97,9 @@ namespace ProjectF.Application.PaymentTerms
         {
             try
             {
-                _paymentTermRepository.Delete(paymentTerm);
+                paymentTerm.EditPaymentDeadlines(paymentTerm.Description
+                    , paymentTerm.DayValue
+                    , Data.Entities.Common.EntityStatus.Deleted);
                 return paymentTerm;
             }
             catch (Exception ex)

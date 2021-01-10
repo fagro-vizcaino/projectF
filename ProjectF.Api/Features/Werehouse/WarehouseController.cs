@@ -9,9 +9,9 @@ namespace ProjectF.Api.Features.Werehouses
     [Route("api/config/[controller]")]
     [ApiController]
     public class WarehouseController : ControllerBase {
-        private readonly WerehouseCrudHandler _werehouseOperation;
+        private readonly WarehouseCrudHandler _werehouseOperation;
 
-        public WarehouseController(WerehouseCrudHandler werehouseOperation) {
+        public WarehouseController(WarehouseCrudHandler werehouseOperation) {
             _werehouseOperation = werehouseOperation;
         }
 

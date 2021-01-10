@@ -21,7 +21,7 @@ namespace ProjectF.Data.Entities.Banks
             decimal initialBalance,
             BankAccountType bankAccountType,
             DateTime created,
-            EntityStatus status)
+            EntityStatus status = EntityStatus.Active)
         {
             AccountName      = accountName;
             AccountNumber    = accountNumber;

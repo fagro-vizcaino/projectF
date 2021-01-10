@@ -28,6 +28,7 @@ namespace ProjectF.Application.Suppliers
             .Bind(ValidatePhone)
             .Bind(ValidateCountry)
             .Bind(SetCountry)
+            .Bind(SetStatus)
             .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
@@ -46,8 +47,8 @@ namespace ProjectF.Application.Suppliers
         public Either<Error, Supplier> Find(long key)
         {
             var supplier = _supplierRepository.GetByKeys(key);
-            return supplier is null 
-                ? Error.New("No records found") 
+            return supplier is null
+                ? Error.New("No records found")
                 : (Either<Error, Supplier>)supplier;
         }
 
@@ -100,9 +101,12 @@ namespace ProjectF.Application.Suppliers
             var country = _countryRepository.FromCountryId(supplier.SelectedCountry);
             if (country == null) return Error.New("couldn't find to country");
 
-            var nSupplier = supplier with { Country = country};
+            var nSupplier = supplier with { Country = country };
             return nSupplier;
         }
+
+        Either<Error, SupplierDto> SetStatus(SupplierDto dto)
+            => dto with { Status = Data.Entities.Common.EntityStatus.Active };
 
         Either<Error, Supplier> UpdateEntity(SupplierDto dto, Supplier supplier)
         {
@@ -169,7 +173,17 @@ namespace ProjectF.Application.Suppliers
         {
             try
             {
-                _supplierRepository.Delete(supplier);
+                supplier.EditSupplier(supplier.Code
+                    , supplier.Name
+                    , supplier.Email
+                    , supplier.Phone
+                    , supplier.Rnc
+                    , supplier.HomeOrApartment
+                    , supplier.City
+                    , supplier.Street
+                    , supplier.Country
+                    , supplier.IsIndependent
+                    , Data.Entities.Common.EntityStatus.Deleted);
                 return supplier;
             }
             catch (Exception ex)

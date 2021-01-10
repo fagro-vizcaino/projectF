@@ -26,6 +26,7 @@ namespace ProjectF.Application.Banks
 
         public Either<Error, BankAccount> Create(BankAccountDto bankAccountDto)
             => Validate(bankAccountDto)
+            .Bind(SetStatus)
             .Bind(c => Add(FromDto(c)))
             .Bind(Save)
             .ToEither()
@@ -87,6 +88,7 @@ namespace ProjectF.Application.Banks
             => _bankRepository.MustBeUnique(bankAccountDto.AccountName)
             .ToValidation(Error.New($"bank account name:{bankAccountDto.AccountName} cannot be duplicate"));
 
+
         Validation<Error, decimal> InitialBalanceIsRequired(BankAccountDto bankAccountDto)
             => AtLeast(0m)(bankAccountDto.InitialBalance).Bind(AtMost(99999999.99m));
 
@@ -124,6 +126,9 @@ namespace ProjectF.Application.Banks
             }
         }
 
+        Validation<Error, BankAccountDto> SetStatus(BankAccountDto dto)
+            => dto with { Status = Data.Entities.Common.EntityStatus.Active };
+
         Validation<Error, BankAccount> Save(BankAccount bank)
         {
             try
@@ -141,7 +146,12 @@ namespace ProjectF.Application.Banks
         {
             try
             {
-                _bankRepository.Delete(bankAccount);
+                bankAccount.EditBank(bankAccount.AccountName
+                    , bankAccount.AccountNumber
+                    , bankAccount.Description
+                    , bankAccount.InitialBalance
+                    , bankAccount.BankAccountType
+                    , Data.Entities.Common.EntityStatus.Deleted);
                 return bankAccount;
             }
             catch (Exception ex)

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using ProjectF.Application.Companies;
 
 namespace ProjectF.Api.Features.Auth
 {
@@ -22,6 +23,8 @@ namespace ProjectF.Api.Features.Auth
     {
         readonly UserManager<User> _userManager;
         readonly AuthUserCrudHandler _authUser;
+        readonly CompanyCrudHandler _companyCrudHandler;
+
         readonly IEmailSender _emailSender;
         readonly IConfiguration _config;
         readonly ILogger _logger;
@@ -30,13 +33,15 @@ namespace ProjectF.Api.Features.Auth
             , AuthUserCrudHandler authUser
             , IEmailSender emailSender
             , IConfiguration configuration
-            , ILoggerFactory logger)
+            , ILoggerFactory logger
+            , CompanyCrudHandler companyCrudHanlder)
         {
             _userManager        = userManager;
             _authUser           = authUser;
             _emailSender        = emailSender;
             _config             = configuration;
-            _logger             = logger.CreateLogger("Authorization"); ;
+            _logger             = logger.CreateLogger("Authorization");
+            _companyCrudHandler = companyCrudHanlder;
         }
 
         [HttpPost("register")]
@@ -97,6 +102,7 @@ namespace ProjectF.Api.Features.Auth
                 , null);
 
             await _emailSender.SendEmailAsync(message, EmailTemplateType.Register);
+            await _companyCrudHandler.GenerateDefaultCompany(savedUser);
             return StatusCode(201);
         }
 

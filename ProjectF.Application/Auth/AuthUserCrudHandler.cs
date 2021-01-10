@@ -68,6 +68,7 @@ namespace ProjectF.Application.Auth
             {
                 new (ClaimTypes.Name, _user.UserName)
                 , new (ClaimTypes.NameIdentifier, _user.Id)
+                , new ("companyId", _user?.CompanyId.ToString() ?? "")
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
@@ -94,7 +95,6 @@ namespace ProjectF.Application.Auth
 
             return tokenOptions;
         }
-
       
         Either<Error, RegisterUserDto> ValidateCountry(RegisterUserDto user)
             => (user.SelectedCountry > 0 || user.Country != null) switch {

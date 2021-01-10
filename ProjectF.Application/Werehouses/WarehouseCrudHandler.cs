@@ -11,11 +11,11 @@ using System;
 
 namespace ProjectF.Application.Werehouses
 {
-    public class WerehouseCrudHandler
+    public class WarehouseCrudHandler
     {
         readonly WerehouseRepository _werehouseRepository;
 
-        public WerehouseCrudHandler(WerehouseRepository werehouseRepo)
+        public WarehouseCrudHandler(WerehouseRepository werehouseRepo)
         {
             _werehouseRepository = werehouseRepo;
         }
@@ -26,7 +26,6 @@ namespace ProjectF.Application.Werehouses
             .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
-
         public Either<Error, Warehouse> Update(long id, WarehouseDto werehouseDto)
             => ValidateIsCorrectUpdate(id, werehouseDto)
             .Bind(ValidateCode)
@@ -34,7 +33,6 @@ namespace ProjectF.Application.Werehouses
             .Bind(c => Find(c.Id))
             .Bind(c => UpdateEntity(werehouseDto, c))
             .Bind(Save);
-
 
         public Either<Error, Warehouse> Delete(long id)
            => Find(id)
@@ -64,7 +62,6 @@ namespace ProjectF.Application.Werehouses
             => Name.Of(werehosueDto.Name)
                 .Match(Succ: c => werehosueDto,
                     Fail: err => Left<Error, WarehouseDto>(Error.New(string.Join(":", err))));
-
 
         Either<Error, Warehouse> UpdateEntity(WarehouseDto dto, Warehouse werehouse)
         {
@@ -100,12 +97,15 @@ namespace ProjectF.Application.Werehouses
             }
         }
 
-        Either<Error, Warehouse> Delete(Warehouse werehouse)
+        Either<Error, Warehouse> Delete(Warehouse warehouse)
         {
             try
             {
-                _werehouseRepository.Delete(werehouse);
-                return werehouse;
+                warehouse.EditWerehouse(warehouse.Code
+                    , warehouse.Name
+                    , warehouse.Location
+                    , Data.Entities.Common.EntityStatus.Deleted);
+                return warehouse;
             }
             catch (Exception ex)
             {

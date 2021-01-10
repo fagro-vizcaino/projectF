@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Sequences;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using static ProjectF.Data.Entities.Sequences.NumberSequenceMapper;
 
 namespace ProjectF.Application.NumberSequence
 {
@@ -18,9 +19,10 @@ namespace ProjectF.Application.NumberSequence
 
         public Either<Error, NumberSequenceDto> Create(NumberSequenceDto numberSequenceDto)
             => ValidateName(numberSequenceDto)
-            .Bind(c => Add(c))
+            .Bind(SetStatus)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save)
-            .Map(c => (NumberSequenceDto)c);
+            .Map(c => FromEntity(c));
 
         public Either<Error, NumberSequenceDto> Update(long id, NumberSequenceDto numberSequenceDto)
             => ValidateIsCorrectUpdate(id, numberSequenceDto)
@@ -28,10 +30,11 @@ namespace ProjectF.Application.NumberSequence
             .Bind(c => Find(c.Id))
             .Bind(c => UpdateEntity(numberSequenceDto, c))
             .Bind(Save)
-            .Map(c =>(NumberSequenceDto)c);
+            .Map(c => FromEntity(c));
 
         public IEnumerable<NumberSequenceDto> GetAll()
-            => _numberSequenceRepository.GetAll().Map(pt => (NumberSequenceDto)pt);
+            => _numberSequenceRepository.GetAll()
+            .Map(pt => FromEntity(pt));
 
         public Either<Error, DocumentNumberSequence> Find(params object[] valueKeys)
             => _numberSequenceRepository
@@ -43,24 +46,24 @@ namespace ProjectF.Application.NumberSequence
            => Find(id)
              .Bind(Delete)
              .Bind(Save)
-             .Map(c => (NumberSequenceDto)c);
-                
+             .Map(c => FromEntity(c));
+
         public Either<Error, Unit> UpdateSequence(long id, int nextSequence)
         => _numberSequenceRepository.Find(id)
             .Match(Some: c => UpdateEntity(GetUpdatedSequenceDto(c, nextSequence), c),
                 None: () => Left(Error.New("Couldn't find document number sequence")))
             .Bind(Save)
             .Map(c => Unit.Default);
-       
+
         public Either<Error, string> GenerateSequence(long id)
             => _numberSequenceRepository.Find(id)
                 .Match<Either<Error, string>>(
-                    Some: c => Right($"{c.Prefix}{(c.NextSequence + 1).ToString().PadLeft(8,'0')}"),
+                    Some: c => Right($"{c.Prefix}{(c.NextSequence + 1).ToString().PadLeft(8, '0')}"),
                     None: () => Left(Error.New("Couldn't generate sequence")));
 
         NumberSequenceDto GetUpdatedSequenceDto(DocumentNumberSequence numberSequence, int nextSequence)
         {
-            var result = ((NumberSequenceDto)numberSequence) 
+            var result = FromEntity(numberSequence)
                     with { NextSequence = numberSequence.NextSequence + nextSequence };
             return result;
         }
@@ -72,6 +75,9 @@ namespace ProjectF.Application.NumberSequence
             return Error.New("Invalid update entity id");
         }
 
+        Either<Error, NumberSequenceDto> SetStatus(NumberSequenceDto dto)
+            => dto with { Status = Data.Entities.Common.EntityStatus.Active };
+
         Either<Error, NumberSequenceDto> ValidateName(NumberSequenceDto numberSequenceDto)
             => Name.Of(numberSequenceDto.Name)
                 .Match(Succ: c => numberSequenceDto,
@@ -79,7 +85,7 @@ namespace ProjectF.Application.NumberSequence
 
         Either<Error, DocumentNumberSequence> UpdateEntity(NumberSequenceDto numberSequenceDto, DocumentNumberSequence originalDocumentSequence)
         {
-            originalDocumentSequence.EditDocumentNumberSequence(new Name(numberSequenceDto.Name), 
+            originalDocumentSequence.EditDocumentNumberSequence(new Name(numberSequenceDto.Name),
                 numberSequenceDto.Prefix,
                 numberSequenceDto.InitialSequence,
                 numberSequenceDto.NextSequence,
@@ -121,7 +127,13 @@ namespace ProjectF.Application.NumberSequence
         {
             try
             {
-                _numberSequenceRepository.Delete(numberSequence);
+                numberSequence.EditDocumentNumberSequence(numberSequence.Name
+                    , numberSequence.Prefix
+                    , numberSequence.InitialSequence
+                    , numberSequence.NextSequence
+                    , numberSequence.FinalSequence
+                    , numberSequence.ValidUntil
+                    , Data.Entities.Common.EntityStatus.Deleted);
                 return numberSequence;
             }
             catch (Exception ex)

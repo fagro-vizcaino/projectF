@@ -50,7 +50,7 @@ namespace ProjectF.Data.Entities.Invoices
             decimal total,
             List<InvoiceDetail> invoiceDetail,
             DateTime created,
-            EntityStatus status)
+            EntityStatus status = EntityStatus.Active)
         {
             Code              = code;
             Ncf               = ncf;

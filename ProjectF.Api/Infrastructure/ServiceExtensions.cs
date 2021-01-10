@@ -92,7 +92,7 @@ namespace ProjectF.Api.Infrastructure
         {
             services.AddScoped<CategoryCrudHandler>();
             services.AddScoped<CategoryRepository>();
-            services.AddScoped<WerehouseCrudHandler>();
+            services.AddScoped<WarehouseCrudHandler>();
             services.AddScoped<WerehouseRepository>();
             services.AddScoped<AuthUserCrudHandler>();
             services.AddScoped<UserRepository>();
@@ -157,6 +157,7 @@ namespace ProjectF.Api.Infrastructure
             services.AddDbContext<_AppDbContext>(options =>
                options
                .UseLoggerFactory(_AppDbContext.GetLoggerFactory())
+               .EnableSensitiveDataLogging()
                .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         }
     }

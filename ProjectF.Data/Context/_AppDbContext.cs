@@ -18,6 +18,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ProjectF.Data.Context
 {
@@ -54,6 +57,30 @@ namespace ProjectF.Data.Context
             _userId = userData.UserId;
         }
 
+        public override int SaveChanges()
+        {
+            this.MarkCreatedItemAsOwnedBy(_companyId);
+            return base.SaveChanges();
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            this.MarkCreatedItemAsOwnedBy(_companyId);
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            this.MarkCreatedItemAsOwnedBy(_companyId);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            this.MarkCreatedItemAsOwnedBy(_companyId);
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
         public static ILoggerFactory GetLoggerFactory()
         {
             IServiceCollection serviceCollection = new ServiceCollection();
@@ -69,25 +96,25 @@ namespace ProjectF.Data.Context
         {
 
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
-            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
-            modelBuilder.ApplyConfiguration(new BankAccountConfiguration());
-            modelBuilder.ApplyConfiguration(new BankAccountTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new WarehouseConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new SupplierConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new BankAccountConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new BankAccountTypeConfiguration(_companyId));
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
-            modelBuilder.ApplyConfiguration(new UserClientConfiguration());
-            modelBuilder.ApplyConfiguration(new PaymentTermConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new UserClientConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new PaymentTermConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new ProductConfiguration(_companyId));
             
             modelBuilder.ApplyConfiguration(new TaxConfiguration(_companyId));
             
             
-            modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration());
-            modelBuilder.ApplyConfiguration(new InvoiceHeaderConfiguration());
-            modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
+            modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new InvoiceHeaderConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration(_companyId));
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.Entity<Country>().HasData(CountryConfiguration.InitialCountryData());
 

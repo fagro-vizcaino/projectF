@@ -60,17 +60,7 @@ namespace ProjectF.Data.Entities.Sequences
             Status          = status;
         }
 
-        public static implicit operator NumberSequenceDto(DocumentNumberSequence model)
-          => new NumberSequenceDto(model.Id,
-              model.Name.Value,
-              model.Prefix,
-              model.InitialSequence,
-              model.NextSequence,
-              model.FinalSequence,
-              model.ValidUntil,
-              model.Created,
-              model.Modified,
-              model.Status);
+       
 
     }
 }

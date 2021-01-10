@@ -47,9 +47,7 @@ namespace ProjectF.Application.Companies
           .Bind(SetStatus)
           .Bind(c => Add(FromDto(c)))
           .BindAsync(LimitCompanyCreation)
-          .BindAsync(Save)
-          .BindAsync(SetUserCompany);
-
+          .BindAsync(Save);
 
         public Task<Either<Error, Company>> Update(long id, CompanyDto CompanyDto)
             => ValidateIsCorrectUpdate(id, CompanyDto)
@@ -64,11 +62,18 @@ namespace ProjectF.Application.Companies
         //    .Bind(Save);
 
         public IEnumerable<CompanyDto> GetAll()
-            => _companyRepository.GetAll().Map(t => FromEntity(t));
+            => _companyRepository.GetAll(_userData.UserId)
+            .Map(t => FromEntity(t));
 
         public Either<Error, Company> Find(params object[] valueKeys)
            => _companyRepository.Find(valueKeys).Match(Some: p => p,
                 None: Left<Error, Company>(Error.New("Couldn't find Company")));
+
+        public Task<Either<Error, Company>> GenerateDefaultCompany(User user)
+         => GetDefaultCompany(user)
+            .Bind(Add)
+            .BindAsync(Save)
+            .BindAsync(c => SetUserCompany(c, user.Id));
 
         ////Missing Pagination
         Either<Error, CompanyDto> ValidateIsCorrectUpdate(long id, CompanyDto dto)
@@ -101,16 +106,16 @@ namespace ProjectF.Application.Companies
              .FindByCondition(c => c.CompanyId == usera.CompanyId, false)
              .FirstOrDefault();
 
-            if ((company?.Id ?? 0) > 0)
+            if ((company?.CompanyId ?? 0) > 0)
                 return Left<Error, Company>(Error.New("There is a company already created"));
 
             return entity;
         }
 
-        async Task<Either<Error, Company>> SetUserCompany(Company company)
+        async Task<Either<Error, Company>> SetUserCompany(Company company, string userId)
         {
             var result = await _authUserCrudHandler
-                .UpdateUserCompany(company.Id, _userData.UserId);
+                .UpdateUserCompany(company.CompanyId, userId);
 
             return result ? company : Error.New("Couldn't update user companyId");
         }
@@ -157,8 +162,6 @@ namespace ProjectF.Application.Companies
             }
         }
 
-
-
         //Either<Error, Tax> Delete(Tax tax)
         //{
         //    try
@@ -171,6 +174,19 @@ namespace ProjectF.Application.Companies
         //        return Error.New($"{ex.Message}\n{ex.StackTrace}");
         //    }
         //}
+
+        Either<Error, Company> GetDefaultCompany(User user)
+            => new Company(new Name("por defecto")
+               , "000000000"
+               , "por defecto"
+               , "por defecto"
+               , "por defecto"
+               , user.Country
+               , new Phone("0000000000")
+               , "por defecto"
+               , 0
+               , DateTime.UtcNow
+               , Data.Entities.Common.EntityStatus.Active);
 
     }
 }

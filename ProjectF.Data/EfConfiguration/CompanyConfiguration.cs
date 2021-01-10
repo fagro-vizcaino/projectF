@@ -53,8 +53,7 @@ namespace ProjectF.Data.EfConfiguration
             builder.Property(c => c.Modified)
                 .HasColumnType("Datetime");
             
-            builder.HasQueryFilter(x => x.CompanyId == _companyId
-            && x.Status == EntityStatus.Active);
+            builder.HasQueryFilter(x => x.Status == EntityStatus.Active);
 
 
         }
