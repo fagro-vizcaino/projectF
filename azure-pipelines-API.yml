@@ -9,9 +9,9 @@ trigger:
      - master
  paths:
    include:
-     - ProjectF.Api/**
+     - ProjectF.Api/ProjectF.Api.csproj
    exclude:
-     - ProjectF.WebUI/**
+     - ProjectF.WebUI/ProjectF.WebUI.csproj
 stages:
 - stage: build_webapi
   jobs:
