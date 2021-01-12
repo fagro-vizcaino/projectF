@@ -25,6 +25,7 @@ namespace ProjectF.Data.Entities.Companies
                 , model.HomeOrApartment
                 , model.City
                 , model.Street
+                , model.Country?.Id ?? 0
                 , model.Country
                 , model.Phone.Value
                 , model.Website

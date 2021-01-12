@@ -23,8 +23,8 @@ namespace ProjectF.Application.Companies
             RuleFor(c => c.Phone)
                 .Must(c => Regex.Match(c, @"^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$").Success);
             RuleFor(c => c.Website).NotEmpty();
-            RuleFor(c => c.Country.Id).GreaterThan(0)
-                .WithMessage("Country es requerido");
+            RuleFor(c => c.SelectedCountry).GreaterThan(0)
+                .WithMessage("Country is required");
 
         }
     }

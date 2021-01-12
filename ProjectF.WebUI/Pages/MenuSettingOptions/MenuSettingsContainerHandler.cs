@@ -60,6 +60,13 @@ namespace ProjectF.WebUI.Pages.MenuSettingOptions
                     Icon = @"<i class='fas fa-swatchbook'></i>",
                     Name = "Categorias",
                     Description = "Defina la categoria de sus productos"
+                },
+                new ()
+                {
+                    Route = "/config/company",
+                    Icon = @"<i class='far fa-building'></i>",
+                    Name = "Empresa",
+                    Description = "Registre los datos de su empresa"
                 }
             };
             return base.OnInitializedAsync();

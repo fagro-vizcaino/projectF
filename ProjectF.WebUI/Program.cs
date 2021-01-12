@@ -18,6 +18,7 @@ using Blazored.LocalStorage;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using ProjectF.WebUI.Pages.Company;
 
 namespace ProjectF.WebUI
 {
@@ -49,6 +50,7 @@ namespace ProjectF.WebUI
             //Themes
             builder.Services.AddAntDesign();
 
+            //Services
             builder.Services.AddScoped<IBaseDataService<Tax>, TaxesDataService>();
             builder.Services.AddScoped<IBaseDataService<PaymentTerm>, PaymentTermDataService>();
             builder.Services.AddScoped<IBaseDataService<Bank>, BankDataService>();
@@ -57,6 +59,7 @@ namespace ProjectF.WebUI
 
             builder.Services.AddScoped<IBaseDataService<Client>, ClientDataService>();
             builder.Services.AddScoped<IBaseDataService<Supplier>, SupplierDataService>();
+            builder.Services.AddScoped<IBaseDataService<Company>, CompanyDataService>();
 
             builder.Services.AddScoped<IBaseDataService<Product>, ProductDataService>();
             builder.Services.AddScoped<IBaseDataService<Category>, CategoryDataService>();
@@ -66,7 +69,7 @@ namespace ProjectF.WebUI
             builder.Services.AddScoped<IBaseDataService<InvoiceMainList>, InvoiceListDataService>();
             builder.Services.AddScoped<IBaseDataService<NumberSequence>, NumberSequenceDataService>();
             
-
+            //Validators
             builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
             builder.Services.AddTransient<IValidator<Warehouse>, WarehouseValidator>();
             builder.Services.AddTransient<IValidator<Tax>, TaxValidator>();
@@ -74,6 +77,7 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<Bank>, BankValidator>();
             builder.Services.AddTransient<IValidator<BankAccountType>, BankAccountTypeValidator>();
             builder.Services.AddTransient<IValidator<Client>, ClientValidator>();
+            builder.Services.AddTransient<IValidator<Company>, CompanyValidator>();
             builder.Services.AddTransient<IValidator<Supplier>, SupplierValidator>();
             builder.Services.AddTransient<IValidator<Product>, ProductValidator>();
             builder.Services.AddTransient<IValidator<NumberSequence>, NumberSequenceValidator>();

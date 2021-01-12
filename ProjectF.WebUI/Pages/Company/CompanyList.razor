@@ -1,13 +1,12 @@
-﻿@using ProjectF.WebUI.Models
-
-
+﻿
 @if (Elements.Length > 0)
 {
 <Table DataSource="Elements">
-    <Column Title="Nombre" Field="@context.DisplayName"> @context.DisplayName</Column>
-    <Column @bind-Field="@context.Email" Title="Email" />
+    <Column Title="Nombre" Field="@context.Name" />
+    <Column @bind-Field="@context.Rnc" Title="Rnc" />
     <Column @bind-Field="@context.Phone" Title="Télefono" />
     <Column @bind-Field="@context.City" Title="Ciudad" />
+    <Column @bind-Field="@context.Website" Title="Sitio Web" />
 
     <ActionColumn Title="Acción" Style="text-align: right">
         <Space>
@@ -15,17 +14,17 @@
                 <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />
             </SpaceItem>
         </Space>
-        <Space>
+        @*<Space>
             <SpaceItem>
                 <Popconfirm Placement="@PlacementType.Top"
-                            Title="@("Estas seguro de borrar este cliente")"
+                            Title="@("Estas seguro de borrar esta compañia")"
                             OkText="Sí"
                             CancelText="No"
                             OnConfirm="()=> OnClickDelete.InvokeAsync(context.Id)">
                     <Button Shape="circle" Icon="delete" Danger />
                 </Popconfirm>
             </SpaceItem>
-        </Space>
+        </Space>*@
     </ActionColumn>
 </Table>
 }
@@ -37,10 +36,10 @@ else
 
 @code {
     [Parameter]
-    public Client[] Elements { get; set; }
+    public Company[] Elements { get; set; }
 
     [Parameter]
-    public EventCallback<Client> OnClickDrawerEdit { get; set; }
+    public EventCallback<Company> OnClickDrawerEdit { get; set; }
 
     [Parameter]
     public EventCallback<long> OnClickDelete { get; set; }

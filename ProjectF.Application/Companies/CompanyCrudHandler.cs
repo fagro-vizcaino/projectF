@@ -92,12 +92,12 @@ namespace ProjectF.Application.Companies
                 .Errors.Select(c => c.ErrorMessage)));
 
         Either<Error, CompanyDto> SetCountry(CompanyDto dto)
-            => _countryRepository.FromCountryId(dto.Country.Id) switch
-            {
-                Country n => dto with { Country = n },
-                _ => Error.New("couldn't find country"),
-            };
-
+        => _countryRepository.FromCountryId(dto.SelectedCountry) switch
+        {
+            Country n => dto with { Country = n },
+            _ => Error.New("couldn't find country"),
+        };
+           
         async Task<Either<Error, Company>> LimitCompanyCreation(Company entity)
         {
             var usera = await _userManager.FindByIdAsync(_userData.UserId);

@@ -11,7 +11,8 @@ namespace ProjectF.Data.Entities.Companies
         , string HomeOrApartment
         , string City
         , string Street
-        , Country Country
+        , int SelectedCountry
+        , Country? Country
         , string Phone
         , string Website
         , DateTime Created
