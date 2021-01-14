@@ -7,14 +7,14 @@ namespace ProjectF.WebUI.Pages.Taxes
     {
         public TaxesContainerHandler() : base("Impuesto")
         {
-            var emtpyModel = new Tax
+            var emptyModel = new Tax
             {
                 Id = 0,
                 Code = string.Empty,
                 Name =string.Empty,
                 Percentvalue =0
             };
-            InitModel(emtpyModel);
+            InitModel(emptyModel);
             NewOrEditOperation = GetNewModelOrEdit;   
         }
 

@@ -1,5 +1,4 @@
-﻿using ProjectF.WebUI.Models;
-using System.Net.Http;
+﻿using System.Net.Http;
 using ProjectF.WebUI.Pages;
 
 namespace ProjectF.WebUI.Services

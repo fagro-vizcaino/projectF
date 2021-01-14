@@ -8,11 +8,9 @@ namespace ProjectF.Data.Repositories
 {
     public class TaxRepository : _BaseRepository<Tax>
     {
-        readonly Context._AppDbContext _context;
+        readonly _AppDbContext _context;
 
-        public TaxRepository(Context._AppDbContext context): base(context)
-        {
-            _context = context;
-        }
+        public TaxRepository(_AppDbContext context): base(context)
+            => _context = context;
     }
 }

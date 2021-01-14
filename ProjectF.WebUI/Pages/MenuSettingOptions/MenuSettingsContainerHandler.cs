@@ -67,6 +67,13 @@ namespace ProjectF.WebUI.Pages.MenuSettingOptions
                     Icon = @"<i class='far fa-building'></i>",
                     Name = "Empresa",
                     Description = "Registre los datos de su empresa"
+                },
+                new ()
+                {
+                    Route = "/config/unitofmeasure",
+                    Icon = @"<i class='far fa-building'></i>",
+                    Name = "Medidas",
+                    Description = "Define las medidas que utilizas en tus ventas"
                 }
             };
             return base.OnInitializedAsync();

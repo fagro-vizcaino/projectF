@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Threading.Tasks;
 using System.Threading;
+using ProjectF.Data.Entities.UnitOfMeasures;
 
 namespace ProjectF.Data.Context
 {
@@ -46,6 +47,8 @@ namespace ProjectF.Data.Context
         public DbSet<DocumentNumberSequence> DocumentNumberSequences { get; set; }
         public DbSet<TaxRegimeType> TaxRegimeTypes { get; set; }
         public DbSet<PaymentTerm> PaymentMethods { get; set; }
+        public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
+
         public _AppDbContext(DbContextOptions<_AppDbContext> options, IGetClaimsProvider userData) 
             : base(options)
         {
@@ -108,7 +111,7 @@ namespace ProjectF.Data.Context
             modelBuilder.ApplyConfiguration(new ProductConfiguration(_companyId));
             
             modelBuilder.ApplyConfiguration(new TaxConfiguration(_companyId));
-            
+            modelBuilder.ApplyConfiguration(new UnitOfMeasureConfiguration(_companyId));
             
             modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration(_companyId));
             modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration(_companyId));
