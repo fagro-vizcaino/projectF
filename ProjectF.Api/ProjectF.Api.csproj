@@ -24,7 +24,6 @@
 <ItemGroup>
   <Folder Include="Features\Home\" />
   <Folder Include="Features\Invoice\InvoicePrint\" />
-  <Folder Include="Features\UnitOfMeasures\" />
 </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />

@@ -23,6 +23,7 @@ using ProjectF.Data.Context;
 using ProjectF.Data.Entities.Auth;
 using ProjectF.Data.Repositories;
 using ProjectF.Application.Companies;
+using ProjectF.Application.UnitOfMeasures;
 
 namespace ProjectF.Api.Infrastructure
 {
@@ -119,6 +120,9 @@ namespace ProjectF.Api.Infrastructure
             services.AddScoped<DocumentNumberSequenceHandler>();
             services.AddScoped<PaymentMethodHandler>();
             services.AddScoped<PaymentMethodRepository>();
+
+            services.AddScoped<UnitOfMeasureRepository>();
+            services.AddScoped<UnitOfMeasureCrudHandler>();
 
             services.AddScoped<CompanyCrudHandler>();
             services.AddScoped<CompanyRepository>();

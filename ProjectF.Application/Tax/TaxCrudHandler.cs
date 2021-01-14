@@ -22,7 +22,6 @@ namespace ProjectF.Application.Taxes
             .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
-
         public Either<Error, Tax> Update(long id, TaxDto taxDto)
             => ValidateIsCorrectUpdate(id, taxDto)
             .Bind(ValidateName)

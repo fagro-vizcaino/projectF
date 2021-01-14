@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProjectF.Data.Migrations
 {
-    public partial class baseMigration : Migration
+    public partial class initialUpdated : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -380,6 +380,29 @@ namespace ProjectF.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UnitOfMeasure",
+                columns: table => new
+                {
+                    UnitOfMeasureId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<long>(nullable: false),
+                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
+                    Name = table.Column<string>(maxLength: 60, nullable: false),
+                    Value = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UnitOfMeasure", x => x.UnitOfMeasureId);
+                    table.ForeignKey(
+                        name: "FK_UnitOfMeasure_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
+                        principalColumn: "CompanyId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Warehouse",
                 columns: table => new
                 {
@@ -653,9 +676,9 @@ namespace ProjectF.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "7eacc7c8-a3de-48c6-ac5e-f8204ed185cb", "3144aefd-1e7c-4661-9cb5-09cf66ad2801", "Manager", "MANAGER" },
-                    { "216121c3-1287-4b3f-9d2d-bbfe0afbd73e", "9932408e-2d9c-4524-bcdb-5ffd98fadc8e", "Admin", "Admin" },
-                    { "6e72257e-5827-48d4-80bf-3229f04dab1a", "109272ea-ff2b-433b-9c35-4e13a358e4a1", "Visitor", "Visitor" }
+                    { "70b45f31-a9cd-4fed-8869-9f8d731bc962", "62408bac-d911-4c8a-b1e2-7fbe9d894f50", "Manager", "MANAGER" },
+                    { "e2156610-60e1-476d-a8c3-25de6d3a3da3", "5b316ea9-5d3e-40e4-abb9-46256a1ed653", "Admin", "Admin" },
+                    { "0c336090-6e97-467d-8a52-6306eecb208b", "8fc106b1-ce88-47b8-b4fc-5d3c373d4457", "Visitor", "Visitor" }
                 });
 
             migrationBuilder.InsertData(
@@ -838,6 +861,11 @@ namespace ProjectF.Data.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UnitOfMeasure_CompanyId",
+                table: "UnitOfMeasure",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Warehouse_CompanyId",
                 table: "Warehouse",
                 column: "CompanyId");
@@ -883,6 +911,9 @@ namespace ProjectF.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TaxRegimeType");
+
+            migrationBuilder.DropTable(
+                name: "UnitOfMeasure");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

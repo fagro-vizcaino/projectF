@@ -48,22 +48,22 @@ namespace ProjectF.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7eacc7c8-a3de-48c6-ac5e-f8204ed185cb",
-                            ConcurrencyStamp = "3144aefd-1e7c-4661-9cb5-09cf66ad2801",
+                            Id = "70b45f31-a9cd-4fed-8869-9f8d731bc962",
+                            ConcurrencyStamp = "62408bac-d911-4c8a-b1e2-7fbe9d894f50",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "216121c3-1287-4b3f-9d2d-bbfe0afbd73e",
-                            ConcurrencyStamp = "9932408e-2d9c-4524-bcdb-5ffd98fadc8e",
+                            Id = "e2156610-60e1-476d-a8c3-25de6d3a3da3",
+                            ConcurrencyStamp = "5b316ea9-5d3e-40e4-abb9-46256a1ed653",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "6e72257e-5827-48d4-80bf-3229f04dab1a",
-                            ConcurrencyStamp = "109272ea-ff2b-433b-9c35-4e13a358e4a1",
+                            Id = "0c336090-6e97-467d-8a52-6306eecb208b",
+                            ConcurrencyStamp = "8fc106b1-ce88-47b8-b4fc-5d3c373d4457",
                             Name = "Visitor",
                             NormalizedName = "Visitor"
                         });
@@ -1024,6 +1024,42 @@ namespace ProjectF.Data.Migrations
                     b.ToTable("Tax");
                 });
 
+            modelBuilder.Entity("ProjectF.Data.Entities.UnitOfMeasures.UnitOfMeasure", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("UnitOfMeasureId")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Datetime");
+
+                    b.Property<DateTime?>("Modified")
+                        .HasColumnType("Datetime");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(60);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("UnitOfMeasure");
+                });
+
             modelBuilder.Entity("ProjectF.Data.Entities.Warehouses.Warehouse", b =>
                 {
                     b.Property<long>("Id")
@@ -1351,6 +1387,15 @@ namespace ProjectF.Data.Migrations
                 });
 
             modelBuilder.Entity("ProjectF.Data.Entities.Taxes.Tax", b =>
+                {
+                    b.HasOne("ProjectF.Data.Entities.Company", null)
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectF.Data.Entities.UnitOfMeasures.UnitOfMeasure", b =>
                 {
                     b.HasOne("ProjectF.Data.Entities.Company", null)
                         .WithMany()
