@@ -19,6 +19,7 @@ namespace ProjectF.Application.Taxes
 
         public Either<Error, Tax> Create(TaxDto taxDto)
             => ValidateName(taxDto)
+            .Bind(SetStatus)
             .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
@@ -43,6 +44,9 @@ namespace ProjectF.Application.Taxes
                 None: Left<Error, Tax>(Error.New("Couldn't find tax")));
 
         //Missing Pagination
+
+        Either<Error, TaxDto> SetStatus(TaxDto dto)
+            => dto with { Status = Data.Entities.Common.EntityStatus.Active };
 
         Either<Error, TaxDto> ValidateIsCorrectUpdate(long id, TaxDto categoryDto)
         {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ProjectF.WebUI.Components.Common;
+﻿using ProjectF.WebUI.Components.Common;
 
 namespace ProjectF.WebUI.Pages.UnitOfMeasures
 {
@@ -13,7 +9,8 @@ namespace ProjectF.WebUI.Pages.UnitOfMeasures
             var emptyModel = new UnitOfMeasure
             {
                 Id = 0,
-                Name = string.Empty
+                Name = string.Empty,
+                Value = 1
             };
             InitModel(emptyModel);
             NewOrEditOperation = GetNewModelOrEdit;
@@ -24,8 +21,9 @@ namespace ProjectF.WebUI.Pages.UnitOfMeasures
             ? new UnitOfMeasure
             {
                 Id = unitOfMeasure.Id,
-                Name = unitOfMeasure.Name
+                Name = unitOfMeasure.Name,
+                Value = unitOfMeasure.Value
             }
-            : new UnitOfMeasure { Id = 0, Name = string.Empty };
+            : new UnitOfMeasure { Id = 0, Name = string.Empty, Value = 1 };
     }
 }

@@ -65,23 +65,28 @@ namespace ProjectF.WebUI
             builder.Services.AddScoped<IBaseDataService<Product>, ProductDataService>();
             builder.Services.AddScoped<IBaseDataService<Category>, CategoryDataService>();
             builder.Services.AddScoped<IBaseDataService<Warehouse>, WarehouseDataService>();
+            builder.Services.AddScoped<IBaseDataService<UnitOfMeasure>, UnitOfMeasureDataService>();
+
 
             builder.Services.AddScoped<IBaseDataService<Invoice>, InvoiceDataService>();
             builder.Services.AddScoped<IBaseDataService<InvoiceMainList>, InvoiceListDataService>();
             builder.Services.AddScoped<IBaseDataService<NumberSequence>, NumberSequenceDataService>();
             
             //Validators
-            builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
-            builder.Services.AddTransient<IValidator<Warehouse>, WarehouseValidator>();
             builder.Services.AddTransient<IValidator<Tax>, TaxValidator>();
             builder.Services.AddTransient<IValidator<PaymentTerm>, PaymentTermValidator>();
             builder.Services.AddTransient<IValidator<Bank>, BankValidator>();
             builder.Services.AddTransient<IValidator<BankAccountType>, BankAccountTypeValidator>();
             builder.Services.AddTransient<IValidator<Client>, ClientValidator>();
             builder.Services.AddTransient<IValidator<Company>, CompanyValidator>();
+            
             builder.Services.AddTransient<IValidator<UnitOfMeasure>, UnitOfMeasureValidator>();
             builder.Services.AddTransient<IValidator<Supplier>, SupplierValidator>();
             builder.Services.AddTransient<IValidator<Product>, ProductValidator>();
+            builder.Services.AddTransient<IValidator<Category>, CategoryValidator>();
+            builder.Services.AddTransient<IValidator<Warehouse>, WarehouseValidator>();
+
+
             builder.Services.AddTransient<IValidator<NumberSequence>, NumberSequenceValidator>();
             builder.Services.AddTransient<IValidator<UserRegisterDto>, UserRegisterValidator>();
             builder.Services.AddTransient<IValidator<UserLoginDto>, UserLoginValidator>();

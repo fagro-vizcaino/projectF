@@ -5,7 +5,7 @@ namespace ProjectF.WebUI.Services
 {
     public class UnitOfMeasureDataService : _BaseDataService<UnitOfMeasure>
     {
-        const string _baseUrl = "config/unitofmeasure";
+        const string _baseUrl = "config/UnitOfMeasure";
 
         public UnitOfMeasureDataService(HttpClient httpClient) 
             : base(_baseUrl, httpClient) { }

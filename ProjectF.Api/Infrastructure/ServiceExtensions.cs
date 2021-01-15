@@ -127,8 +127,6 @@ namespace ProjectF.Api.Infrastructure
             services.AddScoped<CompanyCrudHandler>();
             services.AddScoped<CompanyRepository>();
 
-            services.AddScoped<IGetClaimsProvider, GetClaimsFromUser>();
-
         }
 
         public static void ConfigureMvcViews(this IServiceCollection services)

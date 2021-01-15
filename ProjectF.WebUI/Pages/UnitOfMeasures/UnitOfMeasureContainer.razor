@@ -8,8 +8,8 @@
                   OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
 
     <UnitOfMeasureList Elements="Elements"
-               OnClickDrawerEdit="OpenDrawerForEdit"
-               OnClickDelete="Delete" />
+                       OnClickDrawerEdit="OpenDrawerForEdit"
+                       OnClickDelete="Delete" />
 
 
     <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Medida" : "Crear Medida")}")' OnClose="CloseDrawer">
@@ -21,6 +21,12 @@
                     <FLabel Value="Nombre" LabelFor="Name" />
                     <FInputText @bind-Value="_model.Name" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
                     <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-6">
+                    <FLabel Value="Valor" LabelFor="Value" />
+                    <FInputDecimal @bind-Value="_model.Value" />
+                    <FCustomValidationMessage For="@(() => _model.Value)" Class="mt-2 font-semibold text-red-600" />
+                    <span>Ejemplo: 1, seria igual a la unidad</span>
                 </div>
                 <FDivider />
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">

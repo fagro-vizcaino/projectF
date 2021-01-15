@@ -48,13 +48,14 @@ namespace ProjectF.Api
 
             services.AddSingleton(emailConfig);
             services.AddScoped<IEmailSender, EmailSender>();
-            services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
+            //services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
 
             var authHtmlTemplate = Configuration
                 .GetSection("AuthTemplates")
                 .Get<AuthHtmlTemplateConfig>();
 
             services.AddSingleton(authHtmlTemplate);
+            services.AddScoped<IGetClaimsProvider, GetClaimsFromUser>();
 
             services.AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CompanyValidator>());

@@ -18,9 +18,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Threading.Tasks;
 using System.Threading;
+using LanguageExt.Common;
+using static LanguageExt.Prelude;
 using ProjectF.Data.Entities.UnitOfMeasures;
 
 namespace ProjectF.Data.Context
@@ -30,7 +31,6 @@ namespace ProjectF.Data.Context
         readonly long _companyId;
         readonly string _userId;
         public DbSet<Category> Categories { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Warehouse> Werehouses { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
@@ -52,11 +52,7 @@ namespace ProjectF.Data.Context
         public _AppDbContext(DbContextOptions<_AppDbContext> options, IGetClaimsProvider userData) 
             : base(options)
         {
-            _companyId = 0;
-            if (long.TryParse(userData.CompanyId, out var companyId))
-             {
-                _companyId = companyId;
-             }
+            _companyId = parseInt(userData.CompanyId).Match(c => c, () => 0);
             _userId = userData.UserId;
         }
 

@@ -9,5 +9,6 @@ namespace ProjectF.WebUI.Pages.UnitOfMeasures
     public class UnitOfMeasure : FEntity
     {
         public string Name { get; set; }
+        public decimal Value { get; set; }
     }
 }

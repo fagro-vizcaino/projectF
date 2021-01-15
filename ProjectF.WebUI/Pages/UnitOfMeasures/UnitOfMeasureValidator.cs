@@ -14,6 +14,9 @@ namespace ProjectF.WebUI.Pages.UnitOfMeasures
               .WithMessage("Nombre Requerido")
               .MaximumLength(40)
               .WithMessage("Máximo Carateres 40");
+
+            RuleFor(c => c.Value).NotEmpty()
+                .WithMessage("Valor requerido");
         }
     }
 }
