@@ -74,6 +74,13 @@ namespace ProjectF.WebUI.Pages.MenuSettingOptions
                     Icon = @"<i class='far fa-building'></i>",
                     Name = "Medidas",
                     Description = "Define las medidas que utilizas en tus ventas"
+                },
+                  new ()
+                {
+                    Route = "config/paymentMethod",
+                    Icon = @"<i class='far fa-building'></i>",
+                    Name = "Método de pagos",
+                    Description = "Define los métodos de pago"
                 }
             };
             return base.OnInitializedAsync();

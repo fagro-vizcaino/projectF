@@ -27,11 +27,15 @@ namespace ProjectF.WebUI.Pages.Suppliers
         public IBaseDataService<Country> CountryDataService { get; set; }
         public Country[] Countries { get; set; } = Array.Empty<Country>();
         
+        [Inject]
+        public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
+        public PaymentTerm[] PaymentTerms { get; set; }
         protected override async Task OnInitializedAsync()
         {
             Elements = (await DataService.GetAll()).ToArray();
 
             Countries = (await CountryDataService.GetAll()).ToArray();
+            PaymentTerms = (await PaymentTermDataService.GetAll()).ToArray();
         }
 
         public Supplier GetNewModelOrEdit(Supplier supplier = null)

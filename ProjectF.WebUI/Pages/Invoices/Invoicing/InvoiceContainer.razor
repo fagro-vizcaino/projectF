@@ -98,7 +98,7 @@
                         <div class="flex-col w-1/3">
                             <div class="mb-2">
                                 <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                                   Sequencia Comprobante
+                                    Sequencia Comprobante
                                 </label>
                                 <div class="mb-4">
                                     <div class="inline-block relative w-full">
@@ -122,36 +122,36 @@
                                     </div>
                                 </div>
                                 @*<div class="flex flex-col items-end">
-            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
-                Tipo Comprobante
-            </label>
-            <Dropdown Placement="@PlacementType.BottomRight" Trigger="@(new TriggerType[] { TriggerType.Click })">
-                <Overlay>
-                    <div class="origin-bottom-right rounded-md shadow-lg">
-                        <div class="rounded-md bg-white shadow-xs">
-                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
-                                    Credito Fiscal
-                                </a>
-                                <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
-                                    Consumidor Final
-                                </a>
+                                        <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                            Tipo Comprobante
+                                        </label>
+                                        <Dropdown Placement="@PlacementType.BottomRight" Trigger="@(new TriggerType[] { TriggerType.Click })">
+                                            <Overlay>
+                                                <div class="origin-bottom-right rounded-md shadow-lg">
+                                                    <div class="rounded-md bg-white shadow-xs">
+                                                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                                            <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                                                Credito Fiscal
+                                                            </a>
+                                                            <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                                                Consumidor Final
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Overlay>
+                                            <ChildContent>
+                                                <button class="ml-2 mr-2 text-gray-600 font-semibold py-2 px-4 border border-gray-300 rounded shadow-sm hover:text-gray-900" type="button">
+                                                    Seleccione
+                                                    <i class="ml-2 fas fa-caret-down text-gray-900"></i>
+                                                </button>
+                                            </ChildContent>
+                                        </Dropdown>
+                                        <input class="mt-2 appearance-none block w-5/6 bg-gray-200 border rounded py-3 px-4 mb-3 text-right text-base font-semibold leading-tight focus:outline-none focus:bg-white"
+                                               id="grid-first-name" type="text" placeholder="1545" disabled>
+                                    </div>*@
                             </div>
-                        </div>
-                    </div>
-                </Overlay>
-                <ChildContent>
-                    <button class="ml-2 mr-2 text-gray-600 font-semibold py-2 px-4 border border-gray-300 rounded shadow-sm hover:text-gray-900" type="button">
-                        Seleccione
-                        <i class="ml-2 fas fa-caret-down text-gray-900"></i>
-                    </button>
-                </ChildContent>
-            </Dropdown>
-            <input class="mt-2 appearance-none block w-5/6 bg-gray-200 border rounded py-3 px-4 mb-3 text-right text-base font-semibold leading-tight focus:outline-none focus:bg-white"
-                   id="grid-first-name" type="text" placeholder="1545" disabled>
-        </div>*@
-                            </div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -231,7 +231,7 @@
                 <button class="ml-2 mr-2 bg-black opacity-75 hover:bg-gray-700 text-white font-semibold py-1 px-4 border border-white rounded-full shadow">Limpar</button>
             </div>
             <div>
-                <a href="#" 
+                <a href="#"
                    @onclick="async () => await DownloadFile()"
                    @onclick:preventDefault="true"
                    class="no-underline hover:underline text-indigo-600 text-sm">
@@ -272,6 +272,6 @@
 
 @code {
 
-   
+
 
 }

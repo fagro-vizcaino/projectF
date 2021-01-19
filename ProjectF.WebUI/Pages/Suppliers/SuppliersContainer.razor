@@ -39,11 +39,29 @@
                     <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
                     <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
                 </div>
-
-                <div class="mb-2">
-                    <FLabel Value="Es independiente?" LabelFor="ShowOn" />
-                    <Switch @bind-Value="_model.IsIndependent" />
+                <div class="flex space-x-1">
+                    <div class="w-1/2">
+                        <FLabel Value="Es independiente?" LabelFor="ShowOn" />
+                        <Switch @bind-Value="_model.IsIndependent" />
+                    </div>
+                    <div class="w-1/2">
+                        <FLabel Value="Termino de pago" LabelFor="País" />
+                        <div class="inline-block relative w-full">
+                            <FInputSelect @bind-Value="_model.SelectedCountry">
+                                <option value="0">Seleccione el país</option>
+                                @foreach (var type in PaymentTerms)
+                                {
+                                    <option value="@type.Id">@type.Description</option>
+                                }
+                            </FInputSelect>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                            </div>
+                            <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
+                        </div>
+                    </div>
                 </div>
+
                 <div class="flex space-x-1">
                     <div class="w-1/2">
                         <FLabel Value="Casa o Apartamento" LabelFor="HomeOrApartment" />
@@ -63,7 +81,19 @@
                 </div>
                 <div class="mb-2">
                     <FLabel Value="Cuenta de gastos predeterminada" LabelFor="Street" />
-                    
+                    <div class="inline-block relative w-full">
+                        <FInputSelect @bind-Value="_model.SelectedCountry">
+                            <option value="0">Seleccione el país</option>
+                            @foreach (var type in Countries)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </FInputSelect>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                        <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
                 </div>
                 <div class="mb-4">
                     <FLabel Value="País" LabelFor="País" />
