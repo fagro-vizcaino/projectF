@@ -62,7 +62,7 @@ namespace ProjectF.Data.EfConfiguration
             builder.Property(s => s.Street)
                 .HasMaxLength(60);
 
-            builder.Property(s => s.IsIndependent);
+            builder.Property(s => s.IsInformalSupplier);
 
             builder.HasOne<Company>()
                 .WithMany()

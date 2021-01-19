@@ -9,51 +9,61 @@
               OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
 
 <SuppliersList Elements="Elements"
-              OnClickDrawerEdit="OpenDrawerForEdit"
-              OnClickDelete="Delete" />
+               OnClickDrawerEdit="OpenDrawerForEdit"
+               OnClickDelete="Delete" />
 <div>
-    <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Suplidor" : "Crear Suplidor")}")' OnClose="CloseDrawer">
+    <Drawer Closable="true" Width="600" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Suplidor" : "Crear Suplidor")}")' OnClose="CloseDrawer">
         <Template style="height:90%">
             <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
                 <FluentValidator></FluentValidator>
-                <div class="mb-4">
+                <div class="mb-2">
                     <FLabel Value="Nombre" LabelFor="Name" />
                     <FInputText @bind-Value="_model.Name" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
                     <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
                 </div>
+                <div class="flex space-x-1">
+                    <div class="w-1/2">
+                        <FLabel Value="Rnc" LabelFor="Rnc" />
+                        <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold tWext-red-600" />
+                    </div>
+                    <div class="w-1/2">
+                        <FLabel Value="Télefono" LabelFor="Phone" />
+                        <FInputText @bind-Value="_model.Phone" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Phone)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+
                 <div class="mb-4">
                     <FLabel Value="Email" LabelFor="Email" />
                     <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
                     <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
                 </div>
-                <div class="mb-4">
-                    <FLabel Value="Télefono" LabelFor="Phone" />
-                    <FInputText @bind-Value="_model.Phone" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                    <FCustomValidationMessage For="@(() => _model.Phone)" Class="mt-2 font-semibold text-red-600" />
-                </div>
-                <div class="mb-4">
-                    <FLabel Value="Rnc" LabelFor="Rnc" />
-                    <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                    <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold tWext-red-600" />
-                </div>
-                <div class="mb-6">
-                    <FLabel Value="Es Formal ?" LabelFor="ShowOn" />
+
+                <div class="mb-2">
+                    <FLabel Value="Es independiente?" LabelFor="ShowOn" />
                     <Switch @bind-Value="_model.IsIndependent" />
                 </div>
-                <div class="mb-4">
-                    <FLabel Value="Casa o Apartamento" LabelFor="HomeOrApartment" />
-                    <FTextArea @bind-Value="_model.HomeOrApartment" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                    <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
+                <div class="flex space-x-1">
+                    <div class="w-1/2">
+                        <FLabel Value="Casa o Apartamento" LabelFor="HomeOrApartment" />
+                        <FInputText @bind-Value="_model.HomeOrApartment" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div class="w-1/2">
+                        <FLabel Value="Ciudad" LabelFor="City" />
+                        <FInputText @bind-Value="_model.City" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.City)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <FLabel Value="Ciudad" LabelFor="City" />
-                    <FTextArea @bind-Value="_model.City" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
-                    <FCustomValidationMessage For="@(() => _model.City)" Class="mt-2 font-semibold text-red-600" />
-                </div>
-                <div class="mb-4">
+                <div class="mb-2">
                     <FLabel Value="Calle" LabelFor="Street" />
                     <FTextArea @bind-Value="_model.Street" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
                     <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-2">
+                    <FLabel Value="Cuenta de gastos predeterminada" LabelFor="Street" />
+                    
                 </div>
                 <div class="mb-4">
                     <FLabel Value="País" LabelFor="País" />

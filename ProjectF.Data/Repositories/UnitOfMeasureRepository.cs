@@ -8,7 +8,7 @@ using ProjectF.Data.Entities.UnitOfMeasures;
 
 namespace ProjectF.Data.Repositories
 {
-    public class UnitOfMeasureRepository : _BaseRepository<UnitOfMeasure>
+    public class UnitOfMeasureRepository : BaseRepository<UnitOfMeasure>
     {
         readonly _AppDbContext _context;
 

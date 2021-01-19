@@ -48,7 +48,6 @@ namespace ProjectF.Data.EfConfiguration
             builder.HasQueryFilter(x => x.CompanyId == _companyId
             && x.Status == EntityStatus.Active);
 
-
         }
     }
 }

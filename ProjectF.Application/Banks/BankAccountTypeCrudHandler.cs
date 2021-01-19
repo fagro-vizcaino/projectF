@@ -19,6 +19,7 @@ namespace ProjectF.Application.Banks
         
         public Either<Error, BankAccountType> Create(BankAccountTypeDto bankAccountDto)
             => Validate(bankAccountDto)
+            .Bind(SetStatus)
             .Bind(c => Add(FromDto(c)))
             .Bind(Save)
             .ToEither()
@@ -63,6 +64,9 @@ namespace ProjectF.Application.Banks
 
         Validation<Error, Name> ValidateName(BankAccountTypeDto bankAccountDto)
             => Name.Of(bankAccountDto.Name);
+
+        Validation<Error, BankAccountTypeDto> SetStatus(BankAccountTypeDto dto)
+          => dto with { Status = Data.Entities.Common.EntityStatus.Active };
 
         Validation<Error, BankAccountType> UpdateEntity(BankAccountTypeDto dto, BankAccountType bankAccountType)
         {

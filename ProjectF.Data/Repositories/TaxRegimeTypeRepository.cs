@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ProjectF.Data.Repositories
 {
-    public class TaxRegimeTypeRepository : _BaseRepository<TaxRegimeType>
+    public class TaxRegimeTypeRepository : BaseRepository<TaxRegimeType>
     {
          readonly Context._AppDbContext _context;
         public TaxRegimeTypeRepository(Context._AppDbContext context): base(context)

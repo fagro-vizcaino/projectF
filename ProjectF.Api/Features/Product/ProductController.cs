@@ -25,8 +25,7 @@ namespace ProjectF.Api.Features.Product
             .Match<ActionResult>(
                   Left: err => BadRequest(err.Message),
                   Right: p => CreatedAtRoute(nameof(GetProduct),
-                      new { p.Id },
-                      FromDtoToView(FromEntity(p))));
+                      new { p.Id }, FromDtoToView(FromEntity(p))));
 
 
         [HttpPut("{id}")]

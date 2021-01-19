@@ -1,16 +1,11 @@
-﻿using ProjectF.Data.Entities.Common;
-using ProjectF.Data.Entities.Common.ValueObjects;
+﻿using ProjectF.Data.Entities.Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProjectF.Data.Entities.Taxes
 {
-    public record TaxDto(long Id
-        , string Name
+    public record TaxDto(string Name
         , decimal PercentValue
         , long CompanyId
         , DateTime Created
-        , DateTime? Modified
-        , EntityStatus Status);
+        , DateTime? Modified) : FDto;
 }

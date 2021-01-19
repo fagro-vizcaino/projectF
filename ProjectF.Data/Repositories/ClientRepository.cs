@@ -12,7 +12,7 @@ using LanguageExt.Common;
 
 namespace ProjectF.Data.Repositories
 {
-    public class ClientRepository : _BaseRepository<Client>
+    public class ClientRepository : BaseRepository<Client>
     {
         _AppDbContext _context;
 

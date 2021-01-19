@@ -19,7 +19,7 @@ namespace ProjectF.Api.Features.PaymentMethod
         public ActionResult CreatePaymentTerm(PaymentMethodDto dto)
             => _paymentMethodHandler.Create(dto)
             .Match<ActionResult>(Left: err => BadRequest(err.Message),
-                Right: m => CreatedAtRoute(nameof(GetPaymentMethod), new { id = dto.Id }));
+                Right: m => CreatedAtRoute(nameof(GetPaymentMethod), new { id = m.Id }, m));
 
         [HttpGet("{id}", Name ="GetPaymentMethod")]
         public ActionResult GetPaymentMethod(long id)

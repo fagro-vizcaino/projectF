@@ -9,7 +9,7 @@ using ProjectF.Data.Entities;
 
 namespace ProjectF.Data.Repositories
 {
-    public class CompanyRepository : _BaseRepository<Company>
+    public class CompanyRepository : BaseRepository<Company>
     {
         readonly _AppDbContext _context;
 

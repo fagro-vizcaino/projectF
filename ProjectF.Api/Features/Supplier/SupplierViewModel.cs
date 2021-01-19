@@ -24,6 +24,7 @@ namespace ProjectF.Api.Features.Supplier
         public bool IsIndependent { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Modified { get; set; }
+        public SupplierGroup SupplierGroup { get; set; }
         public EntityStatus Status { get; set; } = EntityStatus.Active;
 
         public SupplierDto ToDto()
@@ -38,6 +39,7 @@ namespace ProjectF.Api.Features.Supplier
                 , Street
                 , SelectedCountry
                 , Country
+                , SupplierGroup
                 , IsIndependent
                 , Created
                 , Modified

@@ -4,7 +4,7 @@ using ProjectF.Data.Entities.Warehouses;
 
 namespace ProjectF.Data.Repositories
 {
-    public class WerehouseRepository : _BaseRepository<Warehouse>
+    public class WerehouseRepository : BaseRepository<Warehouse>
     {
         private readonly Context._AppDbContext _context;
 

@@ -13,12 +13,10 @@ namespace ProjectF.Data.Entities.Taxes
                 , dto.Status);
 
         public static TaxDto FromEntity(Tax entity)
-            => new TaxDto(entity.Id
-                , entity.Name.Value
+            => (new TaxDto(entity.Name.Value
                 , entity.PercentValue
                 , entity.CompanyId
                 , entity.Created
-                , entity.Modified
-                , entity.Status);
+                , entity.Modified)) with { Id = entity.Id, Status = entity.Status };
     }
 }

@@ -1,4 +1,3 @@
-using ProjectF.Data.Entities.Categories;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Taxes;
 using Microsoft.EntityFrameworkCore;
@@ -8,16 +7,8 @@ using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
-    class TaxConfiguration : IEntityTypeConfiguration<Tax>
+    public class TaxConfiguration : IEntityTypeConfiguration<Tax>
     {
-        readonly long _companyId;
-
-        public TaxConfiguration() { }
-        public TaxConfiguration(long companyId) : this()
-        {
-            _companyId = companyId;
-        }
-
         public void Configure(EntityTypeBuilder<Tax> builder)
         {
             builder.ToTable("Tax").HasKey(c => c.Id);
@@ -47,10 +38,6 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Modified)
                 .HasColumnType("Datetime");
-
-            builder.HasQueryFilter(x => x.CompanyId == _companyId
-            && x.Status == EntityStatus.Active);
-
         }
     }
 }

@@ -23,6 +23,8 @@ using System.Threading;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using ProjectF.Data.Entities.UnitOfMeasures;
+using ProjectF.Data.Entities.PaymentMethods;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.Context
 {
@@ -49,7 +51,8 @@ namespace ProjectF.Data.Context
         public DbSet<PaymentTerm> PaymentMethods { get; set; }
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
 
-        public _AppDbContext(DbContextOptions<_AppDbContext> options, IGetClaimsProvider userData) 
+        public _AppDbContext(DbContextOptions<_AppDbContext> options
+            , IGetClaimsProvider userData) 
             : base(options)
         {
             _companyId = parseInt(userData.CompanyId).Match(c => c, () => 0);
@@ -93,27 +96,69 @@ namespace ProjectF.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.Entity<Category>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
 
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new WarehouseConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new SupplierConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new BankAccountConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new BankAccountTypeConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+            modelBuilder.Entity<Warehouse>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
+            modelBuilder.Entity<Supplier>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new BankAccountConfiguration());
+            modelBuilder.Entity<BankAccount>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new BankAccountTypeConfiguration());
+            modelBuilder.Entity<BankAccountType>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+           
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
-            modelBuilder.ApplyConfiguration(new UserClientConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new PaymentTermConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new ProductConfiguration(_companyId));
+
+            modelBuilder.ApplyConfiguration(new UserClientConfiguration());
+            modelBuilder.Entity<Client>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new PaymentTermConfiguration());
+            modelBuilder.Entity<PaymentTerm>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.Entity<Product>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new TaxConfiguration());
+            modelBuilder.Entity<Tax>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new UnitOfMeasureConfiguration());
+                modelBuilder.Entity<UnitOfMeasure>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
             
-            modelBuilder.ApplyConfiguration(new TaxConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new UnitOfMeasureConfiguration(_companyId));
+            modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration());
+                modelBuilder.Entity<TaxRegimeType>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration());
+            modelBuilder.Entity<DocumentNumberSequence>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new InvoiceHeaderConfiguration());
+            modelBuilder.Entity<InvoiceHeader>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration());
+            modelBuilder.Entity<InvoiceDetail>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
+            modelBuilder.Entity<PaymentMethod>()
+                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
             
-            modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new InvoiceHeaderConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new InvoiceDetailConfiguration(_companyId));
-            modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration(_companyId));
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.Entity<Country>().HasData(CountryConfiguration.InitialCountryData());
 
@@ -121,7 +166,6 @@ namespace ProjectF.Data.Context
             modelBuilder.Entity<Currency>().HasData(CurrencyConfiguration.InitialCurrencyData());
 
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            
             base.OnModelCreating(modelBuilder);
         }
 

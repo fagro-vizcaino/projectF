@@ -13,7 +13,7 @@ using System;
 
 namespace ProjectF.Data.Repositories
 {
-    public class ProductRepository : _BaseRepository<Product>
+    public class ProductRepository : BaseRepository<Product>
     {
         readonly _AppDbContext _context;
         public ProductRepository(_AppDbContext context) : base(context)

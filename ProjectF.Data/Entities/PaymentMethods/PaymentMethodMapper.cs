@@ -11,12 +11,10 @@ namespace ProjectF.Data.Entities.PaymentMethods
            dto.Status);
 
         public static PaymentMethodDto FromEntity(PaymentMethod entity)
-            => new PaymentMethodDto(entity.Id, 
-                entity.Code.Value, 
+            => (new PaymentMethodDto(entity.Code.Value, 
                 entity.Description.Value, 
                 entity.Created, 
-                entity.Modified, 
-                entity.Status);
+                entity.Modified)) with { Id = entity.Id, Status = entity.Status };
     }
    
 }

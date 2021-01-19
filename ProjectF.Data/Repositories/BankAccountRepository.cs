@@ -10,7 +10,7 @@ using System;
 
 namespace ProjectF.Data.Repositories
 {
-    public class BankAccountRepository : _BaseRepository<BankAccount>
+    public class BankAccountRepository : BaseRepository<BankAccount>
     {
         readonly Context._AppDbContext _context;
 

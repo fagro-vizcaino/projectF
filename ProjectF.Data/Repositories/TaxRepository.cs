@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ProjectF.Data.Repositories
 {
-    public class TaxRepository : _BaseRepository<Tax>
+    public class TaxRepository : BaseRepository<Tax>
     {
         readonly _AppDbContext _context;
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectF.Data.Entities.Common.ValueObjects;
+﻿using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.Suppliers
 {
@@ -19,6 +14,7 @@ namespace ProjectF.Data.Entities.Suppliers
                 , dto.City
                 , dto.Street
                 , dto.Country
+                , dto.SupplierGroup
                 , dto.IsIndependent
                 , dto.Created
                 , dto.Modified
@@ -36,7 +32,8 @@ namespace ProjectF.Data.Entities.Suppliers
                 , entity.Street
                 , entity.Country?.Id ?? 0
                 , entity.Country
-                , entity.IsIndependent
+                , entity.SupplierGroup
+                , entity.IsInformalSupplier
                 , entity.Created
                 , entity.Modified
                 , entity.Status);

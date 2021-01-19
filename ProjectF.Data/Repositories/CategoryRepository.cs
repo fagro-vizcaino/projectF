@@ -3,7 +3,7 @@ using ProjectF.Data.Entities.Categories;
 
 namespace ProjectF.Data.Repositories
 {
-  public class CategoryRepository : _BaseRepository<Category>
+  public class CategoryRepository : BaseRepository<Category>
   {
     private readonly _AppDbContext _context;
 

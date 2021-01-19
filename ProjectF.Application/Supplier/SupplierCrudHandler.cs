@@ -119,6 +119,7 @@ namespace ProjectF.Application.Suppliers
                 , name
                 , email
                 , phone
+                , dto.SupplierGroup
                 , dto.Rnc
                 , dto.HomeOrApartment
                 , dto.City
@@ -177,12 +178,13 @@ namespace ProjectF.Application.Suppliers
                     , supplier.Name
                     , supplier.Email
                     , supplier.Phone
+                    , supplier.SupplierGroup
                     , supplier.Rnc
                     , supplier.HomeOrApartment
                     , supplier.City
                     , supplier.Street
                     , supplier.Country
-                    , supplier.IsIndependent
+                    , supplier.IsInformalSupplier
                     , Data.Entities.Common.EntityStatus.Deleted);
                 return supplier;
             }

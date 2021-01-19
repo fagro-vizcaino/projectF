@@ -10,11 +10,11 @@ using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.Repositories
 {
-    public class _BaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly Context._AppDbContext _context;
+        private readonly _AppDbContext _context;
 
-        public _BaseRepository(Context._AppDbContext context)
+        public BaseRepository(_AppDbContext context)
         {
             _context = context;
         }
@@ -44,11 +44,11 @@ namespace ProjectF.Data.Repositories
         public IEnumerable<T> Filter(Expression<Func<T, bool>> predicate)
             => _context.Set<T>().Where(predicate).AsEnumerable();
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) 
-            => !trackChanges 
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+            => !trackChanges
             ? _context.Set<T>()
                .Where(expression)
-               .AsNoTracking() 
+               .AsNoTracking()
             : _context.Set<T>()
                .Where(expression);
 
@@ -75,7 +75,7 @@ namespace ProjectF.Data.Repositories
         public T GetSavedEntry(T entity)
         {
             _context.Entry(entity).GetDatabaseValues();
-            return entity ;
+            return entity;
         }
 
 

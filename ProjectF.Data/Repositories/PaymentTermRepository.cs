@@ -3,7 +3,7 @@ using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Repositories
 {
-    public class PaymentTermRepository : _BaseRepository<PaymentTerm>
+    public class PaymentTermRepository : BaseRepository<PaymentTerm>
     {
         readonly _AppDbContext _context;
         public PaymentTermRepository(_AppDbContext context): base(context)

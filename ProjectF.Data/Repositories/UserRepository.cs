@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectF.Data.Repositories
 {
-    public class UserRepository : _BaseRepository<User>
+    public class UserRepository : BaseRepository<User>
     {
         readonly _AppDbContext _context;
         public UserRepository(_AppDbContext context) : base(context)

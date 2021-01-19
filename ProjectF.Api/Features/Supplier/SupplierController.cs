@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ProjectF.Application.Suppliers;
 using static ProjectF.Data.Entities.Suppliers.SupplierMapper;
 using Microsoft.AspNetCore.Mvc;
+using ProjectF.Data.Entities.Suppliers;
 
 namespace ProjectF.Api.Features.Supplier
 {
@@ -20,9 +21,9 @@ namespace ProjectF.Api.Features.Supplier
         }
 
         [HttpPost]
-        public ActionResult CreateSupplier(SupplierViewModel viewModel)
+        public ActionResult CreateSupplier(SupplierDto dto)
             => _supplierOperation
-                .Create(viewModel.ToDto())
+                .Create(dto)
                 .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
                     Right: s => Ok(FromEntity(s)));

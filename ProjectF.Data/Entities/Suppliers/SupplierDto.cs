@@ -1,8 +1,6 @@
 ﻿using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Countries;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProjectF.Data.Entities.Suppliers
 {
@@ -18,6 +16,7 @@ namespace ProjectF.Data.Entities.Suppliers
         , string Street
         , int SelectedCountry
         , Country Country
+        , SupplierGroup SupplierGroup
         , bool IsIndependent
         , DateTime Created
         , DateTime? Modified

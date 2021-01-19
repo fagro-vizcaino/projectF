@@ -13,7 +13,7 @@ using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Repositories
 {
-    public class InvoiceRepository : _BaseRepository<InvoiceHeader>
+    public class InvoiceRepository : BaseRepository<InvoiceHeader>
     {
         readonly _AppDbContext _context;
         public InvoiceRepository(_AppDbContext context) : base(context)

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ProjectF.Data.Repositories
 {
-    public class SupplierRepository : _BaseRepository<Supplier>
+    public class SupplierRepository : BaseRepository<Supplier>
     {
         private readonly Context._AppDbContext _context;
 

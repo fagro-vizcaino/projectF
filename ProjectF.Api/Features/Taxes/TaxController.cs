@@ -2,6 +2,7 @@
 using static ProjectF.Data.Entities.Taxes.TaxMapper;
 using ProjectF.Application.Taxes;
 using Microsoft.AspNetCore.Mvc;
+using ProjectF.Data.Entities.Taxes;
 
 namespace ProjectF.Api.Features.Taxes
 {
@@ -16,36 +17,35 @@ namespace ProjectF.Api.Features.Taxes
         }
 
         [HttpPost]
-        public ActionResult CreateTax(TaxViewModel viewModel)
+        public ActionResult CreateTax(TaxDto dto)
             => _taxOperation
-                .Create(viewModel.ToDto())
+                .Create(dto)
                 .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: tax => Ok(TaxViewModel.FromDtoToView(FromEntity(tax))));
+                    Right: tax => CreatedAtRoute(nameof(GetTax), new {tax.Id}, FromEntity(tax)));
 
 
         [HttpPut("{id}")]
-        public ActionResult UpdateTax(long id, TaxViewModel viewModel)
+        public ActionResult UpdateTax(long id, TaxDto dto)
             => _taxOperation
-                .Update(id, viewModel.ToDto())
+                .Update(id, dto)
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: t => Ok(TaxViewModel.FromDtoToView(FromEntity(t))));
+                    Right: t => Ok(FromEntity(t)));
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name ="GetTax")]
         public IActionResult GetTax(long id)
             =>  _taxOperation
                 .Find(id)
                 .Match<ActionResult>(
                     Left : err => NotFound(err.Message),
-                    Right: tax => Ok(TaxViewModel.FromDtoToView(FromEntity(tax))));
+                    Right: tax => Ok(FromEntity(tax)));
 
 
         [HttpGet]
         public ActionResult GetTaxes() {
-            var result = _taxOperation.GetAll()
-                .Select(c => TaxViewModel.FromDtoToView(c));
+            var result = _taxOperation.GetAll();
             if (result.Any()) return Ok(result);
 
             return NotFound();

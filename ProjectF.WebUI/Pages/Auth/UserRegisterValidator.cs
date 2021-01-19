@@ -8,6 +8,8 @@ namespace ProjectF.WebUI.Pages.Auth
 {
     public class UserRegisterValidator : AbstractValidator<UserRegisterDto>
     {
+        const int MIN_PASSWORD_LENGHT = 11;
+        const int MAX_PASSWORD_LENGHT = 60;
         public UserRegisterValidator()
         {
             RuleFor(x => x.FirstName).NotEmpty()
@@ -29,10 +31,10 @@ namespace ProjectF.WebUI.Pages.Auth
 
             RuleFor(x => x.Password).NotEmpty()
               .WithMessage("Contraseña Requerido")
-              .MaximumLength(60)
-              .WithMessage("Máximo Carateres 40")
-              .MinimumLength(11)
-              .WithMessage("Su contraseña debe tener mas de 4 caracteres");
+              .MaximumLength(MAX_PASSWORD_LENGHT)
+              .WithMessage($"Máximo Carateres {MAX_PASSWORD_LENGHT}")
+              .MinimumLength(MIN_PASSWORD_LENGHT)
+              .WithMessage($"Su contraseña debe tener mas de {MIN_PASSWORD_LENGHT} caracteres");
         }
     }
 }

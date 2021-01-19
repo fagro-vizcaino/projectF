@@ -3,7 +3,7 @@ using ProjectF.Data.Entities.Countries;
 
 namespace ProjectF.Data.Repositories
 {
-    public class CountryRepository : _BaseRepository<Country>
+    public class CountryRepository : BaseRepository<Country>
     {
         private readonly _AppDbContext _context;
 
