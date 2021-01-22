@@ -6,16 +6,16 @@ using ProjectF.Data.Entities.Warehouses;
 
 namespace ProjectF.Data.Entities.Products
 {
-    public record ProductDto(long Id
+    public record ProductDto(int Id
         , string Code
         , string Name
         , string Description
         , string Reference
         , Category Category
-        , long CategoryId
+        , int CategoryId
         , Warehouse Warehouse
-        , long WarehouseId
-        , long TaxId
+        , int WarehouseId
+        , int TaxId
         , Tax Tax
         , bool IsService
         , decimal Cost

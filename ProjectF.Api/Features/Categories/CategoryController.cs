@@ -3,6 +3,7 @@ using ProjectF.Application.Categories;
 using static ProjectF.Data.Entities.Categories.CategoryMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using ProjectF.Data.Entities.Categories;
 
 namespace ProjectF.Api.Features.Categories
 {
@@ -19,36 +20,36 @@ namespace ProjectF.Api.Features.Categories
         }
 
         [HttpPost]
-        public ActionResult CreateCategory(CategoryViewModel viewModel)
+        public ActionResult CreateCategory(CategoryDto dto)
             => _categoryOperations
-                .Create(viewModel.ToDto())
+                .Create(dto)
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: category => Ok(category));
+                    Right: m => CreatedAtRoute(nameof(GetCategory), new { id = m.Id }, m));
+
 
 
         [HttpPut("{id}")]
-        public ActionResult UpdateCategory(long id, CategoryViewModel viewModel)
+        public ActionResult UpdateCategory(long id, CategoryDto dto)
             => _categoryOperations
-                .Update(id, viewModel.ToDto())
+                .Update(id, dto)
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(CategoryViewModel.FromDtoToView(FromEntity(c))));
+                    Right: c => Ok(FromEntity(c)));
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}",Name = "GetCategory")]
         public IActionResult GetCategory(long id)
             => _categoryOperations
                 .Find(id)
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
-                    Right: c => Ok(CategoryViewModel.FromDtoToView(FromEntity(c))));
+                    Right: c => Ok(FromEntity(c)));
 
         [HttpGet]
         public ActionResult GetCategories()
         {
-            var result = _categoryOperations.GetAll()
-                .Select(c => CategoryViewModel.FromDtoToView(c));
+            var result = _categoryOperations.GetAll();
             if (result.Any()) return Ok(result);
 
             return NotFound();

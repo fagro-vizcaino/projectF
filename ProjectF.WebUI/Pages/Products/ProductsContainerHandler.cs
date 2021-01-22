@@ -20,7 +20,6 @@ namespace ProjectF.WebUI.Pages.Products
             };
             InitModel(emtpyModel);
             NewOrEditOperation = GetNewModelOrEdit;
-
         }
 
         [Inject]
@@ -37,10 +36,10 @@ namespace ProjectF.WebUI.Pages.Products
 
         protected override async Task OnInitializedAsync()
         {
-            Elements = (await DataService.GetAll()).ToArray();
+            Elements   = (await DataService.GetAll()).ToArray();
             Categories = (await CategoryDataService.GetAll()).ToArray();
             Werehouses = (await WerehouseDataService.GetAll()).ToArray();
-            Taxes= (await TaxDataService.GetAll()).ToArray();
+            Taxes      = (await TaxDataService.GetAll()).ToArray();
         }
 
         public Product GetNewModelOrEdit(Product product = null)

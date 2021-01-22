@@ -6,8 +6,8 @@ namespace ProjectF.Data.Entities.UnitOfMeasures
 {
     public class UnitOfMeasure : _BaseEntity
     {
-        public Name Name { get; set; }
-        public decimal Value { get; set; }
+        public Name Name { get; private set; }
+        public decimal Value { get; private set; }
         protected UnitOfMeasure() { }
 
         public UnitOfMeasure(Name name

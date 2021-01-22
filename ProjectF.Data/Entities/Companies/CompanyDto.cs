@@ -4,8 +4,8 @@ using ProjectF.Data.Entities.Countries;
 
 namespace ProjectF.Data.Entities.Companies
 {
-    public record CompanyDto(long Id
-        , long CompanyId
+    public record CompanyDto(int Id
+        , int CompanyId
         , string Name
         , string Rnc
         , string HomeOrApartment

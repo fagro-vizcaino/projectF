@@ -1,12 +1,12 @@
-﻿using ProjectF.Data.Entities.Common;
+﻿using ProjectF.Data.Entities.Core;
 using ProjectF.Data.Entities.Countries;
+using ProjectF.Data.Entities.PaymentList;
 using System;
 
 namespace ProjectF.Data.Entities.Suppliers
 {
-    public record SupplierDto
-        (long Id
-        , string Code
+    public record SupplierDto 
+        (string Code
         , string Name
         , string Email
         , string Phone
@@ -16,9 +16,11 @@ namespace ProjectF.Data.Entities.Suppliers
         , string Street
         , int SelectedCountry
         , Country Country
-        , SupplierGroup SupplierGroup
         , bool IsIndependent
+        , SupplierGroup SupplierGroup
+        , int PaymentTermId
+        , PaymentTerm? PaymentTerm
+        , string Notes
         , DateTime Created
-        , DateTime? Modified
-        , EntityStatus Status);
+        , DateTime? Modified) : FDto;
 }

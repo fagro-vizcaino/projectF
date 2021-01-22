@@ -6,14 +6,15 @@ namespace ProjectF.Api.Features.Categories
 {
     public class CategoryViewModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Code { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public bool ShowOn { get; set; } = false;
         public DateTime Created { get; set; }
         public DateTime? Modified { get; set; }
         public EntityStatus Status { get; set; }
-        public CategoryDto ToDto() => new CategoryDto(Id, Code, Name, ShowOn, Created, Modified, Status);
+        public CategoryDto ToDto() => (new CategoryDto(Code, Name, ShowOn, Created, Modified))
+            with { Id = Id, Status = Status };
         public static CategoryViewModel FromDtoToView(CategoryDto category)
             => new CategoryViewModel()
             {

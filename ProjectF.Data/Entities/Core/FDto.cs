@@ -4,7 +4,7 @@ namespace ProjectF.Data.Entities.Core
 {
     public record FDto
     {
-        public long Id { get; init; }
+        public int Id { get; init; }
         public EntityStatus Status { get; init; }
     }
 }

@@ -18,8 +18,7 @@ namespace ProjectF.Data.Entities.Invoices
         //public virtual Company Company { get; private set; }
         public DateTime InvoiceDate { get; private set; }
         public DateTime DueDate { get; private set; }
-        
-        public virtual PaymentTerm PaymentTerm { get; private set; }
+        public PaymentTerm PaymentTerm { get; private set; }
         public decimal Discount { get; private set; }
         public decimal SubTotal { get; private set; }
         public decimal TaxTotal { get; private set; }

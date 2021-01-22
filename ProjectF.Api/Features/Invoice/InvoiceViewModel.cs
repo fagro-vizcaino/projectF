@@ -93,12 +93,14 @@ namespace ProjectF.Api.Features.Invoice
         }
         public static InvoiceViewModel FromDtoToView(InvoiceHeaderDto invoiceDto)
         {
-            var paymentTerm = new PaymentTermDto(invoiceDto.Id,
+            
+                
+            var paymentTerm = (new PaymentTermDto(
                 invoiceDto.PaymentTerm.Description.Value,
                 invoiceDto.PaymentTerm.DayValue,
                 invoiceDto.PaymentTerm.Created,
-                invoiceDto.PaymentTerm.Modified,
-                invoiceDto.PaymentTerm.Status);
+                invoiceDto.PaymentTerm.Modified)) 
+                with { Id = invoiceDto.PaymentTerm.Id, Status  = invoiceDto.PaymentTerm.Status };
 
             return new InvoiceViewModel()
             {

@@ -2,6 +2,7 @@
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
+using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Entities.Suppliers
 {
@@ -18,6 +19,8 @@ namespace ProjectF.Data.Entities.Suppliers
         public virtual Country Country { get; private set; }
         public bool IsInformalSupplier { get; private set; }
         public SupplierGroup SupplierGroup { get; private set; }
+        public virtual PaymentTerm PaymentTerm { get; private set; }
+        public GeneralText Notes { get; private set; }
 
         protected Supplier() { }
 
@@ -31,7 +34,9 @@ namespace ProjectF.Data.Entities.Suppliers
             , string street
             , Country country
             , SupplierGroup supplierGroup
-            , bool isIndependent
+            , PaymentTerm paymentTerm
+            , GeneralText notes
+            , bool isInformalSupplier
             , DateTime created
             , DateTime? modified = null
             , EntityStatus status = EntityStatus.Active)
@@ -46,7 +51,9 @@ namespace ProjectF.Data.Entities.Suppliers
             Street              = street;
             Country             = country;
             SupplierGroup       = supplierGroup;
-            IsInformalSupplier  = isIndependent;
+            PaymentTerm         = paymentTerm;
+            Notes               = notes;
+            IsInformalSupplier  = isInformalSupplier;
             Created             = created == DateTime.MinValue ? DateTime.Now : created;
             Modified            = modified;
             Status              = status;
@@ -58,12 +65,14 @@ namespace ProjectF.Data.Entities.Suppliers
             , Email email
             , Phone phone
             , SupplierGroup supplierGroup
+            , PaymentTerm paymentTerm
+            , GeneralText notes
+            , bool isInformalSupplier
             , string rnc
             , string homeOrApartment
             , string city
             , string street
             , Country country
-            , bool isIndependent
             , EntityStatus status)
         {
             Code                 = code;
@@ -74,10 +83,12 @@ namespace ProjectF.Data.Entities.Suppliers
             HomeOrApartment      = homeOrApartment;
             City                 = city;
             Street               = street;
-            IsInformalSupplier   = isIndependent;
+            SupplierGroup        = supplierGroup;
+            PaymentTerm          = paymentTerm;
+            Notes                = notes;
+            IsInformalSupplier   = isInformalSupplier;
             Country              = country;
             Status               = status;
-            SupplierGroup        = supplierGroup;
             Modified             = DateTime.Now;
         }
     }

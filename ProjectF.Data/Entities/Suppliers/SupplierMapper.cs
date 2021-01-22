@@ -15,14 +15,15 @@ namespace ProjectF.Data.Entities.Suppliers
                 , dto.Street
                 , dto.Country
                 , dto.SupplierGroup
+                , dto.PaymentTerm
+                , new GeneralText(dto.Notes)
                 , dto.IsIndependent
                 , dto.Created
                 , dto.Modified
                 , dto.Status);
 
         public static SupplierDto FromEntity(Supplier entity)
-            => new SupplierDto(entity.Id
-                , entity.Code.Value
+            => (new SupplierDto(entity.Code.Value
                 , entity.Name.Value
                 , entity.Email.Value
                 , entity.Phone.Value
@@ -32,10 +33,12 @@ namespace ProjectF.Data.Entities.Suppliers
                 , entity.Street
                 , entity.Country?.Id ?? 0
                 , entity.Country
-                , entity.SupplierGroup
                 , entity.IsInformalSupplier
+                , entity.SupplierGroup
+                , entity.PaymentTerm?.Id ?? 0
+                , entity.PaymentTerm
+                , entity.Notes.Value
                 , entity.Created
-                , entity.Modified
-                , entity.Status);
+                , entity.Modified)) with { Id = entity.Id, Status = entity.Status };
     }
 }

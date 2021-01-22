@@ -7,7 +7,7 @@ namespace ProjectF.Api.Features.Taxes
 {
     public class TaxViewModel : BaseViewModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public decimal PercentValue { get; set; }
         public DateTime Created { get; set; }

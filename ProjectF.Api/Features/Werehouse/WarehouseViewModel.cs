@@ -11,7 +11,7 @@ namespace ProjectF.Api.Features.Werehouses
 {
     public class WarehouseViewModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Code { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;

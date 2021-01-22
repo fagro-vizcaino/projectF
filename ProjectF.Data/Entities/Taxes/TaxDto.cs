@@ -5,7 +5,7 @@ namespace ProjectF.Data.Entities.Taxes
 {
     public record TaxDto(string Name
         , decimal PercentValue
-        , long CompanyId
+        , int CompanyId
         , DateTime Created
         , DateTime? Modified) : FDto;
 }

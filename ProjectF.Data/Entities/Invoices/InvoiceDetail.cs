@@ -25,7 +25,7 @@ namespace ProjectF.Data.Entities.Invoices
         => (ProductCode, Description, Qty, Amount, TaxPercent, InvoiceHeader)
             = (productCode, description, qty, amount, taxPercent, invoiceHeader);
 
-        public void Deconstructor(out Code productCode,
+        public void Deconstruct(out Code productCode,
             out Name description,
             out int qty,
             out decimal amount,

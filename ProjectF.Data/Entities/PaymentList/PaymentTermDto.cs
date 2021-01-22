@@ -1,8 +1,11 @@
 ﻿using System;
 using ProjectF.Data.Entities.Common;
+using ProjectF.Data.Entities.Core;
 
 namespace ProjectF.Data.Entities.PaymentList
 {
-    public record PaymentTermDto
-        (long Id, string Description, int DayValue, DateTime Created, DateTime? Modified, EntityStatus Status);
+    public record PaymentTermDto(string Description
+        , int DayValue
+        , DateTime Created
+        , DateTime? Modified) : FDto;
 }

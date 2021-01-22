@@ -11,11 +11,9 @@ namespace ProjectF.Data.Entities.UnitOfMeasures
                 , dto.Status);
 
         public static UnitOfMeasureDto FromEntity(UnitOfMeasure entity)
-            => new UnitOfMeasureDto(entity.Id
-                , entity.Name.Value
+            => (new UnitOfMeasureDto(entity.Name.Value
                 , entity.Value
                 , entity.Created
-                , entity.Modified
-                , entity.Status);
+                , entity.Modified)) with { Id = entity.Id, Status = entity.Status };
     }
 }

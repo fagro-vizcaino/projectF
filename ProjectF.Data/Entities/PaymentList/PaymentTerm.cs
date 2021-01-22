@@ -22,7 +22,7 @@ namespace ProjectF.Data.Entities.PaymentList
             Status      = status;
         }
 
-        public void EditPaymentDeadlines(Name description, int dayValue, EntityStatus status)
+        public void EditPaymentTerm(Name description, int dayValue, EntityStatus status)
         {
             Description = description;
             DayValue    = dayValue;

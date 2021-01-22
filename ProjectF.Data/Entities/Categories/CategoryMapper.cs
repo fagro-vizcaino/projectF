@@ -17,12 +17,10 @@ namespace ProjectF.Data.Entities.Categories
                 , dto.Status);
 
         public static CategoryDto FromEntity(Category entity)
-            => new CategoryDto(entity.Id
-                , entity.Code.Value
+            => (new CategoryDto(entity.Code.Value
                 , entity.Name.Value
                 , entity.ShowOn
                 , entity.Created
-                , entity.Modified
-                , entity.Status);
+                , entity.Modified)) with { Id = entity.Id, Status = entity.Status };
     }
 }

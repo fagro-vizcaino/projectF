@@ -21,7 +21,7 @@ namespace ProjectF.Api.Features
                 .Create(dto)
                 .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(c));
+                    Right: m => CreatedAtRoute(nameof(Get), new { id = m.Id }, m));
 
 
         [HttpPut("{id}")]
@@ -33,7 +33,7 @@ namespace ProjectF.Api.Features
                     Right: t => Ok(t));
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name ="Get")]
         public IActionResult Get(long id)
             => _unitOfMeasureCrudHandler
                 .Find(id)
@@ -45,7 +45,7 @@ namespace ProjectF.Api.Features
         [HttpGet]
         public ActionResult GetAll()
         {
-            var result = _unitOfMeasureCrudHandler.FindAll();
+            var result = _unitOfMeasureCrudHandler.GetAll();
             if (result.Any()) return Ok(result);
 
             return NotFound();

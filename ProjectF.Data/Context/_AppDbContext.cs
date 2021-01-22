@@ -30,7 +30,7 @@ namespace ProjectF.Data.Context
 {
     public class _AppDbContext : IdentityDbContext<User>
     {
-        readonly long _companyId;
+        readonly int _companyId;
         readonly string _userId;
         public DbSet<Category> Categories { get; set; }
         public DbSet<Warehouse> Werehouses { get; set; }

@@ -14,7 +14,7 @@ namespace ProjectF.Data.Entities.Taxes
         public Tax(Name name, decimal value,
             DateTime created,
             DateTime? modified = null,
-            long companyId = 0,
+            int companyId = 0,
             EntityStatus status = EntityStatus.Active)
         {
             Name         = name;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProjectF.Data.Entities.Common;
 
@@ -10,7 +6,7 @@ namespace ProjectF.Data.Context
 {
     public static class AppDbContextExtensions
     {
-        public static void MarkCreatedItemAsOwnedBy(this DbContext context, long companyId)
+        public static void MarkCreatedItemAsOwnedBy(this DbContext context, int companyId)
         {
             foreach (var entityEntry in context.ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Added))

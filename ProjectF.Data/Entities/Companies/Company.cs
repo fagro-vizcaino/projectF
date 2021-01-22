@@ -26,7 +26,7 @@ namespace ProjectF.Data.Entities
             , Country country
             , Phone phone
             , string website
-            , long companyId
+            , int companyId
             , DateTime created
             , EntityStatus status = EntityStatus.Active)
         {

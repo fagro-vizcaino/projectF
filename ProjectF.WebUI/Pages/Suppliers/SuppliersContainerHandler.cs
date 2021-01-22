@@ -29,7 +29,7 @@ namespace ProjectF.WebUI.Pages.Suppliers
         
         [Inject]
         public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
-        public PaymentTerm[] PaymentTerms { get; set; }
+        public PaymentTerm[] PaymentTerms { get; set; } = Array.Empty<PaymentTerm>();
         protected override async Task OnInitializedAsync()
         {
             Elements = (await DataService.GetAll()).ToArray();

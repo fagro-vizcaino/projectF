@@ -5,7 +5,7 @@ using System;
 
 namespace ProjectF.Data.Entities.Warehouses
 {
-    public record WarehouseDto(long Id
+    public record WarehouseDto(int Id
         , string Code
         , string Name
         , string Location

@@ -4,14 +4,14 @@ namespace ProjectF.Data.Entities.Common
 {
     public abstract class _BaseEntity
     {
-        public long Id { get; private set; }
+        public int Id { get; private set; }
         public EntityStatus Status { get; protected set; }
-        public long CompanyId { get; protected set; }
+        public int CompanyId { get; protected set; }
         public DateTime Created { get; protected set; }
         public DateTime? Modified { get; protected set; }
         protected _BaseEntity() { }
 
-        protected _BaseEntity(long id, EntityStatus status) : this()
+        protected _BaseEntity(int id, EntityStatus status) : this()
         {
             Id = id;
             Status = status;
@@ -65,7 +65,7 @@ namespace ProjectF.Data.Entities.Common
             return type;
         }
 
-        public void SetCompany(long id)
+        public void SetCompany(int id)
             => CompanyId = id;
 
         public void SetStatus(EntityStatus status)

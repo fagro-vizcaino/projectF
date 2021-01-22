@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectF.Application.Common
+namespace ProjectF.Data.Entities.Bills
 {
-    public class BaseViewModel
+    public class BillInvoiceDetail
     {
-        public int CompanyId { get; set; } = 0;
     }
 }
