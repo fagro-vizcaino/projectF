@@ -25,19 +25,18 @@ namespace ProjectF.Application.Common
         public virtual Either<Error, Fentity> Create(Dto dto)
             => SetStatus(dto)
             .Bind(c => Add(fromDto(c)))
-            .Bind(Save);
+            .Bind(Save );
 
         public Either<Error, Fentity> Delete(long id)
             => Find(id)
             .Bind(Delete)
             .Bind(Save);
 
-        public Either<Error, Fentity> Update(long id, Dto dto)
-            =>ValidateIsCorrectUpdate(id, dto)
+        public virtual Either<Error, Fentity> Update(long id, Dto dto)
+            => ValidateIsCorrectUpdate(id, dto)
             .Bind(c => Find(c.Id))
             .Bind(c => updateEntity(dto, c))
             .Bind(Save);
-
 
         public IEnumerable<Dto> GetAll()
             => _repo.GetAll()
