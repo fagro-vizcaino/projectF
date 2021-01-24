@@ -25,6 +25,10 @@ using static LanguageExt.Prelude;
 using ProjectF.Data.Entities.UnitOfMeasures;
 using ProjectF.Data.Entities.PaymentMethods;
 using ProjectF.Data.Entities.Common;
+using ProjectF.Data.Entities.GoodsTypes;
+using ProjectF.Data.Entities.Bills;
+using ProjectF.Data.Entities.BillsPayment;
+using ProjectF.Data.Entities.PurchaseOrders;
 
 namespace ProjectF.Data.Context
 {
@@ -35,6 +39,7 @@ namespace ProjectF.Data.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<Warehouse> Werehouses { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<GoodsType> GoodsTypes { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<BankAccountType> BankAccountTypes { get; set; }
@@ -50,6 +55,12 @@ namespace ProjectF.Data.Context
         public DbSet<TaxRegimeType> TaxRegimeTypes { get; set; }
         public DbSet<PaymentTerm> PaymentMethods { get; set; }
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
+        public DbSet<BillInvoiceHeader> BillInvoiceHeaders { get; set; }
+        public DbSet<BillInvoiceDetail> BillInvoiceDetails { get; set; }
+        public DbSet<BillPaymentHeader> BillPaymentHeaders { get; set; }
+        public DbSet<BillPaymentDetail> BillPaymentDetails { get; set; }
+        public DbSet<PurchaseOrderHeader> PurchaseOrderHeaders { get; set; }
+        public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
 
         public _AppDbContext(DbContextOptions<_AppDbContext> options
             , IGetClaimsProvider userData) 
@@ -161,6 +172,9 @@ namespace ProjectF.Data.Context
             
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.Entity<Country>().HasData(CountryConfiguration.InitialCountryData());
+
+            modelBuilder.ApplyConfiguration(new GoodsTypeConfiguration());
+            modelBuilder.Entity<Country>().HasData(GoodsTypeConfiguration.InitialGoodsTypeData());
 
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
             modelBuilder.Entity<Currency>().HasData(CurrencyConfiguration.InitialCurrencyData());
