@@ -15,7 +15,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
         public string Rnc { get; private set; }
         public GeneralText Address { get; private set; }
         public DateTime DeliverDate { get; private set; }
-        public PaymentTerm PaymentTerm { get; private set; }
+        public Name PaymentTermName { get; private set; }
         public int PaymentTermId { get; private set; }
         public Name WarehouseName { get; private set; }
         public int WarehouseId { get; private set; }
@@ -36,7 +36,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             , string rnc
             , GeneralText address
             , DateTime deliverDate
-            , PaymentTerm paymentTerm
+            , Name paymentTermName
             , int paymentTermId
             , Name warehouseName
             , int warehouseId
@@ -55,7 +55,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             Rnc             = rnc;
             Address         = address;
             DeliverDate     = deliverDate;
-            PaymentTerm     = paymentTerm;
+            PaymentTermName = paymentTermName;
             PaymentTermId   = paymentTermId;
             WarehouseName   = warehouseName;
             WarehouseId     = warehouseId;
@@ -73,7 +73,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
         {
             var purchaseOrderHeader = this;
             return purchaseOrderDetails.Map(d => new PurchaseOrderDetail(d.ProductCode
-                , d.ProductName
+                , d.Description
                 , d.DiscountValue
                 , d.Qty
                 , d.Cost
@@ -87,7 +87,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             , string rnc
             , GeneralText address
             , DateTime deliverDate
-            , PaymentTerm paymentTerm
+            , Name paymentTermName
             , int paymentTermId
             , Name warehouseName
             , int warehouseId
@@ -101,7 +101,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             var header = this;
             var _localpurchaseOrder = purchaseOrderDetails.Map(d =>
                 new PurchaseOrderDetail(d.ProductCode
-                , d.ProductName
+                , d.Description
                 , d.Cost
                 , d.Qty
                 , d.DiscountValue
@@ -114,7 +114,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             Rnc             = rnc;
             Address         = address;
             DeliverDate     = deliverDate;
-            PaymentTerm     = paymentTerm;
+            PaymentTermName = paymentTermName;
             PaymentTermId   = paymentTermId;
             WarehouseName   = warehouseName;
             WarehouseId     = warehouseId;

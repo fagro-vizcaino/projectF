@@ -55,10 +55,10 @@ namespace ProjectF.Data.Context
         public DbSet<TaxRegimeType> TaxRegimeTypes { get; set; }
         public DbSet<PaymentTerm> PaymentMethods { get; set; }
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
-        public DbSet<BillInvoiceHeader> BillInvoiceHeaders { get; set; }
-        public DbSet<BillInvoiceDetail> BillInvoiceDetails { get; set; }
-        public DbSet<BillPaymentHeader> BillPaymentHeaders { get; set; }
-        public DbSet<BillPaymentDetail> BillPaymentDetails { get; set; }
+        //public DbSet<BillInvoiceHeader> BillInvoiceHeaders { get; set; }
+        //public DbSet<BillInvoiceDetail> BillInvoiceDetails { get; set; }
+        //public DbSet<BillPaymentHeader> BillPaymentHeaders { get; set; }
+        //public DbSet<BillPaymentDetail> BillPaymentDetails { get; set; }
         public DbSet<PurchaseOrderHeader> PurchaseOrderHeaders { get; set; }
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
 
@@ -169,7 +169,15 @@ namespace ProjectF.Data.Context
             modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
             modelBuilder.Entity<PaymentMethod>()
                 .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
-            
+
+            modelBuilder.ApplyConfiguration(new PurchaseOrderHeaderConfiguration());
+            modelBuilder.Entity<PurchaseOrderHeader>().HasQueryFilter(c => c.CompanyId == _companyId 
+            && c.Status == EntityStatus.Active);
+
+            modelBuilder.ApplyConfiguration(new PurchaseOrderDetailConfiguration());
+            modelBuilder.Entity<PurchaseOrderDetail>().HasQueryFilter(c => c.CompanyId == _companyId
+            && c.Status == EntityStatus.Active);
+
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.Entity<Country>().HasData(CountryConfiguration.InitialCountryData());
 

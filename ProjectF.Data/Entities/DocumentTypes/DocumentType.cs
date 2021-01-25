@@ -16,6 +16,7 @@ namespace ProjectF.Data.Entities.DocumentTypes
         DisbursementVoucher, //comprobante de egreso
         Quotation, //Cotización
         PurchaseOrder, //Orden de compra
-        ServiceOrder //conduce
+        ServiceOrder, //conduce
+
     }
 }

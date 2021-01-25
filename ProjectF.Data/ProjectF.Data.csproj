@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Entities\DebitNotes\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

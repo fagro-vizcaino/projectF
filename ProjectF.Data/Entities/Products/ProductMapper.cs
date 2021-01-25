@@ -40,5 +40,29 @@ namespace ProjectF.Data.Entities.Products
                 , entity.Created
                 , entity.Modified
                 , entity.Status);
+
+
+        public static ProductTransaction FromDto(ProductTransactionDto dto)
+            => new ProductTransaction(dto.DocumentType
+                , dto.TransactinId
+                , dto.ProductId
+                , dto.Qty
+                , dto.Amount
+                , dto.WarehouseId
+                , dto.UnitOfMeasureId
+                , dto.Created
+                , dto.Status);
+
+        public static ProductTransactionDto FromEntity(ProductTransaction entity)
+            => (new ProductTransactionDto(entity.DocumentType
+                , entity.TransactionId
+                , entity.ProductId
+                , entity.Qty
+                , entity.Amount
+                , entity.WarehouseId
+                , entity.UnitOfMeasureId)) with { Id = entity.Id
+                , Status = entity.Status
+                , Created = entity.Created
+                , Modified = entity.Modified};
     }
 }

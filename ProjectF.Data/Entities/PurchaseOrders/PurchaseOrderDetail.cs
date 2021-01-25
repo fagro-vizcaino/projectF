@@ -6,7 +6,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
     public class PurchaseOrderDetail : _BaseEntity
     {
         public Code ProductCode { get; private set; }
-        public Name ProductName { get; private set; }
+        public Name Description { get; private set; }
         public decimal Cost { get; private set; }
         public decimal Qty { get; private set; }
         public decimal DiscountValue { get; private set; }
@@ -24,7 +24,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             , PurchaseOrderHeader purchaseOrderHeader)
         {
             ProductCode         = productCode;
-            ProductName         = productName;
+            Description         = productName;
             Cost                = cost;
             Qty                 = qty;
             DiscountValue       = discountValue;
@@ -41,7 +41,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             , out PurchaseOrderHeader dpurchaseOrderHeader)
         {
             dproductCode         = ProductCode;
-            dproductName         = ProductName;
+            dproductName         = Description;
             ddiscountValue       = DiscountValue;
             dqty                 = Qty;
             dcost                = Cost;
@@ -59,7 +59,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             , PurchaseOrderHeader purchaseOrderHeader)
         {
             ProductCode         = productCode;
-            ProductName         = productName;
+            Description         = productName;
             DiscountValue       = discountValue;
             Qty                 = qty;
             Cost                = cost;
