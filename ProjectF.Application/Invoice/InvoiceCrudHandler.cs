@@ -4,9 +4,8 @@ using ProjectF.Data.Repositories;
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
-using static ProjectF.Data.Entities.Invoices.InvoiceHeaderMapper;
+using static ProjectF.Data.Entities.Invoices.InvoiceMapper;
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using System.Threading.Tasks;
 using ProjectF.Application.NumberSequence;
@@ -108,15 +107,13 @@ namespace ProjectF.Application.Invoice
 
         Either<Error, InvoiceHeaderDto> ValidateNotes(InvoiceHeaderDto invoiceDto)
           => GeneralText.Of(invoiceDto.Notes)
-              .Match<Either<Error, InvoiceHeaderDto>>(
-                  Left: err => Error.New(err.Message),
-                  Right: c => invoiceDto);
+            .Match<Either<Error, InvoiceHeaderDto>>(Succ: c => invoiceDto, 
+              Fail: err => Error.New(err.Message));
 
         Either<Error, InvoiceHeaderDto> ValidateTermAndConditions(InvoiceHeaderDto invoiceDto)
            => GeneralText.Of(invoiceDto.Notes)
-               .Match<Either<Error, InvoiceHeaderDto>>(
-                   Left: err => Error.New(err.Message),
-                   Right: c => invoiceDto);
+               .Match<Either<Error, InvoiceHeaderDto>>(Fail: err => Error.New(err.Message),
+                   Succ: c => invoiceDto);
 
         Either<Error, InvoiceHeaderDto> ValidateInvoiceDetail(InvoiceHeaderDto invoiceDto)
             => invoiceDto.InvoiceDetails.Count > 0

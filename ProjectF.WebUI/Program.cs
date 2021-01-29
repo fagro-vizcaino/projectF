@@ -58,7 +58,8 @@ namespace ProjectF.WebUI
             builder.Services.AddScoped<IBaseDataService<Bank>, BankDataService>();
             builder.Services.AddScoped<IBaseDataService<BankAccountType>, BankAccountTypeDataService>();
             builder.Services.AddScoped<IBaseDataService<PaymentMethod>, PaymentMethodDataService>();
-
+            builder.Services.AddScoped<IBaseDataService<Country>, CountryDataService>();
+            
 
             builder.Services.AddScoped<IBaseDataService<Client>, ClientDataService>();
             builder.Services.AddScoped<IBaseDataService<Supplier>, SupplierDataService>();

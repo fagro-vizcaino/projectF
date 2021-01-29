@@ -10,8 +10,12 @@ namespace ProjectF.Data.EfConfiguration
     {
         public void Configure(EntityTypeBuilder<GoodsType> builder)
         {
-            builder.ToTable("GoodsType").HasKey(c => c.Id);
-            builder.Property(c => c.Id).HasColumnName("GoodsTypeId");
+            builder.ToTable("GoodsType").HasKey(c => c.Id)
+                .IsClustered();
+
+            builder.Property(c => c.Id)
+                .HasColumnName("GoodsTypeId")
+                .ValueGeneratedOnAdd();
 
 
             builder.Property(c => c.Description)
@@ -26,24 +30,19 @@ namespace ProjectF.Data.EfConfiguration
                 .IsRequired();
         }
 
-        public static List<GoodsType> InitialGoodsTypeData()
+        public static IEnumerable<GoodsType> InitialGoodsTypeData()
         {
-            var goodsTypes = new List<GoodsType>
-            {
-               new(0, "1","Gastos de personal", EntityStatus.Active)
-               , new(0, "2","Gastos por trabajos, Suministros y servicios", EntityStatus.Active)
-               , new(0, "3","Arrendamiento", EntityStatus.Active)
-               , new(0, "4","Gastos de activo fijo", EntityStatus.Active)
-               , new(0, "5","Gastos de representación", EntityStatus.Active)
-               , new(0, "6","Otras deduciones", EntityStatus.Active)
-               , new(0, "7","Gastos Financieros", EntityStatus.Active)
-               , new(0, "8","Gastos Extraordinarios", EntityStatus.Active)
-               , new(0, "9","Compras y gastos que formaran parde del costo de venta", EntityStatus.Active)
-               , new(0, "10","Adquisiciones de activos", EntityStatus.Active)
-               , new(0, "11","Gastos de seguros", EntityStatus.Active)
-            };
-
-            return goodsTypes;
+              yield return new(1, "1","Gastos de personal", EntityStatus.Active);
+              yield return new(2, "2","Gastos por trabajos, Suministros y servicios", EntityStatus.Active);
+              yield return new(3, "3","Arrendamiento", EntityStatus.Active);
+              yield return new(4, "4","Gastos de activo fijo", EntityStatus.Active);
+              yield return new(5, "5","Gastos de representación", EntityStatus.Active);
+              yield return new(6, "6","Otras deduciones", EntityStatus.Active);
+              yield return new(7, "7","Gastos Financieros", EntityStatus.Active);
+              yield return new(8, "8","Gastos Extraordinarios", EntityStatus.Active);
+              yield return new(9, "9","Compras y gastos que formaran parde del costo de venta", EntityStatus.Active);
+              yield return new(10, "10","Adquisiciones de activos", EntityStatus.Active);
+              yield return new(11, "11","Gastos de seguros", EntityStatus.Active);
         }
     }
 }

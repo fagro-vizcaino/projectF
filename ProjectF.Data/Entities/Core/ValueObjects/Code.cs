@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using LanguageExt;
 using LanguageExt.Common;
+using ProjectF.Data.Entities.Core;
 using static LanguageExt.Prelude;
 
 namespace ProjectF.Data.Entities.Common.ValueObjects
 {
-  public class Code
+  public class Code : ValueObject
   {
     public string Value { get; }
 
@@ -22,6 +24,11 @@ namespace ProjectF.Data.Entities.Common.ValueObjects
         ? Right<Error, Code>(new Code(code))
         : Left<Error, Code>(Error.New("Code length is invalid, shouldn't be greater than 20"));
 
-    public static string CodeLengthError => "Code length is invalid, shouldn't be greater than 20";
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
+
+        public static string CodeLengthError => "Code length is invalid, shouldn't be greater than 20";
   }
 }

@@ -31,7 +31,7 @@ namespace ProjectF.Data.EfConfiguration
             builder.Property(c => c.SupplierId)
                 .IsRequired();
             
-            builder.Property(c => c.Rnc);
+            builder.Property(c => c.Rnc).HasMaxLength(18);
 
             builder.Property(q => q.Address)
                 .HasMaxLength(220)

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProjectF.Data.Migrations
 {
-    public partial class initialUpdated : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,10 +11,10 @@ namespace ProjectF.Data.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,10 +25,10 @@ namespace ProjectF.Data.Migrations
                 name: "Country",
                 columns: table => new
                 {
-                    CountryId = table.Column<int>(nullable: false)
+                    CountryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 120, nullable: false),
-                    IconImage = table.Column<string>(maxLength: 800, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    IconImage = table.Column<string>(type: "nvarchar(800)", maxLength: 800, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,9 +39,9 @@ namespace ProjectF.Data.Migrations
                 name: "Currency",
                 columns: table => new
                 {
-                    CurrencyId = table.Column<int>(nullable: false)
+                    CurrencyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 120, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,14 +49,30 @@ namespace ProjectF.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GoodsType",
+                columns: table => new
+                {
+                    GoodsTypeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GoodsType", x => x.GoodsTypeId)
+                        .Annotation("SqlServer:Clustered", true);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,20 +89,20 @@ namespace ProjectF.Data.Migrations
                 name: "Company",
                 columns: table => new
                 {
-                    CompanyId = table.Column<long>(nullable: false)
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Id = table.Column<long>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Rnc = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
+                    HomeOrApartment = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Rnc = table.Column<string>(maxLength: 18, nullable: false),
-                    HomeOrApartment = table.Column<string>(maxLength: 50, nullable: false),
-                    City = table.Column<string>(maxLength: 30, nullable: false),
-                    Street = table.Column<string>(maxLength: 220, nullable: false),
-                    CountryId = table.Column<int>(nullable: false),
-                    Phone = table.Column<string>(maxLength: 11, nullable: false),
-                    Website = table.Column<string>(nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,25 +119,25 @@ namespace ProjectF.Data.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    Firstname = table.Column<string>(maxLength: 65, nullable: false),
-                    Lastname = table.Column<string>(maxLength: 220, nullable: false),
-                    CountryId = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Firstname = table.Column<string>(type: "nvarchar(65)", maxLength: 65, nullable: false),
+                    Lastname = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,14 +159,14 @@ namespace ProjectF.Data.Migrations
                 name: "BankAccountType",
                 columns: table => new
                 {
-                    BankAccountTypeId = table.Column<long>(nullable: false)
+                    BankAccountTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(119)", maxLength: 119, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Description = table.Column<string>(maxLength: 119, nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -166,15 +182,15 @@ namespace ProjectF.Data.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column<long>(nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    ShowOn = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    ShowOn = table.Column<bool>(type: "bit", nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -190,23 +206,23 @@ namespace ProjectF.Data.Migrations
                 name: "Client",
                 columns: table => new
                 {
-                    ClientId = table.Column<long>(nullable: false)
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Modified = table.Column<DateTime>(nullable: true),
-                    Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Firstname = table.Column<string>(maxLength: 60, nullable: false),
-                    Lastname = table.Column<string>(maxLength: 120, nullable: false),
-                    Email = table.Column<string>(maxLength: 60, nullable: false),
-                    Phone = table.Column<string>(maxLength: 11, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Firstname = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Lastname = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Birthday = table.Column<DateTime>(type: "Date", nullable: true),
-                    Rnc = table.Column<string>(maxLength: 15, nullable: false),
-                    HomeOrApartment = table.Column<string>(maxLength: 200, nullable: false),
-                    City = table.Column<string>(maxLength: 60, nullable: false),
-                    Street = table.Column<string>(maxLength: 60, nullable: false),
-                    CountryId = table.Column<int>(nullable: true)
+                    Rnc = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    HomeOrApartment = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -228,18 +244,18 @@ namespace ProjectF.Data.Migrations
                 name: "DocumentNumberSequence",
                 columns: table => new
                 {
-                    DocumentNumberSequenceId = table.Column<long>(nullable: false)
+                    DocumentNumberSequenceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Prefix = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    InitialSequence = table.Column<int>(type: "int", nullable: false),
+                    NextSequence = table.Column<int>(type: "int", nullable: false),
+                    FinalSequence = table.Column<int>(type: "int", nullable: false),
+                    ValidUntil = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Prefix = table.Column<string>(maxLength: 20, nullable: false),
-                    InitialSequence = table.Column<int>(nullable: false),
-                    NextSequence = table.Column<int>(nullable: false),
-                    FinalSequence = table.Column<int>(nullable: false),
-                    ValidUntil = table.Column<DateTime>(nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -255,14 +271,14 @@ namespace ProjectF.Data.Migrations
                 name: "PaymentMethod",
                 columns: table => new
                 {
-                    PaymentMethodId = table.Column<long>(nullable: false)
+                    PaymentMethodId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Description = table.Column<string>(maxLength: 60, nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -278,14 +294,14 @@ namespace ProjectF.Data.Migrations
                 name: "PaymentTerm",
                 columns: table => new
                 {
-                    PaymentTermId = table.Column<long>(nullable: false)
+                    PaymentTermId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                    DayValue = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Description = table.Column<string>(maxLength: 120, nullable: false),
-                    DayValue = table.Column<int>(nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -298,53 +314,53 @@ namespace ProjectF.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Supplier",
+                name: "PurchaseOrderHeader",
                 columns: table => new
                 {
-                    SupplierId = table.Column<long>(nullable: false)
+                    PurchaseOrderHeaderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    SupplierName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    SupplierId = table.Column<int>(type: "int", nullable: false),
+                    Rnc = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    DeliverDate = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    PaymentTermName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    PaymentTermId = table.Column<int>(type: "int", nullable: false),
+                    WarehouseName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    Subtotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    TaxTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    DiscountTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Email = table.Column<string>(maxLength: 60, nullable: false),
-                    Phone = table.Column<string>(maxLength: 11, nullable: false),
-                    Rnc = table.Column<string>(maxLength: 15, nullable: false),
-                    HomeOrApartment = table.Column<string>(maxLength: 200, nullable: false),
-                    City = table.Column<string>(maxLength: 60, nullable: false),
-                    Street = table.Column<string>(maxLength: 60, nullable: false),
-                    CountryId = table.Column<int>(nullable: false),
-                    IsIndependent = table.Column<bool>(nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Supplier", x => x.SupplierId);
+                    table.PrimaryKey("PK_PurchaseOrderHeader", x => x.PurchaseOrderHeaderId);
                     table.ForeignKey(
-                        name: "FK_Supplier_Company_CompanyId",
+                        name: "FK_PurchaseOrderHeader_Company_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Company",
                         principalColumn: "CompanyId");
-                    table.ForeignKey(
-                        name: "FK_Supplier_Country_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Country",
-                        principalColumn: "CountryId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Tax",
                 columns: table => new
                 {
-                    TaxId = table.Column<long>(nullable: false)
+                    TaxId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    PercentValue = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    PercentValue = table.Column<decimal>(type: "decimal(12,2)", nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -360,14 +376,14 @@ namespace ProjectF.Data.Migrations
                 name: "TaxRegimeType",
                 columns: table => new
                 {
-                    TaxRegimeTypeId = table.Column<long>(nullable: false)
+                    TaxRegimeTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Description = table.Column<string>(maxLength: 60, nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -383,14 +399,14 @@ namespace ProjectF.Data.Migrations
                 name: "UnitOfMeasure",
                 columns: table => new
                 {
-                    UnitOfMeasureId = table.Column<long>(nullable: false)
+                    UnitOfMeasureId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Value = table.Column<decimal>(nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -406,15 +422,15 @@ namespace ProjectF.Data.Migrations
                 name: "Warehouse",
                 columns: table => new
                 {
-                    WarehouseId = table.Column<long>(nullable: false)
+                    WarehouseId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Location = table.Column<string>(maxLength: 60, nullable: false)
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -430,11 +446,11 @@ namespace ProjectF.Data.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -451,10 +467,10 @@ namespace ProjectF.Data.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -471,8 +487,8 @@ namespace ProjectF.Data.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -495,10 +511,10 @@ namespace ProjectF.Data.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -515,17 +531,17 @@ namespace ProjectF.Data.Migrations
                 name: "BankAccount",
                 columns: table => new
                 {
-                    BankAccountId = table.Column<long>(nullable: false)
+                    BankAccountId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
-                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    AccountName = table.Column<string>(maxLength: 60, nullable: false),
-                    AccountNumber = table.Column<string>(maxLength: 18, nullable: false),
-                    Description = table.Column<string>(maxLength: 220, nullable: false),
+                    AccountName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    AccountNumber = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
                     InitialBalance = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
-                    BankAccountTypeId = table.Column<long>(nullable: false)
+                    BankAccountTypeId = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -535,7 +551,7 @@ namespace ProjectF.Data.Migrations
                         column: x => x.BankAccountTypeId,
                         principalTable: "BankAccountType",
                         principalColumn: "BankAccountTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BankAccount_Company_CompanyId",
                         column: x => x.CompanyId,
@@ -547,27 +563,27 @@ namespace ProjectF.Data.Migrations
                 name: "InvoiceHeader",
                 columns: table => new
                 {
-                    InvoiceHeaderId = table.Column<long>(nullable: false)
+                    InvoiceHeaderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
-                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Ncf = table.Column<string>(maxLength: 20, nullable: false),
-                    NumberSequenceId = table.Column<int>(nullable: false),
-                    Rnc = table.Column<string>(maxLength: 15, nullable: false),
-                    ClientId = table.Column<long>(nullable: false),
-                    InvoiceDate = table.Column<DateTime>(nullable: false),
-                    DueDate = table.Column<DateTime>(nullable: false),
-                    PaymentTermId = table.Column<long>(nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Ncf = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    NumberSequenceId = table.Column<int>(type: "int", nullable: false),
+                    Rnc = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: true),
+                    InvoiceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentTermId = table.Column<int>(type: "int", nullable: true),
                     Discount = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     SubTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     TaxTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
-                    Notes = table.Column<string>(maxLength: 220, nullable: false),
-                    TermAndConditions = table.Column<string>(maxLength: 220, nullable: false),
-                    Footer = table.Column<string>(maxLength: 220, nullable: false)
+                    Notes = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    TermAndConditions = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    Footer = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -577,7 +593,7 @@ namespace ProjectF.Data.Migrations
                         column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_InvoiceHeader_Company_CompanyId",
                         column: x => x.CompanyId,
@@ -588,6 +604,81 @@ namespace ProjectF.Data.Migrations
                         column: x => x.PaymentTermId,
                         principalTable: "PaymentTerm",
                         principalColumn: "PaymentTermId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Supplier",
+                columns: table => new
+                {
+                    SupplierId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Rnc = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    HomeOrApartment = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    IsInformalSupplier = table.Column<bool>(type: "bit", nullable: false),
+                    SupplierGroup = table.Column<int>(type: "int", nullable: false),
+                    PaymentTermId = table.Column<int>(type: "int", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(220)", maxLength: 220, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Supplier", x => x.SupplierId)
+                        .Annotation("SqlServer:Clustered", true);
+                    table.ForeignKey(
+                        name: "FK_Supplier_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
+                        principalColumn: "CompanyId");
+                    table.ForeignKey(
+                        name: "FK_Supplier_Country_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Country",
+                        principalColumn: "CountryId");
+                    table.ForeignKey(
+                        name: "FK_Supplier_PaymentTerm_PaymentTermId",
+                        column: x => x.PaymentTermId,
+                        principalTable: "PaymentTerm",
+                        principalColumn: "PaymentTermId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PurchaseOrderDetail",
+                columns: table => new
+                {
+                    PurchaseOrderDetailId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    Qty = table.Column<int>(type: "int", nullable: false),
+                    DiscountValue = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    TaxPercent = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    PurchaseOrderHeaderId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseOrderDetail", x => x.PurchaseOrderDetailId);
+                    table.ForeignKey(
+                        name: "FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderHeaderId",
+                        column: x => x.PurchaseOrderHeaderId,
+                        principalTable: "PurchaseOrderHeader",
+                        principalColumn: "PurchaseOrderHeaderId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -595,25 +686,25 @@ namespace ProjectF.Data.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    ProductId = table.Column<long>(nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
-                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
-                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true),
-                    Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Description = table.Column<string>(maxLength: 60, nullable: false),
-                    Reference = table.Column<string>(maxLength: 60, nullable: false),
-                    CategoryId = table.Column<long>(nullable: false),
-                    WarehouseId = table.Column<long>(nullable: false),
-                    TaxId = table.Column<long>(nullable: false),
-                    IsService = table.Column<bool>(nullable: false, defaultValue: false),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Reference = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false),
+                    TaxId = table.Column<int>(type: "int", nullable: true),
+                    IsService = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     Cost = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
                     Price2 = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
                     Price3 = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
-                    Price4 = table.Column<decimal>(type: "decimal(16,2)", nullable: false)
+                    Price4 = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    Modified = table.Column<DateTime>(type: "Datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -634,7 +725,7 @@ namespace ProjectF.Data.Migrations
                         column: x => x.TaxId,
                         principalTable: "Tax",
                         principalColumn: "TaxId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Product_Warehouse_WarehouseId",
                         column: x => x.WarehouseId,
@@ -647,18 +738,18 @@ namespace ProjectF.Data.Migrations
                 name: "InvoiceDetail",
                 columns: table => new
                 {
-                    InvoiceDetailId = table.Column<long>(nullable: false)
+                    InvoiceDetailId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<long>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Modified = table.Column<DateTime>(nullable: true),
-                    ProductCode = table.Column<string>(maxLength: 20, nullable: false),
-                    Description = table.Column<string>(maxLength: 60, nullable: false),
+                    ProductCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     Qty = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
                     TaxPercent = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
-                    InvoiceHeaderId = table.Column<long>(nullable: false)
+                    InvoiceHeaderId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -676,9 +767,9 @@ namespace ProjectF.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "70b45f31-a9cd-4fed-8869-9f8d731bc962", "62408bac-d911-4c8a-b1e2-7fbe9d894f50", "Manager", "MANAGER" },
-                    { "e2156610-60e1-476d-a8c3-25de6d3a3da3", "5b316ea9-5d3e-40e4-abb9-46256a1ed653", "Admin", "Admin" },
-                    { "0c336090-6e97-467d-8a52-6306eecb208b", "8fc106b1-ce88-47b8-b4fc-5d3c373d4457", "Visitor", "Visitor" }
+                    { "5f2f6c50-e6e4-4ae4-b570-4f93fc1d1091", "64f0c2b7-4f34-4bfa-ba5f-1dfff9fe733d", "Manager", "MANAGER" },
+                    { "dc09cd09-898f-4111-a6fe-b261513064c3", "dadf32a1-8f5e-4e47-a653-9a336a1a1715", "Admin", "Admin" },
+                    { "ce384bc2-8bb7-4e49-9a5f-4ede9fb3d701", "f781d998-099d-4f91-91d1-7acad0cc7d6b", "Visitor", "Visitor" }
                 });
 
             migrationBuilder.InsertData(
@@ -699,6 +790,24 @@ namespace ProjectF.Data.Migrations
                 {
                     { 1, "DOP Peso Dominicano" },
                     { 2, "US Dolar USA" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "GoodsType",
+                columns: new[] { "GoodsTypeId", "Code", "Description", "Status" },
+                values: new object[,]
+                {
+                    { 9, "9", "Compras y gastos que formaran parde del costo de venta", 1 },
+                    { 8, "8", "Gastos Extraordinarios", 1 },
+                    { 7, "7", "Gastos Financieros", 1 },
+                    { 6, "6", "Otras deduciones", 1 },
+                    { 1, "1", "Gastos de personal", 1 },
+                    { 4, "4", "Gastos de activo fijo", 1 },
+                    { 3, "3", "Arrendamiento", 1 },
+                    { 2, "2", "Gastos por trabajos, Suministros y servicios", 1 },
+                    { 10, "10", "Adquisiciones de activos", 1 },
+                    { 5, "5", "Gastos de representación", 1 },
+                    { 11, "11", "Gastos de seguros", 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -729,6 +838,11 @@ namespace ProjectF.Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CompanyId",
                 table: "AspNetUsers",
                 column: "CompanyId");
@@ -737,11 +851,6 @@ namespace ProjectF.Data.Migrations
                 name: "IX_AspNetUsers_CountryId",
                 table: "AspNetUsers",
                 column: "CountryId");
-
-            migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -841,6 +950,16 @@ namespace ProjectF.Data.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PurchaseOrderDetail_PurchaseOrderHeaderId",
+                table: "PurchaseOrderDetail",
+                column: "PurchaseOrderHeaderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PurchaseOrderHeader_CompanyId",
+                table: "PurchaseOrderHeader",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Supplier_CompanyId",
                 table: "Supplier",
                 column: "CompanyId");
@@ -849,6 +968,11 @@ namespace ProjectF.Data.Migrations
                 name: "IX_Supplier_CountryId",
                 table: "Supplier",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Supplier_PaymentTermId",
+                table: "Supplier",
+                column: "PaymentTermId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tax_CompanyId",
@@ -898,6 +1022,9 @@ namespace ProjectF.Data.Migrations
                 name: "DocumentNumberSequence");
 
             migrationBuilder.DropTable(
+                name: "GoodsType");
+
+            migrationBuilder.DropTable(
                 name: "InvoiceDetail");
 
             migrationBuilder.DropTable(
@@ -905,6 +1032,9 @@ namespace ProjectF.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "PurchaseOrderDetail");
 
             migrationBuilder.DropTable(
                 name: "Supplier");
@@ -935,6 +1065,9 @@ namespace ProjectF.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Warehouse");
+
+            migrationBuilder.DropTable(
+                name: "PurchaseOrderHeader");
 
             migrationBuilder.DropTable(
                 name: "Client");

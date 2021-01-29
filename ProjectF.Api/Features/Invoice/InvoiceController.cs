@@ -2,7 +2,7 @@
 using ProjectF.Application.Invoice;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Data.Entities.Invoices;
-using static ProjectF.Data.Entities.Invoices.InvoiceHeaderMapper;
+using static ProjectF.Data.Entities.Invoices.InvoiceMapper;
 using System.Text.Json;
 
 namespace ProjectF.Api.Features.Invoice
@@ -31,7 +31,7 @@ namespace ProjectF.Api.Features.Invoice
 
 
         [HttpGet("{id}", Name = "GetInvoiceForEdit")]
-        public async Task<IActionResult> GetInvoice(long id)
+        public async Task<IActionResult> GetInvoice(int id)
             => (await _invoiceOperation.FindAsync(id))
                 .Match<ActionResult>(Left: err => NotFound(err.Message),
                     Right: c => Ok(InvoiceViewModel.FromDtoToView(FromEntity(c))));
@@ -44,7 +44,7 @@ namespace ProjectF.Api.Features.Invoice
                     Right: i => Ok(InvoiceViewModel.FromDtoToView(FromEntity(i))));
         
         [HttpPut("{id}")]
-        public ActionResult UpdateInvoice(long id, InvoiceViewModel viewModel)
+        public ActionResult UpdateInvoice(int id, InvoiceViewModel viewModel)
             => _invoiceOperation
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(Left: err => BadRequest(err.Message),

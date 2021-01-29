@@ -29,6 +29,7 @@ using ProjectF.Data.Entities.GoodsTypes;
 using ProjectF.Data.Entities.Bills;
 using ProjectF.Data.Entities.BillsPayment;
 using ProjectF.Data.Entities.PurchaseOrders;
+using System.Collections.Generic;
 
 namespace ProjectF.Data.Context
 {
@@ -126,7 +127,7 @@ namespace ProjectF.Data.Context
             modelBuilder.ApplyConfiguration(new BankAccountTypeConfiguration());
             modelBuilder.Entity<BankAccountType>()
                 .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
-           
+
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
 
@@ -147,12 +148,12 @@ namespace ProjectF.Data.Context
                 .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
 
             modelBuilder.ApplyConfiguration(new UnitOfMeasureConfiguration());
-                modelBuilder.Entity<UnitOfMeasure>()
-                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
-            
+            modelBuilder.Entity<UnitOfMeasure>()
+            .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+
             modelBuilder.ApplyConfiguration(new TaxRegimeTypeConfiguration());
-                modelBuilder.Entity<TaxRegimeType>()
-                .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
+            modelBuilder.Entity<TaxRegimeType>()
+            .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
 
             modelBuilder.ApplyConfiguration(new DocumentNumberSequenceConfiguration());
             modelBuilder.Entity<DocumentNumberSequence>()
@@ -171,7 +172,7 @@ namespace ProjectF.Data.Context
                 .HasQueryFilter(c => c.CompanyId == _companyId && c.Status == EntityStatus.Active);
 
             modelBuilder.ApplyConfiguration(new PurchaseOrderHeaderConfiguration());
-            modelBuilder.Entity<PurchaseOrderHeader>().HasQueryFilter(c => c.CompanyId == _companyId 
+            modelBuilder.Entity<PurchaseOrderHeader>().HasQueryFilter(c => c.CompanyId == _companyId
             && c.Status == EntityStatus.Active);
 
             modelBuilder.ApplyConfiguration(new PurchaseOrderDetailConfiguration());
@@ -182,7 +183,7 @@ namespace ProjectF.Data.Context
             modelBuilder.Entity<Country>().HasData(CountryConfiguration.InitialCountryData());
 
             modelBuilder.ApplyConfiguration(new GoodsTypeConfiguration());
-            modelBuilder.Entity<Country>().HasData(GoodsTypeConfiguration.InitialGoodsTypeData());
+            modelBuilder.Entity<GoodsType>().HasData(GoodsTypeConfiguration.InitialGoodsTypeData());
 
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
             modelBuilder.Entity<Currency>().HasData(CurrencyConfiguration.InitialCurrencyData());

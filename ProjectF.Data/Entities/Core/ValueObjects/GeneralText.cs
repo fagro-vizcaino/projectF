@@ -1,10 +1,13 @@
-﻿using LanguageExt;
+﻿using System;
+using System.Collections.Generic;
+using LanguageExt;
 using LanguageExt.Common;
+using ProjectF.Data.Entities.Core;
 using static LanguageExt.Prelude;
 
 namespace ProjectF.Data.Entities.Common.ValueObjects
 {
-    public class GeneralText
+    public class GeneralText: ValueObject
     {
         public string Value { get; }
 
@@ -15,14 +18,23 @@ namespace ProjectF.Data.Entities.Common.ValueObjects
             Value = value;
         }
 
-        public static Either<Error, GeneralText> Of(string description) => IsValidGeneralText(description);
+        public static Result<GeneralText> Of(string description) => IsValidGeneralText(description);
 
-        static Either<Error, GeneralText> IsValidGeneralText(string description)
+        static Result<GeneralText> IsValidGeneralText(string description)
             => description.Length >= 120 || string.IsNullOrEmpty(description)
-            ? Left<Error, GeneralText>(Error.New(NameLengthError))
+            ? new Result<GeneralText>(new GeneralText(NameLengthError))
+            : new Result<GeneralText>(new GeneralText(description));
 
-            : Right<Error, GeneralText>(new GeneralText(description));
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
 
         public static string NameLengthError => "Description length is invalid, shouldn't be greater than 220";
+
+        public static implicit operator string(GeneralText text)
+        {
+            return text.Value;
+        }
     }
 }

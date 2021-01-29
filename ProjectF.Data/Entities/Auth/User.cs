@@ -11,7 +11,7 @@ namespace ProjectF.Data.Entities.Auth
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public virtual Country Country { get; set; }
-        public long? CompanyId { get; protected set; }
+        public int? CompanyId { get; protected set; }
         
         protected User() { }
 
@@ -35,7 +35,7 @@ namespace ProjectF.Data.Entities.Auth
 
         public void EditUser(string firstname
           , string lastname
-          , long companyId)
+          , int companyId)
         {
             Firstname = firstname;
             Lastname  = lastname;

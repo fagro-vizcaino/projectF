@@ -23,7 +23,8 @@ namespace ProjectF.Data.EfConfiguration
 
         public void Configure(EntityTypeBuilder<Supplier> builder)
         {
-            builder.ToTable("Supplier").HasKey(s => s.Id);
+            builder.ToTable("Supplier").HasKey(s => s.Id)
+                .IsClustered();
             builder.Property(s => s.Id).HasColumnName("SupplierId");
 
             builder.Property(s => s.Code)
@@ -63,6 +64,10 @@ namespace ProjectF.Data.EfConfiguration
                 .HasMaxLength(60);
 
             builder.Property(s => s.IsInformalSupplier);
+
+            builder.Property(c => c.Notes)
+                .HasMaxLength(220)
+                .HasConversion(c => c.Value, c => new GeneralText(c));
 
             builder.HasOne<Company>()
                 .WithMany()

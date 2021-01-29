@@ -46,6 +46,7 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.HasOne(q => q.PaymentTerm);
 
+            
             builder.Property(q => q.Notes)
                 .HasMaxLength(220)
                 .HasConversion(p => p.Value, p => new GeneralText(p));

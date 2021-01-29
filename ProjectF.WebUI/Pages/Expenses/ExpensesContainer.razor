@@ -1,0 +1,45 @@
+﻿@page "/expenses"
+@inherits ExpensesContainerHandler
+
+<div class="bg-white rounded-md shadow">
+    <nav class="flex flex-col sm:flex-row">
+        <button @onclick="_ => SetTab(ExpenseContainerTabs.Expenses)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(ExpenseContainerTabs.Expenses)">
+            Gastos
+        </button>
+        <button @onclick="_ => SetTab(ExpenseContainerTabs.SupplierInvoices)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(ExpenseContainerTabs.SupplierInvoices)">
+            Facturas a Proveedores
+        </button>
+        <button @onclick="_ => SetTab(ExpenseContainerTabs.PurchaseOrders)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(ExpenseContainerTabs.PurchaseOrders)">
+            Ordenes de compra
+        </button>
+        <button @onclick="_ => SetTab(ExpenseContainerTabs.ProductsAndServices)"
+                class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none @ActiveTab(ExpenseContainerTabs.ProductsAndServices)">
+            Pago a proveedor
+        </button>
+    </nav>
+</div>
+
+@switch (TabSelected)
+{
+    case ExpenseContainerTabs.Expenses:
+        <span>Hello Sales</span>
+        break;
+    case ExpenseContainerTabs.SupplierInvoices:
+        <ProjectF.WebUI.Pages.Invoices.List.InvoiceList />
+        break;
+    case ExpenseContainerTabs.PurchaseOrders:
+        @*<ProjectF.WebUI.Pages.Clients.ClientList />*@
+        <span>hello clientes</span>
+        break;
+    case ExpenseContainerTabs.ProductsAndServices:
+        @*<ProjectF.WebUI.Pages.Products.ProductsList />*@
+        <span>hello productos y servicios</span>
+        break;
+    default:
+        <span>hello sales</span>
+        break;
+
+}

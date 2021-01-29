@@ -1,0 +1,130 @@
+﻿@page "/purchaseorder"
+@inherits PurchaseOrderContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Orden de compra"
+              Subtitle="Define tus ordenes de compra."
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<PurchaseOrderList Elements="Elements"
+               OnClickDrawerEdit="OpenDrawerForEdit"
+               OnClickDelete="Delete" />
+<div>
+    <Drawer Closable="true" Width="600" Visible="IsDrawerVisible"
+            Title='($"{(IsEditing ? "Editar Suplidor" : "Crear Suplidor")}")'
+            OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+                <FluentValidator></FluentValidator>
+                @*<div class="mb-2">
+                    <FLabel Value="Nombre" LabelFor="Name" />
+                    <FInputText @bind-Value="_model.Name" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="flex space-x-1">
+                    <div class="w-1/2">
+                        <FLabel Value="Rnc" LabelFor="Rnc" />
+                        <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold tWext-red-600" />
+                    </div>
+                    <div class="w-1/2">
+                        <FLabel Value="Télefono" LabelFor="Phone" />
+                        <FInputText @bind-Value="_model.Phone" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Phone)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <FLabel Value="Email" LabelFor="Email" />
+                    <FInputText @bind-Value="_model.Email" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Email)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="flex space-x-1">
+                    <div class="w-1/2">
+                        <FLabel Value="Es independiente?" LabelFor="ShowOn" />
+                        <Switch @bind-Value="_model.IsIndependent" />
+                    </div>
+                    <div class="w-1/2">
+                        <FLabel Value="Termino de pago" LabelFor="País" />
+                        <div class="inline-block relative w-full">
+                            <FInputSelect @bind-Value="_model.SelectedCountry">
+                                <option value="0">Seleccione el país</option>
+                                @foreach (var type in PaymentTerms)
+                                {
+                                    <option value="@type.Id">@type.Description</option>
+                                }
+                            </FInputSelect>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                            </div>
+                            <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex space-x-1">
+                    <div class="w-1/2">
+                        <FLabel Value="Local/Casa/Apartamento" LabelFor="HomeOrApartment" />
+                        <FInputText @bind-Value="_model.HomeOrApartment" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                    <div class="w-1/2">
+                        <FLabel Value="Ciudad" LabelFor="City" />
+                        <FInputText @bind-Value="_model.City" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.City)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <FLabel Value="Calle" LabelFor="Street" />
+                    <FTextArea @bind-Value="_model.Street" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.HomeOrApartment)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-2">
+                    <FLabel Value="Cuenta de gastos predeterminada" LabelFor="Street" />
+                    <div class="inline-block relative w-full">
+                        <FInputSelect @bind-Value="_model.SelectedCountry">
+                            <option value="0">Seleccione el país</option>
+                            @foreach (var type in Countries)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </FInputSelect>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                        <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="País" LabelFor="País" />
+                    <div class="inline-block relative w-full">
+                        <FInputSelect @bind-Value="_model.SelectedCountry">
+                            <option value="0">Seleccione el país</option>
+                            @foreach (var type in Countries)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </FInputSelect>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                        <FCustomValidationMessage For="@(() => _model.SelectedCountry)" Class="mt-2 font-semibold text-red-600" />
+                    </div>
+                </div>*@
+                <FDivider />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    @($"{(IsEditing ? "Editar" : "Guardar")}")
+                </button>
+            </EditForm>
+        </Template>
+
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+}

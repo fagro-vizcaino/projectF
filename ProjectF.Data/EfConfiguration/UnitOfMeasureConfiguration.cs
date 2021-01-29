@@ -32,6 +32,9 @@ namespace ProjectF.Data.EfConfiguration
             builder.Property(c => c.Status)
                .IsRequired();
 
+            builder.Property(c => c.Value)
+                .HasColumnType("decimal(6,2");
+
             builder.Property(q => q.Created)
                 .HasColumnType("Datetime")
                 .ValueGeneratedOnAdd()

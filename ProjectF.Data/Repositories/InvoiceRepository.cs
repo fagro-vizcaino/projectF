@@ -7,9 +7,7 @@ using ProjectF.Data.Entities.Invoices;
 using ProjectF.Data.Entities.RequestFeatures;
 using System.Linq;
 using System.Threading.Tasks;
-using LanguageExt.SomeHelp;
 using Microsoft.EntityFrameworkCore.Storage;
-using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Repositories
 {

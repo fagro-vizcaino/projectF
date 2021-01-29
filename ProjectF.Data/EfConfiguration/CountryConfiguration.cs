@@ -21,17 +21,12 @@ namespace ProjectF.Data.EfConfiguration
               .HasMaxLength(800);
         }
 
-        public static List<Country> InitialCountryData()
+        public static IEnumerable<Country> InitialCountryData()
         {
-            var countries = new List<Country>
-      {
-        new Country(1,"Dominican Republic", string.Empty)
-        , new Country(2, "Puerto Rico", string.Empty )
-        , new Country(3,"Panama", string.Empty)
-        , new Country(4,"Colombia", string.Empty )
-      };
-
-            return countries;
+            yield return new Country(1, "Dominican Republic", string.Empty);
+            yield return new Country(2, "Puerto Rico", string.Empty);
+            yield return new Country(3, "Panama", string.Empty);
+            yield return new Country(4, "Colombia", string.Empty);
         }
     }
 }

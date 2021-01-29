@@ -230,6 +230,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             await jSRuntime.InvokeVoidAsync("open", $"http://localhost:5000/InvoicePrint/PrintInvoice", "_blank", 
                 "toolbar=no,top=800,left=300,width=1024,height=800");
         }
+
         public void GoToDashboard()
         {
             NavigationManager.NavigateTo("/");
