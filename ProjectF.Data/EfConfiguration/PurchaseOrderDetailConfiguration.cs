@@ -12,7 +12,6 @@ namespace ProjectF.Data.EfConfiguration
             builder.ToTable("PurchaseOrderDetail").HasKey(c => c.Id);
             builder.Property(c => c.Id).HasColumnName("PurchaseOrderDetailId");
 
-
             builder.Property(c => c.ProductCode)
            .HasMaxLength(20)
            .HasConversion(c => c.Value, c => new Code(c))
@@ -23,7 +22,6 @@ namespace ProjectF.Data.EfConfiguration
            .HasConversion(c => c.Value, c => new Name(c))
            .IsRequired();
 
-
             builder.Property(q => q.Qty)
              .HasColumnType("int");
 
@@ -31,13 +29,12 @@ namespace ProjectF.Data.EfConfiguration
                 .HasColumnType("decimal(6,2)");
 
             builder.Property(q => q.Cost)
-              .HasColumnType("decimal(16,2)");
+              .HasColumnType("decimal(12,2)");
 
             builder.Property(q => q.DiscountValue)
                 .HasColumnType("decimal(12,2)");
 
             builder.HasOne(c => c.PurchaseOrderHeader);
-
         }
     }
 }

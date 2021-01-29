@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
@@ -40,12 +41,12 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             , int paymentTermId
             , Name warehouseName
             , int warehouseId
-            , GeneralText note
+            , GeneralText notes
             , decimal subtotal
             , decimal taxTotal
             , decimal discountTotal
             , decimal total
-            , List<PurchaseOrderDetail> purchaseOrderDetails
+            , ImmutableList<PurchaseOrderDetail> purchaseOrderDetails
             , DateTime created
             , EntityStatus status = EntityStatus.Active)
         {
@@ -59,7 +60,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             PaymentTermId   = paymentTermId;
             WarehouseName   = warehouseName;
             WarehouseId     = warehouseId;
-            Notes           = note;
+            Notes           = notes;
             Subtotal        = subtotal;
             TaxTotal        = taxTotal;
             DiscountTotal   = discountTotal;
@@ -91,7 +92,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             , int paymentTermId
             , Name warehouseName
             , int warehouseId
-            , GeneralText note
+            , GeneralText notes
             , decimal subtotal
             , decimal taxTotal
             , decimal discountTotal
@@ -118,7 +119,7 @@ namespace ProjectF.Data.Entities.PurchaseOrders
             PaymentTermId   = paymentTermId;
             WarehouseName   = warehouseName;
             WarehouseId     = warehouseId;
-            Notes           = note;
+            Notes           = notes;
             Subtotal        = subtotal;
             TaxTotal        = taxTotal;
             DiscountTotal   = discountTotal;
