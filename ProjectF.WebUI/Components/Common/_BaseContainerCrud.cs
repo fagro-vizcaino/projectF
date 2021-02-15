@@ -67,11 +67,10 @@ namespace ProjectF.WebUI.Components.Common
             if (id > 0)
             {
                 await Edit(id, (T)editContext.Model);
+                return;
             }
-            else
-            {
-                await Add((T)editContext.Model);
-            }
+            await Add((T)editContext.Model);
+            
         }
 
         public virtual void OnFinishFailed(EditContext editContext)

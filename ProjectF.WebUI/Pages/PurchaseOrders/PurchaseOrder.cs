@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using ProjectF.WebUI.Models;
 
@@ -11,6 +12,7 @@ namespace ProjectF.WebUI.Pages.PurchaseOrders
         public int SupplierId { get; set; }
         public string Rnc { get; set; }
         public string Address { get; set; }
+        public DateTime Created { get; set; }
         public DateTime DeliverDate { get; set; }
         public string PaymentTermName { get; set; }
         public int PaymentTermId { get; set; }
@@ -21,10 +23,10 @@ namespace ProjectF.WebUI.Pages.PurchaseOrders
         public decimal TaxTotal { get; set; }
         public decimal DiscountTotal { get; set; }
         public decimal Total { get; set; }
-        public ImmutableList<PurchaseOrderDetail> PurcharseOrderDetails { get; set; }
+        public List<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
     }
 
-    public class PurchaseOrderDetail
+    public class PurchaseOrderDetail : FEntity
     {
         public string ProductCode { get; set; }
         public string Description { get; set; }

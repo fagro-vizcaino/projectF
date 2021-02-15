@@ -95,7 +95,7 @@ namespace ProjectF.Data.Entities.Suppliers
 
     public enum SupplierGroup
     {
-        National,
+        National = 1,
         International
     }
 }

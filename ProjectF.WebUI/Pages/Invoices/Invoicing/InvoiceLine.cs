@@ -13,7 +13,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public long Index { get; set; }
         public long Id { get; set; }
         public Product Product { get; set; }
-        public Select CurrentSelect { get; set; }
+        //public Select CurrentSelect { get; set; }
         public int Qty { get; set; }
         public bool IsEmpty { get; set; } = true;
         public bool IsDelete { get; set; } = false;

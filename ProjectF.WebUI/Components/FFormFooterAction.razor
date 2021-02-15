@@ -1,0 +1,26 @@
+﻿<div class="flex justify-between px-@PaddingX.ToString() py-@PaddinY bg-gray-50 mt-@MaringTop.ToString() sm:px-6">
+    <div class="flex">
+        <FCancelButton OnClickButton="OnClickCancelBtn" 
+                       ButtonType="@CancelBtnType" 
+                       ButtonName="@CancelBtnName" />
+    </div>
+    <div class="flex">
+        <FPrimaryButton ButtonName="@ActionBtnName" 
+                        OnClickPrimary="OnClickPrimaryBtn" 
+                        ButtonType="@ActionBtnType" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public short PaddingX { get; set; } = 4;
+    [Parameter] public short PaddinY { get; set; } = 3;
+    [Parameter] public int MaringTop { get; set; } = 2;
+    [Parameter] public EventCallback OnClickCancelBtn { get; set; }
+
+    [Parameter] public string CancelBtnType { get; set; }
+    [Parameter] public string CancelBtnName { get; set; }
+
+    [Parameter] public string ActionBtnType { get; set; }
+    [Parameter] public string ActionBtnName { get; set; }
+    [Parameter] public EventCallback OnClickPrimaryBtn { get; set; }
+}

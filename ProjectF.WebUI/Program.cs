@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using ProjectF.WebUI.Pages.Company;
 using ProjectF.WebUI.Pages.UnitOfMeasures;
 using ProjectF.WebUI.Pages.PaymentMethods;
+using ProjectF.WebUI.Pages.PurchaseOrders;
 
 namespace ProjectF.WebUI
 {
@@ -59,7 +60,10 @@ namespace ProjectF.WebUI
             builder.Services.AddScoped<IBaseDataService<BankAccountType>, BankAccountTypeDataService>();
             builder.Services.AddScoped<IBaseDataService<PaymentMethod>, PaymentMethodDataService>();
             builder.Services.AddScoped<IBaseDataService<Country>, CountryDataService>();
-            
+
+            //expenses
+            builder.Services.AddScoped<IBaseDataService<PurchaseOrder>, PurchaseOrderDataService>();
+
 
             builder.Services.AddScoped<IBaseDataService<Client>, ClientDataService>();
             builder.Services.AddScoped<IBaseDataService<Supplier>, SupplierDataService>();
@@ -82,7 +86,10 @@ namespace ProjectF.WebUI
             builder.Services.AddTransient<IValidator<BankAccountType>, BankAccountTypeValidator>();
             builder.Services.AddTransient<IValidator<Client>, ClientValidator>();
             builder.Services.AddTransient<IValidator<Company>, CompanyValidator>();
-            
+
+
+            builder.Services.AddTransient<IValidator<PurchaseOrder>, PurchaseOrderValidator>();
+
             builder.Services.AddTransient<IValidator<UnitOfMeasure>, UnitOfMeasureValidator>();
             builder.Services.AddTransient<IValidator<Supplier>, SupplierValidator>();
             builder.Services.AddTransient<IValidator<Product>, ProductValidator>();

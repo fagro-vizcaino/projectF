@@ -2,7 +2,7 @@
 
 <div class="flex mb-2 py-2 bg-white shadow-xs rounded antialiased">
     <div class="w-full px-5">
-        <table class="w-full" id>
+        <table class="w-full" >
             <thead>
                 <tr class="text-gray-600">
                     <th class="px-4 py-2 w-1/3">Producto/Item</th>
@@ -18,7 +18,7 @@
                 {
                     <tr class="hover:bg-gray-100" id="@item.Index">
                         <td class="border px-4 py-2">
-                            <Select OptionLabelProp="label"
+                            @*<Select OptionLabelProp="label"
                                     Style="width: 100%"
                                     DefaultValue=@(item.OptionValue)
                                     @ref="item.CurrentSelect"
@@ -48,7 +48,7 @@
                                         </div>
                                     </SelectOption>
                                 }
-                            </Select>
+                            </Select>*@
                         </td>
                         <td class="border px-4 py-2">
                             <FInputText @bind-Value="item.Product.Description" />

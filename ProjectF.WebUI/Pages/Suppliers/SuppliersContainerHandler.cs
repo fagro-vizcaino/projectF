@@ -14,14 +14,23 @@ namespace ProjectF.WebUI.Pages.Suppliers
         {
             var emtpyModel = new Supplier
             {
-                Id = 0,
-                Code = string.Empty,
-                Name =string.Empty,
+                 Id                 = 0
+                , Code              = GenerateCode
+                , City              = string.Empty
+                , Email             = string.Empty
+                , Rnc               = string.Empty
+                , Phone             = string.Empty
+                , Street            = string.Empty
+                , Notes             = string.Empty
+                , HomeOrApartment   = string.Empty
+                , Name              = string.Empty
+                , Created           = DateTime.UtcNow
             };
             InitModel(emtpyModel);
             NewOrEditOperation = GetNewModelOrEdit;
-            
         }
+
+        public int EmptyDefaultCostAccount { get; set; }
 
         [Inject]
         public IBaseDataService<Country> CountryDataService { get; set; }
@@ -50,11 +59,28 @@ namespace ProjectF.WebUI.Pages.Suppliers
                 Email           = supplier.Email,
                 Country         = supplier.Country,
                 IsIndependent   = supplier.IsIndependent,
+                PaymentTermId   = supplier.PaymentTermId,
+                PaymentTerm     = supplier.PaymentTerm,
                 Rnc             = supplier.Rnc,
                 HomeOrApartment = supplier.HomeOrApartment,
                 Phone           = supplier.Phone,
-                Street          = supplier.Street
+                Street          = supplier.Street,
+                Created         = supplier.Created,
+                Modified        = supplier.Modified
             }
-            : new Supplier { Id = 0, Name = null, Code = GenerateCode};
+            : new Supplier 
+            {    
+                 Id               = 0
+                , Name            = null
+                , Code            = GenerateCode
+                , Email           = string.Empty
+                , Rnc             = string.Empty
+                , Notes           = string.Empty
+                , Phone           = string.Empty
+                , Street          = string.Empty
+                , City            = string.Empty
+                , HomeOrApartment = string.Empty
+                , Created         = DateTime.UtcNow
+             };
     }
 }

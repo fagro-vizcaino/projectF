@@ -1,4 +1,5 @@
 ﻿using ProjectF.Data.Entities.Common.ValueObjects;
+using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Entities.Suppliers
 {
@@ -15,7 +16,7 @@ namespace ProjectF.Data.Entities.Suppliers
                 , dto.Street
                 , dto.Country
                 , dto.SupplierGroup
-                , dto.PaymentTerm
+                , PaymentTermMapper.FromDto(dto.PaymentTerm)
                 , new GeneralText(dto.Notes)
                 , dto.IsIndependent
                 , dto.Created
@@ -36,9 +37,8 @@ namespace ProjectF.Data.Entities.Suppliers
                 , entity.IsInformalSupplier
                 , entity.SupplierGroup
                 , entity.PaymentTerm?.Id ?? 0
-                , entity.PaymentTerm
-                , entity.Notes.Value
-                , entity.Created
-                , entity.Modified)) with { Id = entity.Id, Status = entity.Status };
+                , PaymentTermMapper.FromEntity(entity.PaymentTerm)
+                , entity.Notes.Value)) 
+            with { Id = entity.Id, Status = entity.Status, Created = entity.Created, Modified = entity.Modified};
     }
 }

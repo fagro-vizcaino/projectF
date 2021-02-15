@@ -11,10 +11,12 @@ namespace ProjectF.Data.Entities.PaymentList
                 , dto.Status);
 
         public static PaymentTermDto FromEntity(PaymentTerm entity)
-            => (new PaymentTermDto(entity.Description.Value
-                , entity.DayValue
-                , entity.Created
-                , entity.Modified)) with
-            { Id = entity.Id, Status = entity.Status };
+            => (new PaymentTermDto(entity.Description.Value, entity.DayValue)) 
+            with {
+                    Id = entity.Id
+                    , Status = entity.Status
+                    , Created = entity.Created
+                    , Modified = entity.Modified
+                };
     }
 }

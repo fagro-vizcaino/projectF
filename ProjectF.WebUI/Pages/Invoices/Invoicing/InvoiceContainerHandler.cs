@@ -110,32 +110,32 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
                 InvoiceDetails = new List<InvoiceDetail>()
             };
 
-        protected void OnChangeClient(OneOf<string, IEnumerable<string>,
-            LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
-        {
-            _model.Client = Clients
-                .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
-            _model.Rnc = _model.Client.Rnc;
-            StateHasChanged();
-        }
+        //protected void OnChangeClient(OneOf<string, IEnumerable<string>,
+        //    LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
+        //{
+        //    _model.Client = Clients
+        //        .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
+        //    _model.Rnc = _model.Client.Rnc;
+        //    StateHasChanged();
+        //}
         
-        protected void OnChangePaymentTerm(OneOf<string, IEnumerable<string>,
-            LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
-        {
-            _model.PaymentTerm = PaymentTerms
-                .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
-            _model.PaymentTermId = _model.PaymentTerm.Id;
-        }
+        //protected void OnChangePaymentTerm(OneOf<string, IEnumerable<string>,
+        //    LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
+        //{
+        //    _model.PaymentTerm = PaymentTerms
+        //        .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
+        //    _model.PaymentTermId = _model.PaymentTerm.Id;
+        //}
 
-        protected void OnChangeNumberSequence(OneOf<string, IEnumerable<string>,
-          LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
-        {
-            var result = NumberSequences
-                .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
-            _model.Ncf = result.DisplaySequence;
-            _model.NumberSequenceId = parseInt(value.Value.ToString()).Match(i => i, () => 0);
-            StateHasChanged();
-        }
+        //protected void OnChangeNumberSequence(OneOf<string, IEnumerable<string>,
+        //  LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
+        //{
+        //    var result = NumberSequences
+        //        .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
+        //    _model.Ncf = result.DisplaySequence;
+        //    _model.NumberSequenceId = parseInt(value.Value.ToString()).Match(i => i, () => 0);
+        //    StateHasChanged();
+        //}
 
         protected void ClearLines() => InvoiceLinesRef.ClearLines();
 
@@ -174,12 +174,12 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         {
             var invoiceDetail = InvoiceLinesRef.InvoiceLines.Map(i => new InvoiceDetail
             {
-                Id                 = i.Id,
-                Amount             = i.Product.Price,
-                ProductCode        = i.Product.Code,
-                ProductDescription = i.Product.Name,
-                Qty                = i.Qty,
-                TaxPercent         = i.Product.Tax.Percentvalue
+                //Id                 = i.Id,
+                //Amount             = i.Product.Price,
+                //ProductCode        = i.Product.Code,
+                //ProductDescription = i.Product.Name,
+                //Qty                = i.Qty,
+                //TaxPercent         = i.Product.Tax.Percentvalue
 
             }).Filter(c => c.ProductCode != null).ToList();
 

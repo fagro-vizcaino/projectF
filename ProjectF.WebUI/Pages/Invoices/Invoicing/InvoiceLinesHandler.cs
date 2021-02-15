@@ -41,26 +41,26 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         protected Product GetProduct(string searchText)
             => ProductDataSource.FirstOrDefault(p => p.Id == parseInt(searchText).Match(r => r, () => 0));
 
-        protected readonly Func<string, SelectOption, bool> FilterOptionValue = FilterOption;
+        //protected readonly Func<string, SelectOption, bool> FilterOptionValue = FilterOption;
 
-        protected static bool FilterOption(string value, SelectOption option)
-            => option.Children.ToUpperInvariant().Contains(value.ToLower(), StringComparison.OrdinalIgnoreCase);
+        //protected static bool FilterOption(string value, SelectOption option)
+        //    => option.Children.ToUpperInvariant().Contains(value.ToLower(), StringComparison.OrdinalIgnoreCase);
 
-        protected void OnChange(OneOf<string, IEnumerable<string>, LabeledValue, IEnumerable<LabeledValue>> value,
-            OneOf<SelectOption, IEnumerable<SelectOption>> option, InvoiceLine line)
-        {
-            var product = GetProduct(value.Value.ToString());
-            line.Product = product;
-            line.Qty     = 1;
-            line.IsEmpty = false;
-            InvoiceLines.Add(GetEmptyLine());
-            OnLineChanged.InvokeAsync(InvoiceLines.ToList());
-        }
+        //protected void OnChange(OneOf<string, IEnumerable<string>, LabeledValue, IEnumerable<LabeledValue>> value,
+        //    OneOf<SelectOption, IEnumerable<SelectOption>> option, InvoiceLine line)
+        //{
+        //    var product = GetProduct(value.Value.ToString());
+        //    line.Product = product;
+        //    line.Qty     = 1;
+        //    line.IsEmpty = false;
+        //    InvoiceLines.Add(GetEmptyLine());
+        //    OnLineChanged.InvokeAsync(InvoiceLines.ToList());
+        //}
 
         public void ClearLines()
         {
             InvoiceLines.RemoveAll(l => l.Index >= 0);
-            InvoiceLines.ForEach( l => l.CurrentSelect.ClearAll());
+            //InvoiceLines.ForEach( l => l.CurrentSelect.ClearAll());
             UpdateEmptyLines();
             ((IJSInProcessRuntime)jSRuntime).InvokeVoid("removeLine");
             OnLineChanged.InvokeAsync(InvoiceLines.ToList());
@@ -70,7 +70,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         {
             if (line.IsEmpty) return;
             line.IsDelete = true;
-            line.CurrentSelect.ClearAll();
+            //line.CurrentSelect.ClearAll();
             ((IJSInProcessRuntime)jSRuntime).InvokeVoid("removeLine");   
             OnLineChanged.InvokeAsync(InvoiceLines.ToList());
         }

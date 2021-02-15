@@ -12,7 +12,8 @@ namespace ProjectF.Application.PaymentTerms
         readonly PaymentTermRepository _paymentTermRepository;
 
         public PaymentTermCrudHandler(PaymentTermRepository paymentTermRepository) : base(paymentTermRepository)
-            => (_paymentTermRepository, fromDto, fromEntity, updateEntity) = (paymentTermRepository, FromDto, FromEntity, UpdateEntity);
+            => (_paymentTermRepository, fromDto, fromEntity, updateEntity) 
+            = (paymentTermRepository, FromDto, FromEntity, UpdateEntity);
 
         Either<Error, PaymentTerm> UpdateEntity(PaymentTermDto dto, PaymentTerm paymentTerm)
         {

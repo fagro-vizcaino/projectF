@@ -13,7 +13,7 @@ namespace ProjectF.WebUI.Components.Common
     {
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public string CustomCssClass { get; set;}
-        string _textInputCss = "block appearance-none w-full border border-gray-400 round py-2 px-3 text-gray-700 leading-tight shadow-sm focus:outline-none focus:shadow-outline";
+        string _textInputCss = "w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-2 resize-none leading-6 transition-colors duration-200 ease-in-out";
         // Generate html when the component is rendered.
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {

@@ -14,6 +14,10 @@ namespace ProjectF.WebUI.Models
                 .WithMessage("Nombre Requerido")
                 .MaximumLength(44)
                 .WithMessage("Máximo Carateres (40) excedido");
+
+            RuleFor(s => s.SupplierGroup).NotEmpty()
+                .WithMessage("Tipo suplidor requerido");
+
         }
     }
 }

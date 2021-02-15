@@ -4,8 +4,11 @@
                 ? _textInputCss + "border border-red-500"
                 : $"{CssClass} {_textInputCss}")"
        @bind="@CurrentValue"
-       rows="4" />
+       rows="@Rows" />
+
 
 @code {
+    [Parameter]
+    public short Rows { get; set; } = 4;
     string _textInputCss = "w-full px-3 py-2 text-gray-700 border rounded-lg shadow-sm focus:outline-none leading-tight focus:shadow-outline";
 }

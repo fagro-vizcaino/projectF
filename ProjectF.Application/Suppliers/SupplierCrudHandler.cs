@@ -5,13 +5,13 @@ using static LanguageExt.Prelude;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Suppliers;
 using static ProjectF.Data.Entities.Suppliers.SupplierMapper;
+using static ProjectF.Data.Entities.PaymentList.PaymentTermMapper;
 using ProjectF.Application.Common;
 
 namespace ProjectF.Application.Suppliers
 {
     public class SupplierCrudHandler : BaseCrudHandler<SupplierDto, Supplier, SupplierRepository>
     {
-        readonly SupplierRepository _supplierRepository;
         readonly CountryRepository _countryRepository;
         readonly PaymentTermRepository _paymentTermRepository;
 
@@ -19,7 +19,6 @@ namespace ProjectF.Application.Suppliers
             , CountryRepository countryRepository
             , PaymentTermRepository paymentTermRepository) : base(supplierRepository)
         {
-            _supplierRepository    = supplierRepository;
             _countryRepository     = countryRepository;
             _paymentTermRepository = paymentTermRepository;
             fromDto                = FromDto;
@@ -48,7 +47,7 @@ namespace ProjectF.Application.Suppliers
 
         Either<Error, SupplierDto> SetPaymentTerm(SupplierDto dto)
          => _paymentTermRepository.Find(dto.PaymentTermId)
-            .Match(p => Right(dto with { PaymentTerm = p })
+            .Match(p => Right(dto with { PaymentTerm = FromEntity(p) })
             , () => Left<Error, SupplierDto>(Error.New("couldn't find payment term selected")));
 
      
@@ -56,15 +55,15 @@ namespace ProjectF.Application.Suppliers
         {
             var code = new Code(dto.Code);
             var name = new Name(dto.Name);
-            var email = new Email(dto.Email);
-            var phone = new Phone(dto.Phone);
+            var email = new Email(dto.Email ?? string.Empty);
+            var phone = new Phone(dto.Phone ?? string.Empty);
             
             supplier.EditSupplier(code
                 , name
                 , email
                 , phone
                 , dto.SupplierGroup
-                , dto.PaymentTerm
+                , FromDto(dto.PaymentTerm)
                 , new GeneralText(dto.Notes)
                 , dto.IsIndependent
                 , dto.Rnc

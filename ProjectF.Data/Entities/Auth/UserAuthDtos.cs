@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ProjectF.Data.Entities.Countries;
 
 namespace ProjectF.Data.Entities.Auth
@@ -22,7 +23,7 @@ namespace ProjectF.Data.Entities.Auth
     public class RegistrationResponseDto
     {
         public bool IsSuccessfulRegistration { get; set; }
-        public IEnumerable<string> Errors { get; set; }
+        public IEnumerable<string> Errors { get; set; } = Enumerable.Empty<string>();
     }
 
 }

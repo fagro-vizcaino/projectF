@@ -19,13 +19,12 @@ namespace ProjectF.Data.Entities.Warehouses
                 , dto.Status);
 
         public static WarehouseDto FromEntity(Warehouse entity)
-            => new WarehouseDto(entity.Id
-                , entity.Code.Value
+            => new WarehouseDto(entity.Code.Value
                 , entity.Name.Value
                 , entity.Location
-                , entity.Products.ToImmutableList()
-                , entity.Created
-                , entity.Modified
-                , entity.Status);
+                , entity.Products.ToImmutableList()) with { Id = entity.Id 
+                , Modified = entity.Modified
+                , Created = entity.Created
+                , Status = entity.Status };
     }
 }

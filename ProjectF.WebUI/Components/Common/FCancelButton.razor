@@ -1,0 +1,13 @@
+﻿<button type="@ButtonType" 
+        onclick="@OnClickButton"
+        class="justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+@ButtonName
+</button>
+
+@code {
+    [Parameter] public string ButtonName { get; set; }
+    [Parameter] public string ButtonType { get; set; } = "submit";
+    [Parameter]
+    public EventCallback OnClickButton { get; set; }
+
+}

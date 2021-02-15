@@ -6,7 +6,7 @@ using static ProjectF.Data.Entities.PurchaseOrders.PurchaseOrderMapper;
 
 namespace ProjectF.Api.Features.PurchaseOrders
 {
-    [Route("api/[controller]")]
+    [Route("api/expenses/[controller]")]
     [ApiController]
     public class PurchaseOrdersController : ControllerBase
     {

@@ -34,14 +34,14 @@ namespace ProjectF.Api.Features.Auth
             , IEmailSender emailSender
             , IConfiguration configuration
             , ILoggerFactory logger
-            , CompanyCrudHandler companyCrudHanlder)
+            , CompanyCrudHandler companyCrudHandler)
         {
             _userManager        = userManager;
             _authUser           = authUser;
             _emailSender        = emailSender;
             _config             = configuration;
             _logger             = logger.CreateLogger("Authorization");
-            _companyCrudHandler = companyCrudHanlder;
+            _companyCrudHandler = companyCrudHandler;
         }
 
         [HttpPost("register")]
@@ -99,7 +99,7 @@ namespace ProjectF.Api.Features.Auth
 
             var message = new Message(new string[] { user.Email }, "Confirmar Email"
                 , confirmationLink
-                , null);
+                , attachments: null);
 
             await _emailSender.SendEmailAsync(message, EmailTemplateType.Register);
             await _companyCrudHandler.GenerateDefaultCompany(savedUser);
@@ -156,7 +156,7 @@ namespace ProjectF.Api.Features.Auth
             callback = $"{callback}/{encodeEmail}";
             callback = callback.Replace("http://localhost:5000/", "http://localhost:5001/");
 
-            var message = new Message(new [] { user.Email}, "restablezca su contraseña", callback, null);
+            var message = new Message(new [] { user.Email}, "restablezca su contraseï¿½a", callback, null);
             await _emailSender.SendEmailAsync(message, EmailTemplateType.ForgotPassword);
             
             return Ok();
