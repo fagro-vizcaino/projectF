@@ -32,22 +32,16 @@ namespace ProjectF.Data.Repositories
                 .ToList();
 
 
-        public async Task<Either<Error, PagedList<BankAccount>>> GetBankAccountListAsync(BankListParameters paramenters, bool trackChanges)
+        public async Task<Option<PagedList<BankAccount>>> GetBankAccountListAsync(BankListParameters parameters, bool trackChanges)
         {
-            try
-            {
                 var bankAccount = await FindByCondition(e => e.Id > 0, trackChanges)
                     .Include(b => b.BankAccountType)
                     .OrderBy(e => e.Id)
                     .ToListAsync();
 
                 return PagedList<BankAccount>
-                  .ToPagedList(bankAccount, paramenters.PageNumber, paramenters.PageSize);
-            }
-            catch (Exception ex)
-            {
-                return Error.New(ex.Message);
-            }
+                  .ToPagedList(bankAccount, parameters.PageNumber, parameters.PageSize);
+            
         }
 
     }

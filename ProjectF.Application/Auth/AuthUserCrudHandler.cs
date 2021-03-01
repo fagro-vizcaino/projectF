@@ -71,6 +71,8 @@ namespace ProjectF.Application.Auth
                 , new ("companyId", _user?.CompanyId.ToString() ?? "")
             };
 
+            if(_user is null) return claims;
+
             var roles = await _userManager.GetRolesAsync(_user);
             foreach (var role in roles)
             {

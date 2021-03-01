@@ -7,7 +7,7 @@ using ProjectF.Data.Repositories;
 using LanguageExt.Common;
 using ProjectF.Data.Entities;
 using ProjectF.Data.Entities.Companies;
-using static ProjectF.Data.Entities.Companies.CompanyMapper;
+using static ProjectF.Application.Companies.CompanyMapper;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
 using ProjectF.Application.Auth;
@@ -127,7 +127,7 @@ namespace ProjectF.Application.Companies
                 , dto.HomeOrApartment
                 , dto.City
                 , dto.Street
-                , dto.Country
+                , dto.Country ?? new Country(0, string.Empty, string.Empty)
                 , new Phone(dto.Phone)
                 , dto.Website
                 , dto.Status);

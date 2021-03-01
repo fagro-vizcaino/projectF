@@ -48,22 +48,22 @@ namespace ProjectF.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5f2f6c50-e6e4-4ae4-b570-4f93fc1d1091",
-                            ConcurrencyStamp = "64f0c2b7-4f34-4bfa-ba5f-1dfff9fe733d",
+                            Id = "9a1e5725-7e0b-4f04-a476-21c59bfddfbd",
+                            ConcurrencyStamp = "cc0c1151-be8c-441f-9150-8089b7c47980",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "dc09cd09-898f-4111-a6fe-b261513064c3",
-                            ConcurrencyStamp = "dadf32a1-8f5e-4e47-a653-9a336a1a1715",
+                            Id = "d6834e79-d7d2-4971-9662-5b55ea465d7f",
+                            ConcurrencyStamp = "c46fc176-8ad6-41d9-be69-7049a431de5e",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "ce384bc2-8bb7-4e49-9a5f-4ede9fb3d701",
-                            ConcurrencyStamp = "f781d998-099d-4f91-91d1-7acad0cc7d6b",
+                            Id = "c5b95009-f85f-4103-9e01-eb7b4b332ec5",
+                            ConcurrencyStamp = "93801ac6-5c1b-4d0b-b0d7-d6f360256896",
                             Name = "Visitor",
                             NormalizedName = "Visitor"
                         });
@@ -1430,6 +1430,9 @@ namespace ProjectF.Data.Migrations
                     b.Property<int?>("TaxId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UnitOfMeasureId")
+                        .HasColumnType("int");
+
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
@@ -1440,6 +1443,8 @@ namespace ProjectF.Data.Migrations
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("TaxId");
+
+                    b.HasIndex("UnitOfMeasureId");
 
                     b.HasIndex("WarehouseId");
 
@@ -1726,6 +1731,10 @@ namespace ProjectF.Data.Migrations
                         .WithMany()
                         .HasForeignKey("TaxId");
 
+                    b.HasOne("ProjectF.Data.Entities.UnitOfMeasures.UnitOfMeasure", "UnitOfMeasure")
+                        .WithMany()
+                        .HasForeignKey("UnitOfMeasureId");
+
                     b.HasOne("ProjectF.Data.Entities.Warehouses.Warehouse", "Warehouse")
                         .WithMany("Products")
                         .HasForeignKey("WarehouseId")
@@ -1735,6 +1744,8 @@ namespace ProjectF.Data.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Tax");
+
+                    b.Navigation("UnitOfMeasure");
 
                     b.Navigation("Warehouse");
                 });

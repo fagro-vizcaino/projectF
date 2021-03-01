@@ -7,7 +7,7 @@ using ProjectF.WebUI.Pages.Company;
 
 namespace ProjectF.WebUI.Services
 {
-    public class CompanyDataService : _BaseDataService<Company>
+    public class CompanyDataService : BaseDataService<Company>
     {
         const string baseUrl = "config/company";
         public CompanyDataService(HttpClient httpClient)

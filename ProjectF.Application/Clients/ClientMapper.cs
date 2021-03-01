@@ -1,11 +1,12 @@
-﻿using ProjectF.Data.Entities.Common.ValueObjects;
+﻿using ProjectF.Data.Entities.Clients;
+using ProjectF.Data.Entities.Common.ValueObjects;
 
-namespace ProjectF.Data.Entities.Clients
+namespace ProjectF.Application.Clients
 {
     public static class ClientMapper
     {
         public static Client FromDto(ClientDto dto)
-            => new Client(new Code(dto.Code)
+            => new(new Code(dto.Code)
                 , new Name(dto.Firstname)
                 , new Name(dto.Lastname)
                 , new Email(dto.Email)
@@ -20,7 +21,7 @@ namespace ProjectF.Data.Entities.Clients
                 , dto.Status);
 
         public static ClientDto FromEntity(Client model)
-            => new ClientDto(model.Id,
+            => new(model.Id,
                 model.Code.Value,
                 model.Firstname.Value,
                 model.Lastname.Value,

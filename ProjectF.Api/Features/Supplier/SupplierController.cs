@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using ProjectF.Application.Suppliers;
-using static ProjectF.Data.Entities.Suppliers.SupplierMapper;
+using static ProjectF.Application.Suppliers.SupplierMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Data.Entities.Suppliers;
 

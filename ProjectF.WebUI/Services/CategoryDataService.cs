@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace ProjectF.WebUI.Services
 {
-    public class CategoryDataService : _BaseDataService<Category>
+    public class CategoryDataService : BaseDataService<Category>
     {
         const string _baseUrl = "config/category";
 

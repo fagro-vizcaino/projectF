@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Application.PurchaseOrders;
 using ProjectF.Data.Entities.PurchaseOrders;
-using static ProjectF.Data.Entities.PurchaseOrders.PurchaseOrderMapper;
+using static ProjectF.Application.PurchaseOrders.PurchaseOrderMapper;
 
 namespace ProjectF.Api.Features.PurchaseOrders
 {

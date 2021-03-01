@@ -4,8 +4,8 @@ using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Suppliers;
-using static ProjectF.Data.Entities.Suppliers.SupplierMapper;
-using static ProjectF.Data.Entities.PaymentList.PaymentTermMapper;
+using static ProjectF.Application.Suppliers.SupplierMapper;
+using static ProjectF.Application.PaymentTerms.PaymentTermMapper;
 using ProjectF.Application.Common;
 
 namespace ProjectF.Application.Suppliers
@@ -21,9 +21,9 @@ namespace ProjectF.Application.Suppliers
         {
             _countryRepository     = countryRepository;
             _paymentTermRepository = paymentTermRepository;
-            fromDto                = FromDto;
-            fromEntity             = FromEntity;
-            updateEntity           = UpdateEntity;
+            _fromDto                = FromDto;
+            _fromEntity             = FromEntity;
+            _updateEntity           = UpdateEntity;
         }
 
         public override Either<Error, Supplier> Create(SupplierDto dto)
@@ -49,7 +49,6 @@ namespace ProjectF.Application.Suppliers
          => _paymentTermRepository.Find(dto.PaymentTermId)
             .Match(p => Right(dto with { PaymentTerm = FromEntity(p) })
             , () => Left<Error, SupplierDto>(Error.New("couldn't find payment term selected")));
-
      
         Either<Error, Supplier> UpdateEntity(SupplierDto dto, Supplier supplier)
         {

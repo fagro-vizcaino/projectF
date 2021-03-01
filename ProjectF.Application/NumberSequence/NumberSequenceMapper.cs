@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using ProjectF.Data.Entities.Sequences;
 
-namespace ProjectF.Data.Entities.Sequences
+namespace ProjectF.Application.NumberSequences
 {
     public static class NumberSequenceMapper
     {

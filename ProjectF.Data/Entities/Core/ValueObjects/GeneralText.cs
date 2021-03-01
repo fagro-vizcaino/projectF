@@ -13,9 +13,9 @@ namespace ProjectF.Data.Entities.Common.ValueObjects
 
         protected GeneralText() { }
 
-        public GeneralText(string value) : this()
+        public GeneralText(string? value) : this()
         {
-            Value = value;
+            Value = value ?? string.Empty;
         }
 
         public static Result<GeneralText> Of(string description) => IsValidGeneralText(description);

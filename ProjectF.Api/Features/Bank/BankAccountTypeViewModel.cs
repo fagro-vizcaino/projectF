@@ -6,7 +6,7 @@ namespace ProjectF.Api.Features.Bank
 {
     public class BankAccountTypeViewModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime Created { get; set; }
@@ -14,16 +14,12 @@ namespace ProjectF.Api.Features.Bank
         public EntityStatus Status { get; set; }
 
         public BankAccountTypeDto ToDto()
-            => new BankAccountTypeDto(Id, Name, Description, Created, Modified, Status);
-        public static BankAccountTypeViewModel FromDto(BankAccountTypeDto bankAccountTypeDto)
-            => new BankAccountTypeViewModel()
+            => new( Name, Description)
             {
-                Id          = bankAccountTypeDto.Id,
-                Name        = bankAccountTypeDto.Name,
-                Description = bankAccountTypeDto.Description,
-                Created     = bankAccountTypeDto.Created,
-                Modified    = bankAccountTypeDto.Modified,
-                Status      = bankAccountTypeDto.Status
+                Id = Id,
+                Created = Created,
+                Modified = Modified,
+                Status = Status
             };
     }
 }

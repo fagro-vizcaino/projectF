@@ -14,8 +14,8 @@ namespace ProjectF.Api.Features.Taxes
         public DateTime? Modified { get; set; }
         public EntityStatus Status { get; set; }
         public TaxDto ToDto()
-            => (new TaxDto(Name, PercentValue, CompanyId, Created, Modified)) 
-                with { Id = Id, Status = Status };
+            => (new TaxDto(Name, PercentValue)) 
+                with { Id = Id, Status = Status, Created = Created, Modified = Modified};
 
         public static TaxViewModel FromDtoToView(TaxDto tax)
             => new TaxViewModel()

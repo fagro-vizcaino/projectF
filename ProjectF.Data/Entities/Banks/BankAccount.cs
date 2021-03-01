@@ -49,22 +49,5 @@ namespace ProjectF.Data.Entities.Banks
             Modified         = DateTime.Now;
             Status           = status;
         }
-
-        public static implicit operator BankAccountDto(BankAccount entity)
-            => CreateDto(entity);
-
-        static BankAccountDto CreateDto(BankAccount entity)
-            => new BankAccountDto(entity.Id,
-                    entity.AccountName.Value,
-                    entity.AccountNumber,
-                    entity.Description.Value,
-                    entity.InitialBalance,
-                    entity.BankAccountType?.Id ?? 0L,
-                    entity.BankAccountType,
-                    entity.Created,
-                    entity.Modified,
-                    entity.Status);
-
-
     }
 }

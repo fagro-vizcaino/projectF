@@ -5,7 +5,7 @@ using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Common.ValueObjects;
-using static ProjectF.Data.Entities.Clients.ClientMapper;
+using static ProjectF.Application.Clients.ClientMapper;
 using System;
 using System.Linq;
 using ProjectF.Data.Entities.RequestFeatures;

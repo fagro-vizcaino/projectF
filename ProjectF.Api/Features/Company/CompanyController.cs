@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Application.Companies;
 using ProjectF.Data.Entities.Companies;
-using static ProjectF.Data.Entities.Companies.CompanyMapper;
+using static ProjectF.Application.Companies.CompanyMapper;
 
 namespace ProjectF.Api.Features.Company
 {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using ProjectF.Application.Banks;
-using static ProjectF.Data.Entities.Banks.BankAccountsMapper;
+using static ProjectF.Application.Banks.BankAccountsMapper;
 using static ProjectF.Api.Features.Bank.BankAccountTypeViewModel;
 using Microsoft.AspNetCore.Mvc;
 

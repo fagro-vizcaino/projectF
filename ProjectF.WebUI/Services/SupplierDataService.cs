@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjectF.WebUI.Services
 {
-    public class SupplierDataService : _BaseDataService<Supplier>
+    public class SupplierDataService : BaseDataService<Supplier>
     {
         const string _baseUrl = "inventory/supplier";
         public SupplierDataService(HttpClient httpClient) 

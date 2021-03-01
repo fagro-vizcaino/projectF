@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace ProjectF.WebUI.Services
 {
-    public class TaxesDataService : _BaseDataService<Tax>
+    public class TaxesDataService : BaseDataService<Tax>
     {
         const string _baseUrl = "config/tax";
 

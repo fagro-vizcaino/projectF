@@ -1,12 +1,14 @@
-﻿using ProjectF.Data.Entities.Common.ValueObjects;
+﻿using ProjectF.Application.PaymentTerms;
+using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.PaymentList;
+using ProjectF.Data.Entities.Suppliers;
 
-namespace ProjectF.Data.Entities.Suppliers
+namespace ProjectF.Application.Suppliers
 {
     public static class SupplierMapper
     {
         public static Supplier FromDto(SupplierDto dto)
-            => new Supplier(new Code(dto.Code)
+            => new(new Code(dto.Code)
                 , new Name(dto.Name)
                 , new Email(dto.Email)
                 , new Phone(dto.Phone)
@@ -24,7 +26,7 @@ namespace ProjectF.Data.Entities.Suppliers
                 , dto.Status);
 
         public static SupplierDto FromEntity(Supplier entity)
-            => (new SupplierDto(entity.Code.Value
+            => new(entity.Code.Value
                 , entity.Name.Value
                 , entity.Email.Value
                 , entity.Phone.Value
@@ -38,7 +40,12 @@ namespace ProjectF.Data.Entities.Suppliers
                 , entity.SupplierGroup
                 , entity.PaymentTerm?.Id ?? 0
                 , PaymentTermMapper.FromEntity(entity.PaymentTerm)
-                , entity.Notes.Value)) 
-            with { Id = entity.Id, Status = entity.Status, Created = entity.Created, Modified = entity.Modified};
+                , entity.Notes.Value)
+            {
+                Id = entity.Id, 
+                Status = entity.Status,
+                Created = entity.Created, 
+                Modified = entity.Modified
+            };
     }
 }

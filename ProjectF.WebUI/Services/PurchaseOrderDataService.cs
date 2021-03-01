@@ -7,7 +7,7 @@ using ProjectF.WebUI.Pages.PurchaseOrders;
 
 namespace ProjectF.WebUI.Services
 {
-    public class PurchaseOrderDataService : _BaseDataService<PurchaseOrder>
+    public class PurchaseOrderDataService : BaseDataService<PurchaseOrder>
     {
         const string _baseUrl = "expenses/PurchaseOrders";
         public PurchaseOrderDataService(HttpClient httpClient) 

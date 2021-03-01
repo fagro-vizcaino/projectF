@@ -3,6 +3,7 @@ using ProjectF.Data.Entities.Categories;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Taxes;
+using ProjectF.Data.Entities.UnitOfMeasures;
 using ProjectF.Data.Entities.Warehouses;
 
 namespace ProjectF.Data.Products
@@ -15,6 +16,7 @@ namespace ProjectF.Data.Products
         public GeneralText Reference { get; private set; }
         public virtual Category Category {get; private set;}
         public virtual Warehouse Warehouse { get; private set;}
+        public virtual UnitOfMeasure UnitOfMeasure { get; private set; }
         public virtual Tax Tax { get; private set;}
         public bool IsService { get; private set; }
         public decimal Cost { get; private set; }
@@ -23,7 +25,6 @@ namespace ProjectF.Data.Products
         public decimal Price3 { get;  private set; }
         public decimal Price4 { get; private set; }
 
-
         protected Product() { }
         public Product(Code code
             , Name name
@@ -31,6 +32,7 @@ namespace ProjectF.Data.Products
             , GeneralText reference
             , Category category
             , Warehouse werehouse
+            , UnitOfMeasure unitOfMeasure
             , Tax tax
             , bool isService
             , decimal cost
@@ -39,23 +41,26 @@ namespace ProjectF.Data.Products
             , decimal price3
             , decimal price4
             , DateTime created
+            , DateTime? modified
             , EntityStatus status = EntityStatus.Active)
         {
-            Code        = code;
-            Name        = name;
-            Description = description;
-            Reference   = reference;
-            Category    = category;
-            Warehouse   = werehouse;
-            Tax         = tax;
-            IsService   = isService;
-            Cost        = cost;
-            Price       = price;
-            Price2      = price2;
-            Price3      = price3;
-            Price4      = price4;
-            Created     = created == DateTime.MinValue ? DateTime.Now : created;
-            Status      = status;
+            Code          = code;
+            Name          = name;
+            Description   = description;
+            Reference     = reference;
+            Category      = category;
+            Warehouse     = werehouse;
+            UnitOfMeasure = unitOfMeasure;
+            Tax           = tax;
+            IsService     = isService;
+            Cost          = cost;
+            Price         = price;
+            Price2        = price2;
+            Price3        = price3;
+            Price4        = price4;
+            Created       = created == DateTime.MinValue ? DateTime.Now : created;
+            Modified      = modified;
+            Status        = status;
 
         }
 
@@ -65,6 +70,7 @@ namespace ProjectF.Data.Products
             , GeneralText reference
             , Category category
             , Warehouse werehouse
+            , UnitOfMeasure unitOfMeasure
             , Tax tax
             , bool isService
             , decimal cost
@@ -74,21 +80,22 @@ namespace ProjectF.Data.Products
             , decimal price4
             , EntityStatus status)
         {
-            Code        = code;
-            Name        = name;
-            Description = description;
-            Reference   = reference;
-            Category    = category;
-            Warehouse   = werehouse;
-            Tax         = tax;
-            IsService   = isService;
-            Cost        = cost;
-            Price       = price;
-            Price2      = price2;
-            Price3      = price3;
-            Price4      = price4;
-            Status      = status;
-            Modified    = DateTime.Now;
+            Code          = code;
+            Name          = name;
+            Description   = description;
+            Reference     = reference;
+            Category      = category;
+            Warehouse     = werehouse;
+            UnitOfMeasure = unitOfMeasure;
+            Tax           = tax;
+            IsService     = isService;
+            Cost          = cost;
+            Price         = price;
+            Price2        = price2;
+            Price3        = price3;
+            Price4        = price4;
+            Status        = status;
+            Modified      = DateTime.Now;
         }
     }
 }

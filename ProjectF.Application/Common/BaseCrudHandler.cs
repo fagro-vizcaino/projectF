@@ -9,49 +9,55 @@ using System.Collections.Generic;
 
 namespace ProjectF.Application.Common
 {
-    public class BaseCrudHandler<Dto, Fentity, Repo>
-        where Fentity : _BaseEntity
-        where Repo : IBaseRepository<Fentity>
-        where Dto : FDto
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TDto">Dto to work with</typeparam>
+    /// <typeparam name="TFEntity">The entity type you want to map to</typeparam>
+    /// <typeparam name="TRepo">The Crud operations repository for this TFEntity</typeparam>
+    public class BaseCrudHandler<TDto, TFEntity, TRepo>
+        where TFEntity : _BaseEntity
+        where TRepo : IBaseRepository<TFEntity>
+        where TDto : FDto
     {
-        readonly Repo _repo;
+        private readonly TRepo _repo;
 
-        public BaseCrudHandler(Repo repo) => _repo = repo;
-        
-        public static Func<Dto, Fentity> fromDto;
-        public static Func<Fentity, Dto> fromEntity;
-        public static Func<Dto, Fentity, Either<Error, Fentity>> updateEntity;
+        protected BaseCrudHandler(TRepo repo) => _repo = repo;
 
-        public virtual Either<Error, Fentity> Create(Dto dto)
+        protected static Func<TDto, TFEntity> _fromDto;
+        protected static Func<TFEntity, TDto> _fromEntity;
+        protected static Func<TDto, TFEntity, Either<Error, TFEntity>> _updateEntity;
+
+        public virtual Either<Error, TFEntity> Create(TDto dto)
             => SetStatus(dto)
-            .Bind(c => Add(fromDto(c)))
-            .Bind(Save );
+            .Bind(c => Add(_fromDto(c)))
+            .Bind(Save);
 
-        public Either<Error, Fentity> Delete(long id)
+        public Either<Error, TFEntity> Delete(long id)
             => Find(id)
             .Bind(Delete)
             .Bind(Save);
 
-        public virtual Either<Error, Fentity> Update(long id, Dto dto)
+        public virtual Either<Error, TFEntity> Update(long id, TDto dto)
             => ValidateIsCorrectUpdate(id, dto)
             .Bind(c => Find(c.Id))
-            .Bind(c => updateEntity(dto, c))
+            .Bind(c => _updateEntity(dto, c))
             .Bind(Save);
 
-        public IEnumerable<Dto> GetAll()
+        public IEnumerable<TDto> GetAll()
             => _repo.GetAll()
-                .Map(t => fromEntity(t));
+                .Map(t => _fromEntity(t));
 
-        Either<Error, Dto> SetStatus(Dto dto) => dto with { Status = EntityStatus.Active };
+        Either<Error, TDto> SetStatus(TDto dto) => dto with { Status = EntityStatus.Active };
 
-        Either<Error, Dto> ValidateIsCorrectUpdate(long id, Dto dto)
+        Either<Error, TDto> ValidateIsCorrectUpdate(long id, TDto dto)
             => (id == dto.Id) switch { true => dto, _ => Error.New("Invalid update entity id") };
 
-        public Either<Error, Fentity> Find(params object[] valueKeys)
+        public Either<Error, TFEntity> Find(params object[] valueKeys)
            => _repo.Find(valueKeys).Match(Some: p => p,
-                None: Left<Error, Fentity>(Error.New($"Couldn't find {nameof(Fentity)}")));
+                None: Left<Error, TFEntity>(Error.New($"Couldn't find {nameof(TFEntity)}")));
 
-        protected virtual Either<Error, Fentity> Add(Fentity entity)
+        private Either<Error, TFEntity> Add(TFEntity entity)
         {
             try
             {
@@ -64,7 +70,7 @@ namespace ProjectF.Application.Common
             }
         }
 
-        protected virtual Either<Error, Fentity> Save(Fentity entity)
+        private Either<Error, TFEntity> Save(TFEntity entity)
         {
             try
             {
@@ -77,7 +83,7 @@ namespace ProjectF.Application.Common
             }
         }
 
-        protected virtual Either<Error, Fentity> Delete(Fentity entity)
+        private Either<Error, TFEntity> Delete(TFEntity entity)
         {
             entity.SetStatus(EntityStatus.Deleted);
             return entity;

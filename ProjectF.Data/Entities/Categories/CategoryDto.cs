@@ -6,7 +6,5 @@ namespace ProjectF.Data.Entities.Categories
 {
     public record CategoryDto(string Code
         , string Name
-        , bool ShowOn
-        , DateTime Created
-        , DateTime? Modified) : FDto;
+        , bool ShowOn) : FDto;
 }

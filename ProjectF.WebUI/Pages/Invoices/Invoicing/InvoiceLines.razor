@@ -50,18 +50,18 @@
                                 }
                             </Select>*@
                         </td>
-                        <td class="border px-4 py-2">
-                            <FInputText @bind-Value="item.Product.Description" />
-                        </td>
-                        <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12">
-                            <FInputInt @bind-Value="item.Qty" />
-                        </td>
-                        <td class="border table-cell px-4 py-2 text-center w-1/12">
-                            <span>@($"{item.Product.Tax.Percentvalue} %")</span>
-                        </td>
-                        <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums">
-                            <FInputDecimal @bind-Value="item.Product.Price" />
-                        </td>
+                        @* <td class="border px-4 py-2"> *@
+                        @*     <FInputText @bind-Value="item.Product.Description" /> *@
+                        @* </td> *@
+                        @* <td class="border tracking-wide table-cell px-4 py-2 text-right w-1/12"> *@
+                        @*     <FInputInt @bind-Value="item.Qty" /> *@
+                        @* </td> *@
+                        @* <td class="border table-cell px-4 py-2 text-center w-1/12"> *@
+                        @*     <span>@($"{item.Product.Tax.PercentValue} %")</span> *@
+                        @* </td> *@
+                        @* <td class="border table-cell tracking-wide px-4 py-1 text-right w-1/12 font-semibold lining-nums"> *@
+                        @*     <FInputDecimal @bind-Value="item.Product.Price" /> *@
+                        @* </td> *@
                         <td class="px-2 py-2 justify-center">
                             <button class="rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-200 text-gray-400 hover:text-red-600"
                                     @onclick=" _ => Remove(item)"

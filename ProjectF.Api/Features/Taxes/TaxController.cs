@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using static ProjectF.Data.Entities.Taxes.TaxMapper;
+using static ProjectF.Application.Taxes.TaxMapper;
 using ProjectF.Application.Taxes;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Data.Entities.Taxes;

@@ -34,30 +34,23 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public InvoiceLines InvoiceLinesRef { get; set; }
         public DiscountType SelectedDiscount { get; set; }
 
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
+        [Inject] public NavigationManager NavigationManager { get; set; }
 
-        [Inject]
-        public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
+        [Inject]public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
         public PaymentTerm[] PaymentTerms { get; set; } = System.Array.Empty<PaymentTerm>();
 
-        [Inject]
-        public IBaseDataService<Client> ClientDataService { get; set; }
+        [Inject]public IBaseDataService<Client> ClientDataService { get; set; }
         public Client[] Clients { get; set; } = System.Array.Empty<Client>();
 
-        [Inject]
-        public IBaseDataService<Product> ProductDataService { get; set; }
+        [Inject] public IBaseDataService<Product> ProductDataService { get; set; }
         public Product[] ProductsData { get; set; } = System.Array.Empty<Product>();
 
-        [Inject]
-        public IBaseDataService<NumberSequences.NumberSequence> NumberSequenceDataService { get; set; }
+        [Inject] public IBaseDataService<NumberSequences.NumberSequence> NumberSequenceDataService { get; set; }
         public NumberSequences.NumberSequence[] NumberSequences { get; set; } = System.Array.Empty<NumberSequences.NumberSequence>();
 
-        [Inject]
-        public IBaseDataService<Invoice> InvoiceService { get; set; }
+        [Inject] public IBaseDataService<Invoice> InvoiceService { get; set; }
 
-        [Inject]
-        public IJSRuntime jSRuntime { get; set; }
+        [Inject] public IJSRuntime jSRuntime { get; set; }
 
         public List<InvoiceLine> Lines { get; private set; }
 
@@ -155,7 +148,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         void Calculate(ImmutableList<InvoiceLine> lines)
         {
             _model.SubTotal = lines.Sum(i => i.Qty + i.Product.Price);
-            _model.TaxTotal = lines.Sum(i => (i.Qty + i.Product.Price) * i.Product.Tax.Percentvalue / 100);
+            _model.TaxTotal = lines.Sum(i => (i.Qty + i.Product.Price) * i.Product.Tax.PercentValue / 100);
             var discount = ApplyDiscount(_model, SelectedDiscount);
             _model.Total = (_model.SubTotal - discount) + _model.TaxTotal;
         }
@@ -166,6 +159,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             catch (Exception ex)
             {
                 setProperty(0);
+                Console.WriteLine(ex.Message);
             }
             Calculate(GetValidInvoiceLine(InvoiceLinesRef.InvoiceLines));
         }

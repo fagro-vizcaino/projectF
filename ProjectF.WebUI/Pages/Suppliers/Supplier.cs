@@ -19,8 +19,6 @@ namespace ProjectF.WebUI.Models
         public int PaymentTermId { get; set; }
         public PaymentTerm PaymentTerm { get; set;}
         public string Notes { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime? Modified { get; set; }
     }
 
     public enum SupplierGroup

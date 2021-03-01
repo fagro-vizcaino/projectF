@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace ProjectF.WebUI.Services
 {
-    public class InvoiceDataService : _BaseDataService<Invoice>
+    public class InvoiceDataService : BaseDataService<Invoice>
     {
         const string baseUrl = "sales/invoice";
 
@@ -12,7 +12,7 @@ namespace ProjectF.WebUI.Services
             : base(baseUrl, client) { }
     }
 
-    public class InvoiceListDataService : _BaseDataService<InvoiceMainList>
+    public class InvoiceListDataService : BaseDataService<InvoiceMainList>
     {
         const string baseUrl = "sales/invoice";
 

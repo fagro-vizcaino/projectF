@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Application.PaymentMethods;
 using ProjectF.Data.Entities.PaymentMethods;
-using static ProjectF.Data.Entities.PaymentMethods.PaymentMethodMapper;
+using static ProjectF.Application.PaymentMethods.PaymentMethodMapper;
 
 namespace ProjectF.Api.Features.PaymentMethod
 {

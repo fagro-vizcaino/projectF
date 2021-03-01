@@ -4,16 +4,14 @@ using ProjectF.Application.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.UnitOfMeasures;
 using ProjectF.Data.Repositories;
-using static ProjectF.Data.Entities.UnitOfMeasures.UnitOfMeasureMapper;
+using static ProjectF.Application.UnitOfMeasures.UnitOfMeasureMapper;
 
 namespace ProjectF.Application.UnitOfMeasures
 {
     public class UnitOfMeasureCrudHandler : BaseCrudHandler<UnitOfMeasureDto, UnitOfMeasure, UnitOfMeasureRepository>
     {
-        readonly UnitOfMeasureRepository _ofMeasureRepository;
-
         public UnitOfMeasureCrudHandler(UnitOfMeasureRepository unitOfMeasureRepository) : base(unitOfMeasureRepository)
-            => (_ofMeasureRepository, fromDto, fromEntity, updateEntity  ) = (unitOfMeasureRepository, FromDto, FromEntity, UpdateEntity);
+            => (_, _fromDto, _fromEntity, _updateEntity  ) = (unitOfMeasureRepository, FromDto, FromEntity, UpdateEntity);
 
         Either<Error, UnitOfMeasure> UpdateEntity(UnitOfMeasureDto dto, UnitOfMeasure unitOfMeasure)
         {

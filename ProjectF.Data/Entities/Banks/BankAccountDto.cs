@@ -1,16 +1,11 @@
-﻿using ProjectF.Data.Entities.Common;
-using System;
+﻿using ProjectF.Data.Entities.Core;
 
 namespace ProjectF.Data.Entities.Banks
 {
-    public record BankAccountDto(long Id
-        , string AccountName
+    public record BankAccountDto(string AccountName
         , string AccountNumber
-        , string Description
+        , string? Description
         , decimal InitialBalance
         , long BankAccountTypeId
-        , BankAccountType BankAccountType
-        , DateTime Created
-        , DateTime? Modified
-        , EntityStatus Status);
+        , BankAccountTypeDto BankAccountType) : FDto;
 }

@@ -3,7 +3,7 @@ using ProjectF.WebUI.Pages.UnitOfMeasures;
 
 namespace ProjectF.WebUI.Services
 {
-    public class UnitOfMeasureDataService : _BaseDataService<UnitOfMeasure>
+    public class UnitOfMeasureDataService : BaseDataService<UnitOfMeasure>
     {
         const string _baseUrl = "config/UnitOfMeasure";
 

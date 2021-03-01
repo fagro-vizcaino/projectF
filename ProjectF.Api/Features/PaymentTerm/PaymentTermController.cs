@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using ProjectF.Data.Entities.PaymentList;
-using static ProjectF.Data.Entities.PaymentList.PaymentTermMapper;
+using static ProjectF.Application.PaymentTerms.PaymentTermMapper;
 
 namespace ProjectF.Api.Features.PaymentTerms
 {

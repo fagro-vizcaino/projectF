@@ -18,19 +18,19 @@ namespace ProjectF.Api.Features.Bank
         public EntityStatus Status { get; set; }
         
         public BankAccountDto ToDto()
-            => new BankAccountDto(Id,
-                AccountName,
-                AccountNumber,
-                Description,
-                InitialBalance,
-                BankAccountTypeId,
-                BankAccountType: null,
-                Created,
-                Modified,
-                Status);
+            => new BankAccountDto(AccountName, AccountNumber, Description, InitialBalance, BankAccountTypeId,
+                
+                new BankAccountTypeDto(BankAccountType.Name, 
+                    BankAccountType.Description)
+                {
+                    Id =  BankAccountType.Id,
+                    Created = BankAccountType.Created,
+                    Modified = BankAccountType.Modified,
+                    Status = BankAccountType.Status
+                });
 
         public static BankAccountViewModel FromDto(BankAccountDto accountDto)
-            => new BankAccountViewModel()
+            => new()
             {
                 Id                = accountDto.Id,
                 AccountName       = accountDto.AccountName,
@@ -39,8 +39,8 @@ namespace ProjectF.Api.Features.Bank
                 BankAccountType   = new BankAccountTypeViewModel()
                 {
                     Id          = accountDto.BankAccountType.Id,
-                    Description = accountDto.BankAccountType.Description.Value,
-                    Name        = accountDto.BankAccountType.Name.Value
+                    Description = accountDto.BankAccountType.Description,
+                    Name        = accountDto.BankAccountType.Name
                 },
                 Description     = accountDto.Description,
                 InitialBalance  = accountDto.InitialBalance,

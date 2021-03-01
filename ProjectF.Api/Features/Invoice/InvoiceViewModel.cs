@@ -3,7 +3,7 @@ using ProjectF.Data.Entities.PaymentList;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Invoices;
 using ProjectF.Data.Entities.Clients;
-using static ProjectF.Data.Entities.Clients.ClientMapper;
+using static ProjectF.Application.Clients.ClientMapper;
 using ProjectF.Application.Invoice;
 using ProjectF.Data.Entities.Countries;
 using System;
@@ -21,7 +21,7 @@ namespace ProjectF.Api.Features.Invoice
         public long Id { get; set; }
         public string Code { get; set; }
         public string Ncf { get; set; }
-        public int NumberSequenceId { get; set;}
+        public int NumberSequenceId { get; set; }
         public string Rnc { get; set; }
         public ClientDto Client { get; set; }
         public DateTime InvoiceDate { get; set; }
@@ -95,37 +95,42 @@ namespace ProjectF.Api.Features.Invoice
         {
             var paymentTerm = new PaymentTermDto(invoiceDto.PaymentTerm.Description.Value,
                 invoiceDto.PaymentTerm.DayValue)
-                with { Id = invoiceDto.PaymentTerm.Id
-                    , Status  = invoiceDto.PaymentTerm.Status
-                    , Created = invoiceDto.PaymentTerm.Created
-                    , Modified = invoiceDto.PaymentTerm.Modified
-                    };
+                with
+            {
+                Id = invoiceDto.PaymentTerm.Id
+                    ,
+                Status = invoiceDto.PaymentTerm.Status
+                    ,
+                Created = invoiceDto.PaymentTerm.Created
+                    ,
+                Modified = invoiceDto.PaymentTerm.Modified
+            };
 
             return new InvoiceViewModel()
             {
-                Id                = invoiceDto.Id,
-                Client            = FromEntity(invoiceDto.Client),
-                Code              = invoiceDto.Code,
-                Rnc               = invoiceDto.Rnc,
-                Ncf               = invoiceDto.Ncf,
-                Created           = invoiceDto.InvoiceDate,
-                DueDate           = invoiceDto.DueDate,
-                Footer            = invoiceDto.Footer,
-                Notes             = invoiceDto.Notes,
-                PaymentTerm       = paymentTerm,
+                Id = invoiceDto.Id,
+                Client = FromEntity(invoiceDto.Client),
+                Code = invoiceDto.Code,
+                Rnc = invoiceDto.Rnc,
+                Ncf = invoiceDto.Ncf,
+                Created = invoiceDto.InvoiceDate,
+                DueDate = invoiceDto.DueDate,
+                Footer = invoiceDto.Footer,
+                Notes = invoiceDto.Notes,
+                PaymentTerm = paymentTerm,
                 TermAndConditions = invoiceDto.TermAndConditions,
-                Discount          = invoiceDto.Discount,
-                SubTotal          = invoiceDto.Subtotal,
-                TaxTotal          = invoiceDto.TaxTotal,
-                Total             = invoiceDto.Total,
-                InvoiceDetails    = invoiceDto.InvoiceDetails.Map(i => new InvoiceDetailViewModel()
+                Discount = invoiceDto.Discount,
+                SubTotal = invoiceDto.Subtotal,
+                TaxTotal = invoiceDto.TaxTotal,
+                Total = invoiceDto.Total,
+                InvoiceDetails = invoiceDto.InvoiceDetails.Map(i => new InvoiceDetailViewModel()
                 {
-                    Id                 = i.Id,
-                    ProductCode        = i.ProductCode,
+                    Id = i.Id,
+                    ProductCode = i.ProductCode,
                     ProductDescription = i.ProductDescription,
-                    Amount             = i.Amount,
-                    Qty                = i.Qty,
-                    TaxPercent         = i.TaxPercent
+                    Amount = i.Amount,
+                    Qty = i.Qty,
+                    TaxPercent = i.TaxPercent
                 }).ToList()
 
             };

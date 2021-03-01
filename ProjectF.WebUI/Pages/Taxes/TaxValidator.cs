@@ -15,7 +15,7 @@ namespace ProjectF.WebUI.Models
               .MaximumLength(40)
               .WithMessage("Máximo Carateres 40");
 
-            RuleFor(x => x.Percentvalue);
+            RuleFor(x => x.PercentValue);
         }
     }
 }

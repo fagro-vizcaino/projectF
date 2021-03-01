@@ -1,8 +1,9 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using ProjectF.Data.Entities.PurchaseOrders;
 
-namespace ProjectF.Data.Entities.PurchaseOrders
+namespace ProjectF.Application.PurchaseOrders
 {
     public static class PurchaseOrderMapper
     {

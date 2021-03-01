@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace ProjectF.WebUI.Services
 {
-    public class WarehouseDataService : _BaseDataService<Warehouse>
+    public class WarehouseDataService : BaseDataService<Warehouse>
     {
         const string _baseUrl = "config/warehouse";
 

@@ -4,6 +4,6 @@
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public decimal Percentvalue { get; set; }
+        public decimal PercentValue { get; set; }
     }
 }

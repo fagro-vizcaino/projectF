@@ -27,7 +27,6 @@ namespace ProjectF.Application.Suppliers
             RuleFor(c => c.SelectedCountry)
                 .NotEmpty()
                 .WithMessage("country is required");
-                
         }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using ProjectF.Data.Entities.Clients;
-using static ProjectF.Data.Entities.Clients.ClientMapper;
+using static ProjectF.Application.Clients.ClientMapper;
 using System.Threading.Tasks;
 using System.Text.Json;
 

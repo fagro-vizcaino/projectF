@@ -1,13 +1,15 @@
 ﻿<div class="flex justify-between px-@PaddingX.ToString() py-@PaddinY bg-gray-50 mt-@MaringTop.ToString() sm:px-6">
     <div class="flex">
-        <FCancelButton OnClickButton="OnClickCancelBtn" 
-                       ButtonType="@CancelBtnType" 
+        <FCancelButton OnClickButton="OnClickCancelBtn"
+                       ButtonType="@CancelBtnType"
                        ButtonName="@CancelBtnName" />
     </div>
     <div class="flex">
-        <FPrimaryButton ButtonName="@ActionBtnName" 
-                        OnClickPrimary="OnClickPrimaryBtn" 
-                        ButtonType="@ActionBtnType" />
+
+        <FPrimaryButton OnClickButton="OnClickPrimaryBtn"
+                        ButtonType="@ActionBtnType"
+                        ButtonName="@ActionBtnName"/>
+
     </div>
 </div>
 

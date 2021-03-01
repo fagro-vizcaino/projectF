@@ -1,11 +1,11 @@
-﻿
-using System.Linq;
+﻿using ProjectF.Data.Products;
 using static ProjectF.Api.Features.Bank.BankAccountViewModel;
+using static ProjectF.Application.Banks.BankAccountsMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Application.Banks;
 using System.Threading.Tasks;
 using ProjectF.Data.Entities.Banks;
-using System.Text.Json;
+using ProjectF.Api.Infrastructure.Extensions;
 
 namespace ProjectF.Api.Features.Bank
 {
@@ -26,37 +26,34 @@ namespace ProjectF.Api.Features.Bank
                 .Create(viewModel.ToDto())
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: category => Ok(category));
+                    Right: Ok);
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public ActionResult UpdateBankAccount(long id, BankAccountViewModel viewModel)
             => _bankAccountCrudHandler
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(FromDto(c)));
+                    Right: c => Ok(FromEntity(c)));
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public IActionResult GetBankAccount(long id)
             => _bankAccountCrudHandler
                 .Find(id)
                 .Match<ActionResult>(
-                    Succ: c => Ok(FromDto(c)),
+                    Succ: c => Ok(FromEntity(c)),
                     Fail: err => NotFound(string.Join("; ", err)));
 
 
         [HttpGet]
-        public async Task<ActionResult> GetBankAccount([FromQuery] BankListParameters bankListParameters)
-            => (await _bankAccountCrudHandler.GetBankAccountList(bankListParameters))
-             .Match<ActionResult>(Left: err => NotFound(err.Message), Right: c => {
-                 Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
-                 return Ok(c.list);
-             });
+        public  Task<IActionResult> GetBankAccount([FromQuery] BankListParameters bankListParameters)
+            =>  _bankAccountCrudHandler.GetBankAccountList(bankListParameters)
+                .ToActionResult<BankAccountMainListDto, BankAccountDto>(Response);
 
-        [HttpDelete("{id}")]
-        public ActionResult Delete(long id)
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(long id)
          => _bankAccountCrudHandler.Delete(id)
          .Match<ActionResult>(
              Left: err => BadRequest(err.Message),

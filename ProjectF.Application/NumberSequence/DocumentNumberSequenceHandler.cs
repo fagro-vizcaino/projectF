@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Sequences;
 using ProjectF.Data.Entities.Common.ValueObjects;
-using static ProjectF.Data.Entities.Sequences.NumberSequenceMapper;
+using static ProjectF.Application.NumberSequences.NumberSequenceMapper;
 
-namespace ProjectF.Application.NumberSequence
+namespace ProjectF.Application.NumberSequences
 {
     public class DocumentNumberSequenceHandler
     {

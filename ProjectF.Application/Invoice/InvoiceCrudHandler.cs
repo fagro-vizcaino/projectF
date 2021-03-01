@@ -8,7 +8,7 @@ using static ProjectF.Data.Entities.Invoices.InvoiceMapper;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
-using ProjectF.Application.NumberSequence;
+using ProjectF.Application.NumberSequences;
 
 namespace ProjectF.Application.Invoice
 {

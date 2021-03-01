@@ -45,6 +45,8 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.HasOne(p => p.Warehouse);
 
+            builder.HasOne(p => p.UnitOfMeasure);
+
             builder.HasOne(p => p.Tax);
 
             builder.Property(q => q.IsService)

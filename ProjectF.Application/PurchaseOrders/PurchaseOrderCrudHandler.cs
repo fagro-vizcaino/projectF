@@ -1,6 +1,6 @@
 ﻿using ProjectF.Application.Common;
 using ProjectF.Data.Entities.PurchaseOrders;
-using static ProjectF.Data.Entities.PurchaseOrders.PurchaseOrderMapper;
+using static ProjectF.Application.PurchaseOrders.PurchaseOrderMapper;
 using ProjectF.Data.Repositories;
 using LanguageExt;
 using LanguageExt.Common;
@@ -15,7 +15,7 @@ namespace ProjectF.Application.PurchaseOrders
         readonly PurchaseOrderRepository _purchaseOrderRepository;
 
         public PurchaseOrderCrudHandler(PurchaseOrderRepository repository) : base(repository)
-            => (_purchaseOrderRepository, fromDto, fromEntity, updateEntity) 
+            => (_purchaseOrderRepository, _fromDto, _fromEntity, _updateEntity) 
             = (repository, FromDto, FromEntity, UpdateEntity);
 
         Either<Error, PurchaseOrderHeader> UpdateEntity(PurchaseOrderHeaderDto dto, PurchaseOrderHeader purchaseOrderHeader)

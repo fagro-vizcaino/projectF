@@ -1,6 +1,8 @@
-﻿using ProjectF.Data.Entities.Common.ValueObjects;
+﻿using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common.ValueObjects;
+using ProjectF.Data.Entities.Companies;
 
-namespace ProjectF.Data.Entities.Companies
+namespace ProjectF.Application.Companies
 {
     public static class CompanyMapper
     {

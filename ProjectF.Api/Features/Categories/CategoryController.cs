@@ -1,6 +1,6 @@
 using System.Linq;
 using ProjectF.Application.Categories;
-using static ProjectF.Data.Entities.Categories.CategoryMapper;
+using static ProjectF.Application.Categories.CategoryMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ProjectF.Data.Entities.Categories;

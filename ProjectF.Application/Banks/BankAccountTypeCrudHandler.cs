@@ -1,5 +1,5 @@
 ﻿using ProjectF.Data.Entities.Banks;
-using static ProjectF.Data.Entities.Banks.BankAccountsMapper;
+using static ProjectF.Application.Banks.BankAccountsMapper;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System;

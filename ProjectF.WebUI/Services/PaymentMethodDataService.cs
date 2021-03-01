@@ -3,7 +3,7 @@ using ProjectF.WebUI.Pages.PaymentMethods;
 
 namespace ProjectF.WebUI.Services
 {
-    public class PaymentMethodDataService : _BaseDataService<PaymentMethod>
+    public class PaymentMethodDataService : BaseDataService<PaymentMethod>
     {
         const string _baseUrl = "config/paymentMethod";
         public PaymentMethodDataService(HttpClient httpClient)

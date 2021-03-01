@@ -4,8 +4,5 @@ using System;
 namespace ProjectF.Data.Entities.Taxes
 {
     public record TaxDto(string Name
-        , decimal PercentValue
-        , int CompanyId
-        , DateTime Created
-        , DateTime? Modified) : FDto;
+        , decimal PercentValue) : FDto;
 }

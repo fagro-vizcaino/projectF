@@ -60,7 +60,7 @@ namespace ProjectF.Data.Entities.Common
             Type type = GetType();
 
             if (type.ToString().Contains("Castle.Proxies."))
-                return type.BaseType;
+                return type?.BaseType ?? type;
 
             return type;
         }

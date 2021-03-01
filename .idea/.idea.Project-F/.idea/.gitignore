@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.Project-F.iml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../../../:\Users\fagro\Workspace\ProjectF\src\.idea\.idea.Project-F\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
