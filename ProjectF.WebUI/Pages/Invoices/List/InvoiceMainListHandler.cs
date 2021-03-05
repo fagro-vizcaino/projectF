@@ -16,6 +16,7 @@ namespace ProjectF.WebUI.Pages.Invoices.List
 
         public bool DropDownEditOpen { get; set; } = false;
         public InvoiceListParameters QueryParameters { get; set; }
+
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 

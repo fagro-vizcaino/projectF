@@ -29,17 +29,19 @@ namespace ProjectF.Application.Banks
                 dto.Status);
 
         public static BankAccountType FromDto(BankAccountTypeDto dto)
-            => new BankAccountType(new Name(dto.Name)
+            => new(new Name(dto.Name)
                 , new GeneralText(dto.Description)
                 , dto.Created
                 , dto.Status);
 
         public static BankAccountTypeDto FromEntity(BankAccountType entity)
-            => new BankAccountTypeDto(entity.Id
-                , entity.Name.Value
-                , entity.Description.Value
-                , entity.Created
-                , entity.Modified
-                , entity.Status);
+            => new (entity.Name.Value
+                , entity.Description.Value)
+            {
+                Id = entity.Id,
+                Created = entity.Created,
+                Modified = entity.Modified,
+                Status = entity.Status
+            };
     }
 }

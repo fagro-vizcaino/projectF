@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using ProjectF.WebUI.Models;
@@ -11,14 +9,12 @@ namespace ProjectF.WebUI.Pages.PurchaseOrders
 {
     public class PurchaseOrderDetailLineHandler : ComponentBase
     {
-        [Parameter]
-        public Product[] Products { get; set; } = System.Array.Empty<Product>();
-        
-        [Parameter]
-        public PaymentTerm[] PaymentTerms { get; set; } = System.Array.Empty<PaymentTerm>();
+        [Parameter] public Product[] Products { get; set; } = Array.Empty<Product>();
+        [Parameter] public EventCallback<PurchaseOrderDetail> OnSaveDetailClick { get; set; }
 
-        [Parameter]
-        public Tax[] Taxes { get; set; } = System.Array.Empty<Tax>();
+        [Parameter] public PaymentTerm[] PaymentTerms { get; set; } = Array.Empty<PaymentTerm>();
+       
+        [Parameter] public Tax[] Taxes { get; set; } = Array.Empty<Tax>();
         public ImmutableList<PurchaseOrderDetail> Details { get; set; } = ImmutableList<PurchaseOrderDetail>.Empty;
 
         public PurchaseOrderDetail Line { get; set; }
@@ -30,15 +26,23 @@ namespace ProjectF.WebUI.Pages.PurchaseOrders
             return base.OnInitializedAsync();
         }
 
-
-        public void OnSelectProductChangedHandler(Product product)
+        protected void OnSelectProductChangedHandler(Product product)
         {
-            Console.WriteLine($"product selected {product.Name}");
+            Line = new PurchaseOrderDetail()
+            {
+                Cost = product.Cost,
+                Description = product.Name,
+                ProductCode = product.Code,
+                Qty = 1,
+                TaxPercent = Line.TaxPercent
+            };
+        }
+        protected void OnSaveHandler()
+        {
+            OnSaveDetailClick.InvokeAsync(Line);
+            Line = new();
         }
 
-        public void OnAddPurchaseDetailHandler()
-        {
-
-        }
+        
     }
 }

@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Threading.Tasks;
 using LanguageExt;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PlaywrightSharp;
 using ProjectF.Application.Common;
-using ProjectF.Application.Products;
-using ProjectF.Data.Entities.Products;
 
 namespace ProjectF.Api.Infrastructure.Extensions
 {

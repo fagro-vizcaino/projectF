@@ -9,7 +9,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using ProjectF.WebUI.Pages.Invoices.List;
 using ProjectF.WebUI.Services.Common;
 using Array = System.Array;
 
@@ -53,7 +52,7 @@ namespace ProjectF.WebUI.Services
         {
             var result = await _httpClient.DeleteAsync($"{_baseUrl}/{elementId}");
             return result.IsSuccessStatusCode
-                ? Some(Boolean.TrueString)
+                ? Some(bool.TrueString)
                 : None;
         }
 
@@ -62,9 +61,8 @@ namespace ProjectF.WebUI.Services
             try
             {
                 var result =  await _httpClient.GetFromJsonAsync<IEnumerable<T>>(_baseUrl);
-                var items = result as T[] ?? (result ?? Array.Empty<T>()).ToArray();
                 //Console.WriteLine($"Items from {JsonSerializer.Serialize(items)}");
-                return items;
+                return result;
             }
             catch (Exception ex)
             {
