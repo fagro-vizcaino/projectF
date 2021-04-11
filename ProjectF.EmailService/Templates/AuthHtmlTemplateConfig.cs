@@ -1,4 +1,4 @@
-﻿namespace ProjectF.EmailService.Auth
+﻿namespace ProjectF.EmailService.Templates
 {
     public class AuthHtmlTemplateConfig
     {

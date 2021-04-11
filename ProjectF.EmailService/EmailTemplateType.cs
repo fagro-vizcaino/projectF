@@ -7,4 +7,5 @@ namespace ProjectF.EmailService
         Register,
         Default
     }
+
 }

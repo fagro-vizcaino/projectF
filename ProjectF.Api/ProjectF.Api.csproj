@@ -4,6 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UserSecretsId>dc957a92-3fa7-4661-9ebe-2f67a7fdc02a</UserSecretsId>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,6 +36,11 @@
 <ItemGroup>
   <ProjectReference Include="..\ProjectF.Application\ProjectF.Application.csproj" />
   <ProjectReference Include="..\ProjectF.EmailService\ProjectF.EmailService.csproj" />
+</ItemGroup>
+<ItemGroup>
+  <Content Update="EmailTemplates\auth\RegisterEmail.cshtml">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
 </ItemGroup>
 <ItemGroup>
   <None Update="EmailTemplates\auth\ForgotPassword.html">

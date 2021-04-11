@@ -6,20 +6,18 @@ using Microsoft.Extensions.Hosting;
 using ProjectF.Api.Infrastructure;
 using ProjectF.EmailService;
 using Microsoft.AspNetCore.Routing;
-using ProjectF.EmailService.Auth;
+using ProjectF.EmailService.Templates;
 using System;
 using FluentValidation.AspNetCore;
 using ProjectF.Application.Companies;
 using ProjectF.Data.Entities.Auth;
-
+using FluentEmail;
 namespace ProjectF.Api
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+           => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -37,22 +35,29 @@ namespace ProjectF.Api
             services.ConfigureIdentity();
             services.ConfigureJWT(Configuration);
 
-            var emailConfig = Configuration
-                .GetSection("EmailConfiguration")
-                .Get<EmailConfiguration>();
-
-            emailConfig.UserName = Environment.GetEnvironmentVariable("emailusername") ?? string.Empty;
-            emailConfig.Password = Environment.GetEnvironmentVariable("emailpassword") ?? string.Empty;
-
-            services.AddSingleton(emailConfig);
-            services.AddScoped<IEmailSender, EmailSender>();
-            //services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
-
             var authHtmlTemplate = Configuration
                 .GetSection("AuthTemplates")
                 .Get<AuthHtmlTemplateConfig>();
 
             services.AddSingleton(authHtmlTemplate);
+
+            var emailConfig = Configuration
+                .GetSection("SendGrid")
+                .Get<SendGridConfiguration>();
+
+            emailConfig.Sender = Environment.GetEnvironmentVariable("email_sender") ?? string.Empty;
+            emailConfig.Key    = Environment.GetEnvironmentVariable("sendgrid_email_key") ?? string.Empty;
+
+            services
+               .AddFluentEmail(emailConfig.Sender)
+               .AddSendGridSender(emailConfig.Key)
+               .AddRazorRenderer();
+
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
+            //services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
+
+
             services.AddScoped<IGetClaimsProvider, GetClaimsFromUser>();
 
             services.AddControllers()
@@ -63,6 +68,8 @@ namespace ProjectF.Api
                 options.LowercaseUrls = true;
                 options.LowercaseQueryStrings = true;
             });
+
+           
 
         }
 

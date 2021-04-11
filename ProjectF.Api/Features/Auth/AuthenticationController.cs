@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ProjectF.Application.Companies;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjectF.Api.Features.Auth
 {
@@ -98,10 +100,12 @@ namespace ProjectF.Api.Features.Auth
                 .Replace(uri, _config.GetValue<string>("AppSettings:webui"));
 
             var message = new Message(new string[] { user.Email }, "Confirmar Email"
-                , confirmationLink
+                , string.Empty
+                , new { Name = $"{user.FirstName} {user.LastName}", Link = confirmationLink}
                 , attachments: null);
 
             await _emailSender.SendEmailAsync(message, EmailTemplateType.Register);
+            _logger.LogInformation($"email was sent");
             await _companyCrudHandler.GenerateDefaultCompany(savedUser);
             return StatusCode(201);
         }
@@ -140,23 +144,27 @@ namespace ProjectF.Api.Features.Auth
             if(user is null) return BadRequest("user not valid");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var callback = Url.Action(""
+            var forgotPasswordUrl = Url.Action(""
                 , nameof(ResetPassword)
                 , new { token = "mtoken" }
                 , Request.Scheme);
-            callback = callback.Replace("%2F","/");
+            forgotPasswordUrl = forgotPasswordUrl.Replace("%2F","/");
 
             var bytesToken = Encoding.UTF8.GetBytes(token);
             var encodeToken = Convert.ToBase64String(bytesToken);
 
             var encodeEmail = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Email));
 
-            callback = callback.Replace("?token=", "/");
-            callback = callback.Replace("mtoken", encodeToken);
-            callback = $"{callback}/{encodeEmail}";
-            callback = callback.Replace("http://localhost:5000/", "http://localhost:5001/");
+            forgotPasswordUrl = forgotPasswordUrl.Replace("?token=", "/");
+            forgotPasswordUrl = forgotPasswordUrl.Replace("mtoken", encodeToken);
+            forgotPasswordUrl = $"{forgotPasswordUrl}/{encodeEmail}";
+            forgotPasswordUrl = forgotPasswordUrl.Replace("http://localhost:5000/", "http://localhost:5001/");
 
-            var message = new Message(new [] { user.Email}, "restablezca su contrase�a", callback, null);
+            var message = new Message(to:new [] { user.Email}, 
+                subject: "restablezca su contraseña",
+                content: string.Empty,
+                forgotPasswordUrl, 
+                null);
             await _emailSender.SendEmailAsync(message, EmailTemplateType.ForgotPassword);
             
             return Ok();

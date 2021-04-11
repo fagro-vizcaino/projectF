@@ -1,20 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ProjectF.EmailService.Templates;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectF.EmailService
 {
     public static class EmailTemplateParser
     {
-        public static string FindHtmlTemplate(string htmlPath)
+        static string FindHtmlTemplate(string htmlPath)
         {
             var _basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
             var path = Path.Combine(_basePath, htmlPath);
 
-            return File.ReadAllText(path);
+            return path;
         }
+
+        public static string GetTemplatePath(EmailTemplateType emailTemplate, AuthHtmlTemplateConfig template)
+            => emailTemplate switch
+            {
+                EmailTemplateType.ForgotPassword => FindHtmlTemplate(template.ForgotPassword),
+                EmailTemplateType.Register => FindHtmlTemplate(template.RegisterAccount),
+                EmailTemplateType.Default => "defaultTemplate",
+                _ => "no template",
+            };
     }
 }

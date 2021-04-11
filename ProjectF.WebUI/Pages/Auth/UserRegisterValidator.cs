@@ -34,7 +34,7 @@ namespace ProjectF.WebUI.Pages.Auth
               .MaximumLength(MAX_PASSWORD_LENGHT)
               .WithMessage($"Máximo Carateres {MAX_PASSWORD_LENGHT}")
               .MinimumLength(MIN_PASSWORD_LENGHT)
-              .WithMessage($"Su contraseña debe tener mas de {MIN_PASSWORD_LENGHT} caracteres");
+              .WithMessage($"Su contraseña debe tener {MIN_PASSWORD_LENGHT} caracteres o más.");
         }
     }
 }

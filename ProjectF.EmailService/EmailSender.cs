@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ProjectF.EmailService.Templates;
 using static ProjectF.EmailService.EmailTemplateParser;
-using MailKit.Net.Smtp;
-using MimeKit;
-using ProjectF.EmailService.Auth;
+using FluentEmail.Core;
+using FluentEmail.Core.Models;
+using System;
 
 namespace ProjectF.EmailService
 {
@@ -15,131 +14,73 @@ namespace ProjectF.EmailService
 
     public class EmailSender : IEmailSender
     {
-        private readonly EmailConfiguration _emailConfig;
-        readonly AuthHtmlTemplateConfig _authTemplate;
-        public EmailSender(EmailConfiguration emailConfig
-            , AuthHtmlTemplateConfig authHtml)
+        private readonly SendGridConfiguration _emailConfig;
+        readonly AuthHtmlTemplateConfig _authTemplatePath;
+        readonly IFluentEmailFactory _emailClientFactory;
+        public EmailSender(SendGridConfiguration emailConfig
+            , AuthHtmlTemplateConfig authHtml
+            , IFluentEmailFactory emailClientFactory)
         {
-            _emailConfig = emailConfig;
-            _authTemplate = authHtml;
-
+            _emailConfig                 = emailConfig;
+            _authTemplatePath            = authHtml;
+            _emailClientFactory          = emailClientFactory;
         }
 
         public void SendEmail(Message message)
         {
-            var emailMessage = CreateEmailMessage(message, EmailTemplateType.Default);
-
-            Send(emailMessage);
+            try
+            {
+                var emailMessage = CreateEmailMessage(message, EmailTemplateType.Default);
+                Send(emailMessage);
+            }
+            catch (Exception ex) { throw; }
+            
         }
 
         public async Task SendEmailAsync(Message message, EmailTemplateType emailTemplate)
         {
-            var mailMessage = CreateEmailMessage(message, emailTemplate);
-
-            await SendAsync(mailMessage);
+            try
+            {
+                var mailMessage = CreateEmailMessage(message, emailTemplate);
+                await SendAsync(mailMessage);
+            }
+            catch (Exception ex){ throw; }
+            
         }
 
-        private MimeMessage CreateEmailMessage(Message message, EmailTemplateType emailTemplate)
+        private IFluentEmail CreateEmailMessage(Message message, EmailTemplateType emailTemplateType)
         {
-            var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
-            emailMessage.To.AddRange(message.To);
-            emailMessage.Subject = message.Subject;
 
-            var bodyBuilder = new BodyBuilder
-            {
-                HtmlBody = GetHtmlEmailTemplate(emailTemplate, message.Content)
-            };
-
-            if (message.Attachments != null && message.Attachments.Any())
+            var attachements = new List<Attachment>();
+            if (message.Attachments is not null && message.Attachments.Any())
             {
                 byte[] fileBytes;
                 foreach (var attachment in message.Attachments)
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        attachment.CopyTo(ms);
-                        fileBytes = ms.ToArray();
-                    }
-
-                    bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
+                    using var ms = new MemoryStream();
+                    attachment.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                    attachements.Add(new Attachment { Filename = attachment.FileName, Data = ms, ContentType = attachment.ContentType });
                 }
             }
+            var createdEmail = _emailClientFactory
+                  .Create()
+                  .To(string.Join(";",message.To))
+                  .Subject(message.Subject)
+                  .Attach(attachements);
 
-            emailMessage.Body = bodyBuilder.ToMessageBody();
+            
+            if (!message.IsRazorTemplate) return createdEmail.Body(message.Content);
 
-            return emailMessage;
+            var path = GetTemplatePath(emailTemplateType, _authTemplatePath);
+
+            return createdEmail.UsingTemplateFromFile(path, message.Model);
         }
 
-        private void Send(MimeMessage mailMessage)
-        {
-            using (var client = new SmtpClient())
-            {
-                try
-                {
-                    client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
+        private void Send(IFluentEmail fluentEmail)
+            => fluentEmail.Send();
 
-                    client.Send(mailMessage);
-                }
-                catch
-                {
-                    //log an error message or throw an exception, or both.
-                    throw;
-                }
-                finally
-                {
-                    client.Disconnect(true);
-                    client.Dispose();
-                }
-            }
-        }
-
-        private async Task SendAsync(MimeMessage mailMessage)
-        {
-            using (var client = new SmtpClient())
-            {
-                try
-                {
-                    await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, MailKit.Security.SecureSocketOptions.StartTls);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
-
-                    await client.SendAsync(mailMessage);
-                }
-                catch
-                {
-                    //log an error message or throw an exception, or both.
-                    throw;
-                }
-                finally
-                {
-                    await client.DisconnectAsync(true);
-                    client.Dispose();
-                }
-            }
-        }
-
-
-        public string GetHtmlEmailTemplate(EmailTemplateType emailTemplate, string messageContent)
-        {
-            switch (emailTemplate)
-            {
-                case EmailTemplateType.ForgotPassword:
-                    {
-                        var template = FindHtmlTemplate(_authTemplate.ForgotPassword);
-                        return template.Replace("{content}", messageContent);
-                    }
-                case EmailTemplateType.Register:
-                    {
-                        var template = FindHtmlTemplate(_authTemplate.RegisterAccount);
-                        return template.Replace("{$link}", messageContent);
-                    }
-                case EmailTemplateType.Default: return messageContent;
-                default:
-                    return messageContent;
-            }
-        }
+        private async Task SendAsync(IFluentEmail fluentEmail)
+            => await fluentEmail.SendAsync();
     }
 }
