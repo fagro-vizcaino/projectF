@@ -30,7 +30,7 @@ namespace ProjectF.Application.Invoice
         Task<Either<Error, (List<InvoiceListDto>, MetaData)>> GetInvoiceList(InvoiceListParameters listParameters)
             => _invoiceRepository.GetInvoiceMainListAsync(listParameters, true)
                 .MapT(c => (InvoiceList: c.Select(i => new InvoiceListDto(i.Id,
-               i.Created,
+               i.InvoiceDate,
                i.DueDate,
                i.Total,
                0,

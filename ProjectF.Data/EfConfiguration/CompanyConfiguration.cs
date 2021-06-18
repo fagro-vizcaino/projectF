@@ -2,15 +2,23 @@ using ProjectF.Data.Entities;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class CompanyConfiguration : IEntityTypeConfiguration<Company>
     {
+        readonly long _companyId;
+
+        public CompanyConfiguration() { }
+        public CompanyConfiguration(long companyId): this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<Company> builder)
         {
-            builder.ToTable("Company").HasKey(c => c.Id);
-            builder.Property(c => c.Id).HasColumnName("CompanyId");
+            builder.ToTable("Company").HasKey(c => c.CompanyId);
+            builder.Property(c => c.CompanyId).HasColumnName("CompanyId");
 
             builder.Property(q => q.Name)
                 .HasMaxLength(60)
@@ -35,10 +43,19 @@ namespace ProjectF.Data.EfConfiguration
                 .HasMaxLength(11)
                 .HasConversion(p => p.Value, p => new Phone(p));
 
-            builder.HasOne(p => p.RegimeType);
-
-            builder.HasOne(p => p.Currency);
+            builder.Property(c => c.Status)
+                .IsRequired();
             
+            builder.Property(c => c.Created)
+                .IsRequired()
+                .HasColumnType("Datetime");
+            
+            builder.Property(c => c.Modified)
+                .HasColumnType("Datetime");
+            
+            builder.HasQueryFilter(x => x.Status == EntityStatus.Active);
+
+
         }
     }
 }

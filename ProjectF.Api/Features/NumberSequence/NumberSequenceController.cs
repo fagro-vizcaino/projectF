@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectF.Application.NumberSequence;
+using ProjectF.Application.NumberSequences;
 using ProjectF.Data.Entities.Sequences;
 using System.Linq;
 

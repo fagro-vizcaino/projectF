@@ -11,6 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectF.Application", "Pro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectF.Api", "ProjectF.Api\ProjectF.Api.csproj", "{0737900F-C9D7-4B3D-8C45-FE4925AAA555}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectF.EmailService", "ProjectF.EmailService\ProjectF.EmailService.csproj", "{BFE2703A-22B0-47C7-8324-85FA0FE03FCE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A71F0E1-1A5A-404D-ADEE-AC56DC1123C2}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines-API.yml = azure-pipelines-API.yml
+		azure-pipelines-WebUI.yml = azure-pipelines-WebUI.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +41,10 @@ Global
 		{0737900F-C9D7-4B3D-8C45-FE4925AAA555}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0737900F-C9D7-4B3D-8C45-FE4925AAA555}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0737900F-C9D7-4B3D-8C45-FE4925AAA555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFE2703A-22B0-47C7-8324-85FA0FE03FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFE2703A-22B0-47C7-8324-85FA0FE03FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFE2703A-22B0-47C7-8324-85FA0FE03FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFE2703A-22B0-47C7-8324-85FA0FE03FCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

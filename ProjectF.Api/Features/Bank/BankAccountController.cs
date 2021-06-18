@@ -1,8 +1,11 @@
-﻿
-using System.Linq;
+﻿using ProjectF.Data.Products;
 using static ProjectF.Api.Features.Bank.BankAccountViewModel;
+using static ProjectF.Application.Banks.BankAccountsMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Application.Banks;
+using System.Threading.Tasks;
+using ProjectF.Data.Entities.Banks;
+using ProjectF.Api.Infrastructure.Extensions;
 
 namespace ProjectF.Api.Features.Bank
 {
@@ -23,48 +26,37 @@ namespace ProjectF.Api.Features.Bank
                 .Create(viewModel.ToDto())
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: category => Ok(category));
+                    Right: Ok);
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public ActionResult UpdateBankAccount(long id, BankAccountViewModel viewModel)
             => _bankAccountCrudHandler
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(FromDto(c)));
+                    Right: c => Ok(FromEntity(c)));
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public IActionResult GetBankAccount(long id)
             => _bankAccountCrudHandler
                 .Find(id)
                 .Match<ActionResult>(
-                    Succ: c => Ok(FromDto(c)),
+                    Succ: c => Ok(FromEntity(c)),
                     Fail: err => NotFound(string.Join("; ", err)));
 
 
         [HttpGet]
-        public ActionResult GetBankAccount()
-        {
-            var result = _bankAccountCrudHandler.GetAll()
-                .Select(c => FromDto(c));
-            if (result.Any()) return Ok(result);
+        public  Task<IActionResult> GetBankAccount([FromQuery] BankListParameters bankListParameters)
+            =>  _bankAccountCrudHandler.GetBankAccountList(bankListParameters)
+                .ToActionResult<BankAccountMainListDto, BankAccountDto>(Response);
 
-            return NotFound();
-        }
-
-        [HttpDelete("{id}")]
-        public ActionResult Delete(long id)
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(long id)
          => _bankAccountCrudHandler.Delete(id)
          .Match<ActionResult>(
              Left: err => BadRequest(err.Message),
              Right: c => NoContent());
-        //[HttpGet]
-        //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )
-        //{
-        //    var result = _categoryOperations.GetAll()
-        //    return Ok();
-        //}
     }
 }

@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
+using static System.Guid;
 
 namespace ProjectF.WebUI.Components.Common
 {
@@ -13,7 +14,7 @@ namespace ProjectF.WebUI.Components.Common
     {
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public string CustomCssClass { get; set;}
-        string _textInputCss = "block appearance-none w-full border border-gray-400 round py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
+        string _textInputCss = "w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-2 resize-none leading-6 transition-colors duration-200 ease-in-out";
         // Generate html when the component is rendered.
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
@@ -37,7 +38,8 @@ namespace ProjectF.WebUI.Components.Common
 
                 return true;
             }
-            else if (typeof(TValue) == typeof(int))
+
+            if (typeof(TValue) == typeof(int))
             {
                 int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedValue);
                 result = (TValue)(object)parsedValue;
@@ -45,7 +47,8 @@ namespace ProjectF.WebUI.Components.Common
 
                 return true;
             }
-            else if (typeof(TValue) == typeof(long))
+
+            if (typeof(TValue) == typeof(long))
             {
                 long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedValue);
                 result = (TValue)(object)parsedValue;
@@ -53,15 +56,26 @@ namespace ProjectF.WebUI.Components.Common
 
                 return true;
             }
-            else if (typeof(TValue) == typeof(Guid))
+
+            if (typeof(TValue) == typeof(decimal))
             {
-                Guid.TryParse(value, out var parsedValue);
+                decimal.TryParse(value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var parsedValue);
                 result = (TValue)(object)parsedValue;
                 validationErrorMessage = null;
 
                 return true;
             }
-            else if (typeof(TValue).IsEnum)
+
+            if (typeof(TValue) == typeof(Guid))
+            {
+                TryParse(value, out var parsedValue);
+                result = (TValue)(object)parsedValue;
+                validationErrorMessage = null;
+
+                return true;
+            }
+
+            if (typeof(TValue).IsEnum)
             {
                 try
                 {

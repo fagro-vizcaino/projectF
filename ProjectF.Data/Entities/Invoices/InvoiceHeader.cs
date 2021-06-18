@@ -8,18 +8,17 @@ using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Entities.Invoices
 {
-    public class InvoiceHeader : Entity
+    public class InvoiceHeader : _BaseEntity
     {
         public Code Code { get; private set; }
         public string Ncf { get; private set; }
         public int NumberSequenceId { get; private set; }
         public string Rnc { get; private set; }
         public virtual Client Client { get; private set; }
-        public virtual Company Company { get; private set; }
-        public DateTime Created { get; private set; }
+        //public virtual Company Company { get; private set; }
+        public DateTime InvoiceDate { get; private set; }
         public DateTime DueDate { get; private set; }
-        
-        public virtual PaymentTerm PaymentTerm { get; private set; }
+        public PaymentTerm PaymentTerm { get; private set; }
         public decimal Discount { get; private set; }
         public decimal SubTotal { get; private set; }
         public decimal TaxTotal { get; private set; }
@@ -31,9 +30,6 @@ namespace ProjectF.Data.Entities.Invoices
         private readonly List<InvoiceDetail> _invoiceDetails = new List<InvoiceDetail>();
         public virtual IReadOnlyList<InvoiceDetail> InvoiceDetails => _invoiceDetails.ToList();
 
-        public DateTime SystemCreated { get; private set; }
-        public DateTime? SystemModified { get; private set; }
-
         protected InvoiceHeader() { }
 
         public InvoiceHeader(Code code,
@@ -41,7 +37,7 @@ namespace ProjectF.Data.Entities.Invoices
             int numberSequenceId,
             string rnc,
             Client client,
-            DateTime created,
+            DateTime invoiceDate,
             DateTime dueDate,
             PaymentTerm paymentTerm,
             GeneralText notes,
@@ -51,14 +47,16 @@ namespace ProjectF.Data.Entities.Invoices
             decimal subTotal,
             decimal taxTotal,
             decimal total,
-            List<InvoiceDetailDto> invoiceDetail)
+            List<InvoiceDetail> invoiceDetail,
+            DateTime created,
+            EntityStatus status = EntityStatus.Active)
         {
             Code              = code;
             Ncf               = ncf;
             NumberSequenceId  = numberSequenceId;
             Rnc               = rnc;
             Client            = client;
-            Created           = created;
+            InvoiceDate       = invoiceDate;
             DueDate           = dueDate;
             PaymentTerm       = paymentTerm;
             Notes             = notes;
@@ -68,21 +66,21 @@ namespace ProjectF.Data.Entities.Invoices
             SubTotal          = subTotal;
             TaxTotal          = taxTotal;
             Total             = total;
-            SystemCreated     = DateTime.UtcNow;
+            Created           = created == DateTime.MinValue ? DateTime.Now : created;
+            Status            = status;
             _invoiceDetails.AddRange(CreateDetails(invoiceDetail));
         }
 
 
-        IEnumerable<InvoiceDetail> CreateDetails(IEnumerable<InvoiceDetailDto> details)
+        IEnumerable<InvoiceDetail> CreateDetails(IEnumerable<InvoiceDetail> details)
         {
             var invoiceHeader = this;
-            return details.Map(d => new InvoiceDetail(
-                new Code(d.ProductCode),
-                new Name(d.ProductDescription),
-                d.Qty,
-                d.Amount,
-                d.TaxPercent,
-                invoiceHeader));
+            return details.Map(d => new InvoiceDetail(d.ProductCode
+                , d.Description
+                , d.Qty
+                , d.Amount
+                , d.TaxPercent
+                , invoiceHeader));
         }
 
         public void EditInvoiceHeader(Code code,
@@ -112,35 +110,9 @@ namespace ProjectF.Data.Entities.Invoices
             Notes                       = notes;
             TermAndConditions           = termAndConditions;
             Footer                      = footer;
-            SystemModified              = DateTime.UtcNow;
+            Modified                    = DateTime.UtcNow;
             _invoiceDetails.RemoveAll(c => c.Id == c.Id);
             _invoiceDetails.AddRange(_localInvoiceDetails);
         }
-
-        public static implicit operator InvoiceHeaderDto(InvoiceHeader invoice)
-            => new InvoiceHeaderDto(invoice.Id,
-                invoice.Code.Value,
-                invoice.Ncf,
-                invoice.NumberSequenceId,
-                invoice.Rnc,
-                invoice.Client.Id,
-                invoice.Client,
-                invoice.Created,
-                invoice.DueDate,
-                invoice.PaymentTerm.Id,
-                invoice.PaymentTerm,
-                invoice.Notes.Value,
-                invoice.TermAndConditions.Value,
-                invoice.Footer.Value,
-                invoice.Discount,
-                invoice.SubTotal,
-                invoice.TaxTotal,
-                invoice.Total,
-                invoice.InvoiceDetails.Map(i => new InvoiceDetailDto(i.Id,
-                    i.ProductCode.Value,
-                    i.Description.Value,
-                    i.Qty,
-                    i.Amount,
-                    i.TaxPercent)));
     }
 }

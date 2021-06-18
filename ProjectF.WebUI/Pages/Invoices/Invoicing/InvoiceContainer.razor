@@ -26,7 +26,7 @@
                                 <label class="block text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                                     Cliente
                                 </label>
-                                <Select ShowSearch
+                                @*<Select ShowSearch
                                         Style="width:100%"
                                         Placeholder="Seleccione un cliente"
                                         OnChange="OnChangeClient"
@@ -35,9 +35,10 @@
                                         OptionFilterProp="children">
                                     @foreach (var customer in Clients)
                                     {
-                                        <SelectOption Value="@customer.Id.ToString()">@customer.Name</SelectOption>
+                                        <SelectOption Value="@customer.Id.ToString()">@customer.DisplayName</SelectOption>
                                     }
-                                </Select>
+                                </Select>*@
+                                
                             </div>
                             <div class="mb-2">
                                 <label class="block text-gray-700 text-xs font-bold mb-1" for="grid-first-name">
@@ -52,7 +53,7 @@
                                 </label>
                                 <div class="mb-4">
                                     <div class="inline-block relative w-full">
-                                        <Select ShowSearch
+                                        @*<Select ShowSearch
                                                 Style="width:100%"
                                                 Placeholder="Seleccione un termino"
                                                 OnChange="OnChangePaymentTerm"
@@ -63,7 +64,7 @@
                                             {
                                                 <SelectOption Value="@term.Id.ToString()">@term.Description</SelectOption>
                                             }
-                                        </Select>
+                                        </Select>*@
                                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                                         </div>
@@ -72,7 +73,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex-col w-1/3 mr-1">
+                        <div class="flex-col w-1/3 mr-2">
                             <div class="mb-2">
                                 <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
                                     Email
@@ -95,33 +96,63 @@
                                 <FCustomValidationMessage For="@(() => _model.DueDate)" Class="mt-2 font-semibold text-red-600" />
                             </div>
                         </div>
-                        <div class="flex-col w-1/3 flex-col w-1/3 self-center">
-                            <div class="flex flex-col items-end">
-                                <Dropdown Placement="@PlacementType.BottomRight" Trigger="@(new TriggerType[] { TriggerType.Click })">
-                                    <Overlay>
-                                        <div class="origin-bottom-right rounded-md shadow-lg">
-                                            <div class="rounded-md bg-white shadow-xs">
-                                                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                                    <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
-                                                        Credito Fiscal
-                                                    </a>
-                                                    <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
-                                                        Consumidor Final
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Overlay>
-                                    <ChildContent>
-                                        <button class="ml-2 mr-2 text-gray-600 font-semibold py-1 px-4 border border-white rounded shadow hover:text-gray-900" type="button">
+                        <div class="flex-col w-1/3">
+                            <div class="mb-2">
+                                <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
+                                    Sequencia Comprobante
+                                </label>
+                                <div class="mb-4">
+                                    <div class="inline-block relative w-full">
+                                        @*<Select ShowSearch
+                                                Style="width:100%"
+                                                Placeholder="NCF (Comprobante)"
+                                                OnChange="OnChangeNumberSequence"
+                                                DefaultValue=@(_model.PaymentTerm.Id.ToString())
+                                                Value="@_model.PaymentTerm.Id.ToString()"
+                                                OptionFilterProp="children">
+                                            @foreach (var term in NumberSequences)
+                                            {
+                                                <SelectOption Value="@term.Id.ToString()">@term.Name</SelectOption>
+                                            }
+                                        </Select>*@
+                                        <FCustomValidationMessage For="@(() => _model.Ncf)" Class="mt-2 font-semibold text-red-600" />
+                                        <input @bind-value="_model.Ncf"
+                                               class="mt-2 appearance-none block w-5/6 bg-gray-200 border rounded py-3 px-4 mb-3 text-right text-base font-semibold leading-tight focus:outline-none focus:bg-white"
+                                               id="grid-first-name" type="text" placeholder="@_model.Ncf" disabled>
+
+                                    </div>
+                                </div>
+                                @*<div class="flex flex-col items-end">
+                                        <label class="block tracking-wide text-gray-700 text-xs font-bold mb-1" for="grid-last-name">
                                             Tipo Comprobante
-                                            <i class="ml-2 fas fa-caret-down text-gray-900"></i>
-                                        </button>
-                                    </ChildContent>
-                                </Dropdown>
-                                <input class="mt-2 appearance-none block w-5/6 bg-gray-200 border rounded py-3 px-4 mb-3 text-right text-base font-semibold leading-tight focus:outline-none focus:bg-white"
-                                       id="grid-first-name" type="text" placeholder="1545" disabled>
+                                        </label>
+                                        <Dropdown Placement="@PlacementType.BottomRight" Trigger="@(new TriggerType[] { TriggerType.Click })">
+                                            <Overlay>
+                                                <div class="origin-bottom-right rounded-md shadow-lg">
+                                                    <div class="rounded-md bg-white shadow-xs">
+                                                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                                            <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                                                Credito Fiscal
+                                                            </a>
+                                                            <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                                                                Consumidor Final
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Overlay>
+                                            <ChildContent>
+                                                <button class="ml-2 mr-2 text-gray-600 font-semibold py-2 px-4 border border-gray-300 rounded shadow-sm hover:text-gray-900" type="button">
+                                                    Seleccione
+                                                    <i class="ml-2 fas fa-caret-down text-gray-900"></i>
+                                                </button>
+                                            </ChildContent>
+                                        </Dropdown>
+                                        <input class="mt-2 appearance-none block w-5/6 bg-gray-200 border rounded py-3 px-4 mb-3 text-right text-base font-semibold leading-tight focus:outline-none focus:bg-white"
+                                               id="grid-first-name" type="text" placeholder="1545" disabled>
+                                    </div>*@
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -201,8 +232,8 @@
                 <button class="ml-2 mr-2 bg-black opacity-75 hover:bg-gray-700 text-white font-semibold py-1 px-4 border border-white rounded-full shadow">Limpar</button>
             </div>
             <div>
-                <a href="#" 
-                   @onclick="async () => DownloadFile()"
+                <a href="#"
+                   @onclick="async () => await DownloadFile()"
                    @onclick:preventDefault="true"
                    class="no-underline hover:underline text-indigo-600 text-sm">
                     Impresion Previa
@@ -242,6 +273,6 @@
 
 @code {
 
-   
+
 
 }

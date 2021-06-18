@@ -6,147 +6,44 @@ using static ProjectF.Application.Validator.Validators;
 using System;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Banks;
+using static ProjectF.Application.Banks.BankAccountsMapper;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using System.Threading.Tasks;
+using ProjectF.Data.Entities.RequestFeatures;
+using System.Linq;
+using ProjectF.Application.Common;
 
 namespace ProjectF.Application.Banks
 {
-    public class BankAccountCrudHandler
+    public class BankAccountCrudHandler : BaseCrudHandler<BankAccountDto, BankAccount, BankAccountRepository>
     {
-        readonly BankAccountRepository _bankRepository;
+        private readonly BankAccountRepository _bankRepository;
         readonly BankAccountTypeRepository _bankAccountTypeRepository;
         public BankAccountCrudHandler(BankAccountRepository bankRepository,
-            BankAccountTypeRepository bankAccountTypeRepository)
-            => (_bankRepository,
-            _bankAccountTypeRepository)
-            = (bankRepository, bankAccountTypeRepository);
-
-        public Either<Error, BankAccount> Create(BankAccountDto bankAccountDto)
-            => Validate(bankAccountDto)
-            .Bind(CreateEntity)
-            .Bind(Add)
-            .Bind(Save)
-            .ToEither()
-            .MapLeft(errors => Error.New(string.Join("; ", errors)));
-
-        public Either<Error, BankAccount> Update(long id, BankAccountDto bankAccountDto)
-            => UpdateOperation(id, bankAccountDto)
-            .Bind(Save)
-            .ToEither()
-            .MapLeft(errors => Error.New(string.Join("; ", errors)));
-            
-        public Validation<Error, BankAccount> UpdateOperation(long id, BankAccountDto bankAccountDto) 
-            => (Find(id), 
-                Validate(bankAccountDto), 
-                ValidateIsCorrectUpdate(id, bankAccountDto))
-            .Apply((editObject, bankAccountObj, c) => UpdateEntity(bankAccountObj, editObject))
-            .Map(c => c);
-
-        public IEnumerable<BankAccountDto> GetAll()
-          => _bankRepository.GetAll().Map(b => (BankAccountDto)b);
+            BankAccountTypeRepository bankAccountTypeRepository) : base(bankRepository)
+            => (_bankRepository, _bankAccountTypeRepository, _fromDto, _fromEntity, _updateEntity)
+            = (bankRepository, bankAccountTypeRepository, FromDto, FromEntity, UpdateEntity);
+        
+        public Task<Option<BankAccountMainListDto>> GetBankAccountList(BankListParameters listParameters)
+            => _bankRepository.GetBankAccountListAsync(listParameters, true)
+            .MapT(c => new BankAccountMainListDto(c.Select(FromEntity).ToList(), c.MetaData));
 
         public Validation<Error, BankAccount> Find(long id)
             => _bankRepository.Get(id)
             .Match(Some: c => Success<Error, BankAccount>(c),
                 None: Error.New($"bank account id {id} does not exits"));
 
-        public Either<Error, BankAccount> Delete(long id)
-          => Find(id)            
-            .Bind(Delete)
-            .Bind(Save)
-            .ToEither()
-            .MapLeft(errors => Error.New(string.Join("; ", errors)));
-
-        Validation<Error, BankAccountDto> Validate(BankAccountDto bankAccountDto)
-            => (ValidateName(bankAccountDto),
-                ValidateAccountNumber(bankAccountDto),
-                InitialBalanceIsRequired(bankAccountDto),
-                ValidateAccountType(bankAccountDto),
-                AccountTypeMustExist(bankAccountDto),
-                BankAccountNameMustNotExist(bankAccountDto))
-            .Apply((z, y, x, w, g, f) => bankAccountDto.With(bankAccountType: g))
-            .Map(b => b);
-
-        Validation<Error, bool> ValidateAccountNumber(BankAccountDto bankAccountDto)
-            => _bankRepository.MustBeUnique(bankAccountDto.AccountNumber.Trim())
-            .ToValidation(Error.New($"Account number:{bankAccountDto.AccountNumber} cannot be duplicate"));
-
-        Validation<Error, BankAccountType> AccountTypeMustExist(BankAccountDto bankAccountDto)
-          => _bankAccountTypeRepository.Get(bankAccountDto.BankAccountTypeId)
-          .ToValidation(Error.New($"bank account type {bankAccountDto.BankAccountTypeId} does not exits"));
-
-        Validation<Error, BankAccountDto> ValidateAccountType(BankAccountDto bankAccountDto)
-         => bankAccountDto.BankAccountTypeId > 0
-                ? Success<Error, BankAccountDto>(bankAccountDto)
-                : Fail<Error, BankAccountDto>(Error.New("bank account type is require"));
-
-        Validation<Error, bool> BankAccountNameMustNotExist(BankAccountDto bankAccountDto)
-            => _bankRepository.MustBeUnique(bankAccountDto.AccountName)
-            .ToValidation(Error.New($"bank account name:{bankAccountDto.AccountName} cannot be duplicate"));
-
-        Validation<Error, decimal> InitialBalanceIsRequired(BankAccountDto bankAccountDto)
-            => AtLeast(0m)(bankAccountDto.InitialBalance).Bind(AtMost(99999999.99m));
-
-        Validation<Error, BankAccountDto> ValidateIsCorrectUpdate(long id, BankAccountDto bankAccountDto)
-            => id == bankAccountDto.Id 
-            ? bankAccountDto 
-            : Fail<Error, BankAccountDto>(Error.New("invalid bankaccount update id"));
-
-        Validation<Error, Name> ValidateName(BankAccountDto bankAccountDto)
-            => Name.Of(bankAccountDto.AccountName);
-
-        Validation<Error, BankAccount> CreateEntity(BankAccountDto bankAccountDto)
-         => Success<Error, BankAccount>(bankAccountDto);
-
-        BankAccount UpdateEntity(BankAccountDto bankAccountDto, BankAccount bankAccount)
+        Either<Error, BankAccount> UpdateEntity(BankAccountDto bankAccountDto, BankAccount bankAccount)
         {
-            BankAccount editAccount = bankAccountDto;
-            
+            BankAccount editAccount = FromDto(bankAccountDto);
+
             bankAccount.EditBank(editAccount.AccountName,
                 editAccount.AccountNumber,
                 editAccount.Description,
                 editAccount.InitialBalance,
                 editAccount.BankAccountType,
-                editAccount.Created);
+                editAccount.Status);
             return bankAccount;
-        }
-
-        Validation<Error, BankAccount> Add(BankAccount bank)
-        {
-            try
-            {
-                _bankRepository.Add(bank);
-                return bank;
-            }
-            catch (Exception ex)
-            {
-                return Error.New($"{ex.Message}\n{ex.StackTrace}");
-            }
-        }
-
-        Validation<Error, BankAccount> Save(BankAccount bank)
-        {
-            try
-            {
-                _bankRepository.Save();
-                return bank;
-            }
-            catch (Exception ex)
-            {
-                return Error.New($"{ex.Message}\n{ex.StackTrace}");
-            }
-        }
-
-        Validation<Error, BankAccount> Delete(BankAccount bankAccount)
-        {
-            try
-            {
-                _bankRepository.Delete(bankAccount);
-                return bankAccount;
-            }
-            catch (Exception ex)
-            {
-                return Error.New($"{ex.Message}\n{ex.StackTrace}");
-            }
         }
     }
 }

@@ -1,0 +1,38 @@
+﻿@page "/config/paymentmethod"
+@inherits PaymentMethodContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Métedos de pagos"
+              Subtitle="Define los metodo de pago (efectivo, credito, tarjeta) que manejas en tu negocio"
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<PaymentMethodList Elements="Elements"
+                 OnClickDrawerEdit="OpenDrawerForEdit"
+                 OnClickDelete="Delete" />
+<div>
+    <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar método de pago" : "Crear método de pago")}")' OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+
+                <FluentValidator></FluentValidator>
+                <div class="mb-4">
+                    <FLabel Value="Descripcion" LabelFor="Description" />
+                    <FInputText @bind-Value="_model.Description" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Description)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <FDivider />
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    @($"{(IsEditing ? "Editar" : "Guardar")}")
+                </button>
+            </EditForm>
+        </Template>
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+}

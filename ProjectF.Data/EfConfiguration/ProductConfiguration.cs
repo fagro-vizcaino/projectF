@@ -2,11 +2,20 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectF.Data.Entities;
+using ProjectF.Data.Entities.Common;
 
 namespace ProjectF.Data.EfConfiguration
 {
     class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
+        readonly long _companyId;
+
+        public ProductConfiguration(){}
+        public ProductConfiguration(long companyId): this()
+        {
+            _companyId = companyId;
+        }
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.ToTable("Product").HasKey(c => c.Id);
@@ -34,7 +43,9 @@ namespace ProjectF.Data.EfConfiguration
                 .WithMany()
                 .IsRequired();
 
-            builder.HasOne(p => p.Werehouse);
+            builder.HasOne(p => p.Warehouse);
+
+            builder.HasOne(p => p.UnitOfMeasure);
 
             builder.HasOne(p => p.Tax);
 
@@ -56,6 +67,25 @@ namespace ProjectF.Data.EfConfiguration
 
             builder.Property(q => q.Price4)
                 .HasColumnType("decimal(16,2)");
+
+            builder.HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(s => s.CompanyId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(c => c.Status)
+                .IsRequired();
+
+            builder.Property(q => q.Created)
+                .HasColumnType("Datetime")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            builder.Property(q => q.Modified)
+                .HasColumnType("Datetime");
+
+            builder.HasQueryFilter(x => x.CompanyId == _companyId
+           && x.Status == EntityStatus.Active);
         }
     }
 }

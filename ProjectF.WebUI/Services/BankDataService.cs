@@ -1,10 +1,9 @@
-﻿using ProjectF.WebUI.Models;
-using System.Net.Http;
+﻿using System.Net.Http;
 using ProjectF.WebUI.Pages;
 
 namespace ProjectF.WebUI.Services
 {
-    public class BankDataService : _BaseDataService<Bank>
+    public class BankDataService : BaseDataService<Bank>
     {
         const string _baseUrl = "finance/bankAccount";
 

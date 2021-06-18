@@ -6,31 +6,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using ProjectF.Data.Entities.RequestFeatures;
+using LanguageExt.Common;
 
 namespace ProjectF.Data.Repositories
 {
-    public class ClientRepository : _BaseRepository<Client>
+    public class ClientRepository : BaseRepository<Client>
     {
-        Context._AppDbContext _context;
+        _AppDbContext _context;
 
-        public ClientRepository(Context._AppDbContext context) : base(context)
+        public ClientRepository(_AppDbContext context) : base(context)
         {
             _context = context;
         }
 
-
         public Option<Client> FindByKey(long id)
-        {
-            return _context.Clients
+            => _context.Clients
                 .Include(c => c.Country)
                 .FirstOrDefault(c => c.Id == id);
-        }
-
+        
 
         public IEnumerable<Client> FindAll()
+            => _context.Clients.Include(c => c.Country);
+
+        public async Task<Either<Error, PagedList<Client>>> GetClientListAsync(ClientListParameters paramenters, bool trackChanges)
         {
-            return _context.Clients
-                .Include(c => c.Country);
+            try
+            {
+                var clients = await FindByCondition(e => e.Id > 0, trackChanges)
+                .Include(c => c.Country)
+                .OrderBy(e => e.Id)
+                .ToListAsync();
+
+                return PagedList<Client>
+                  .ToPagedList(clients, paramenters.PageNumber, paramenters.PageSize);
+            }
+            catch (Exception ex)
+            {
+                return Error.New(ex.Message);
+            }
         }
     }
 }

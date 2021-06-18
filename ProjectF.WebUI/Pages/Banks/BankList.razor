@@ -4,14 +4,14 @@
 @if (Elements.Length > 0)
 {
 <Table DataSource="Elements">
-    <Column @bind-Field="@context.AccountName" Title="Cuenta" Width="100" />
-    <Column @bind-Field="@context.AccountNumber" Title="# cuenta" />
+    <Column @bind-Field="@context.AccountName" Title="Cuenta"  />
     <Column @bind-Field="@context.BankAccountTypeId" Title="Tipo cuenta">
         @(context.BankAccountType.Name)
     </Column>
+    <Column @bind-Field="@context.AccountNumber" Title="# cuenta" />
     <Column @bind-Field="@context.InitialBalance" Title="Balance" Style="text-align: right;"/>
 
-    <ActionColumn Title="Acción" Style="text-align: center;" Width="40">
+    <ActionColumn Title="Acción" Style="text-align: right;">
         <Space>
             <SpaceItem>
                 <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />

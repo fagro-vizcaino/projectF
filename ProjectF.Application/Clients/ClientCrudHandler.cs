@@ -5,7 +5,11 @@ using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System.Collections.Generic;
 using ProjectF.Data.Entities.Common.ValueObjects;
+using static ProjectF.Application.Clients.ClientMapper;
 using System;
+using System.Linq;
+using ProjectF.Data.Entities.RequestFeatures;
+using System.Threading.Tasks;
 
 namespace ProjectF.Application.Clients
 {
@@ -27,8 +31,8 @@ namespace ProjectF.Application.Clients
             .Bind(ValidatePhone)
             .Bind(ValidateCountry)
             .Bind(SetCountry)
-            .Bind(CreateEntity)
-            .Bind(Add)
+            .Bind(SetStatus)
+            .Bind(c => Add(FromDto(c)))
             .Bind(Save);
 
         public Either<Error, Client> Update(long id, ClientDto clientDto)
@@ -36,12 +40,15 @@ namespace ProjectF.Application.Clients
             .Bind(ValidateCode)
             .Bind(ValidateName)
             .Bind(ValidateEmail)
+            .Bind(SetStatus)
             .Bind(c => Find(c.Id))
             .Bind(c => UpdateEntity(clientDto, c))
             .Bind(Save);
 
-        public IEnumerable<ClientDto> GetAll()
-            => _clientRepository.FindAll().Map(c => (ClientDto)c);
+
+        public Task<Either<Error, (List<ClientDto> list, MetaData meta)>> GetClientList(ClientListParameters listParameters)
+            => _clientRepository.GetClientListAsync(listParameters, true)
+            .MapT(c => (ClientList: c.Select(i => FromEntity(i)).ToList(), MetaData: c.MetaData));
 
         public Either<Error, Client> Find(long id)
          => _clientRepository.FindByKey(id).Match(Some: t => t,
@@ -66,7 +73,7 @@ namespace ProjectF.Application.Clients
                     Right: c => clientDto);
 
         Either<Error, ClientDto> ValidateName(ClientDto clientDto)
-            => Name.Of(clientDto.Name)
+            => Name.Of(clientDto.Firstname)
                 .Match(Succ: c => clientDto,
                 Fail: err => Left<Error, ClientDto>(Error.New(string.Join("; ", err))));
 
@@ -90,26 +97,29 @@ namespace ProjectF.Application.Clients
             return clientDto;
         }
 
+        Either<Error, ClientDto> SetStatus(ClientDto dto)
+            => dto with { Status = Data.Entities.Common.EntityStatus.Active };
+
         Either<Error, ClientDto> SetCountry(ClientDto clientDto)
         {
             var country = _countryRepository.FromCountryId(clientDto.SelectedCountry);
             if (country == null) return Error.New("couldn't find to country");
 
-            var nclient = clientDto.With(country: country);
+            var nclient = clientDto with { Country = country };
             return nclient;
         }
-        Either<Error, Client> CreateEntity(ClientDto clientDto)
-         => Right<Error, Client>(clientDto);
 
         Either<Error, Client> UpdateEntity(ClientDto clientDto, Client client)
         {
             var code = new Code(clientDto.Code);
-            var name = new Name(clientDto.Name);
+            var firstname = new Name(clientDto.Firstname);
+            var lastname = new Name(clientDto.Lastname);
             var email = new Email(clientDto.Email);
             var phone = new Phone(clientDto.Phone);
 
             client.EditUserClient(code,
-                    name,
+                    firstname,
+                    lastname,
                     email,
                     phone,
                     clientDto.Rnc,
@@ -117,7 +127,8 @@ namespace ProjectF.Application.Clients
                     clientDto.HomeOrApartment,
                     clientDto.City,
                     clientDto.Street,
-                    clientDto.Country);
+                    clientDto.Country,
+                    clientDto.Status);
 
             return client;
         }
@@ -152,7 +163,18 @@ namespace ProjectF.Application.Clients
         {
             try
             {
-                _clientRepository.Delete(client);
+                client.EditUserClient(client.Code
+                    , client.Firstname
+                    , client.Lastname
+                    , client.Email
+                    , client.Phone
+                    , client.Rnc
+                    , client.Birthday
+                    , client.HomeOrApartment
+                    , client.City
+                    , client.Street
+                    , client.Country
+                    , Data.Entities.Common.EntityStatus.Deleted);
                 return client;
             }
             catch (Exception ex)

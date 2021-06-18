@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace ProjectF.WebUI.Services
 {
-    public class CountryDataService : _BaseDataService<Country>
+    public class CountryDataService : BaseDataService<Country>
     {
         const string _baseUrl = "common/country";
 

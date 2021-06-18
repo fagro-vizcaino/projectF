@@ -4,110 +4,72 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectF.Api.Infrastructure;
-using ProjectF.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using ProjectF.Application.Categories;
-using ProjectF.Data.Repositories;
-using ProjectF.Application.Auth;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using ProjectF.Application.Countries;
-using ProjectF.Application.Werehouses;
-using ProjectF.Application.Products;
-using ProjectF.Application.Invoice;
-using ProjectF.Application.Clients;
-using ProjectF.Application.Suppliers;
-using ProjectF.Application.PaymentTerms;
-using ProjectF.Application.Banks;
-using ProjectF.Application.Taxes;
-using ProjectF.Application.NumberSequence;
-
+using ProjectF.EmailService;
+using Microsoft.AspNetCore.Routing;
+using ProjectF.EmailService.Templates;
+using System;
+using FluentValidation.AspNetCore;
+using ProjectF.Application.Companies;
+using ProjectF.Data.Entities.Auth;
+using FluentEmail;
 namespace ProjectF.Api
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+           => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<CategoryCrudHandler>();
-            services.AddScoped<CategoryRepository>();
-            services.AddScoped<WerehouseCrudHandler>();
-            services.AddScoped<WerehouseRepository>();
-            services.AddScoped<AuthUserCrudHandler>();
+            services.ConfigureCors();
+            services.ConfigureAppServices();
 
-            services.AddScoped<UserRepository>();
-            services.AddScoped<CountryRepository>();
-            services.AddScoped<CountryCrudOperation>();
-            services.AddScoped<ProductCrudHandler>();
-            services.AddScoped<ProductRepository>();
-            services.AddScoped<InvoiceCrudHandler>();
-            services.AddScoped<InvoiceMainListHandler>();
-            services.AddScoped<InvoiceRepository>();
-            services.AddScoped<ClientCrudHandler>();
-            services.AddScoped<ClientRepository>();
-            services.AddScoped<SupplierRepository>();
-            services.AddScoped<SupplierCrudHandler>();
-            services.AddScoped<TaxRepository>();
-            services.AddScoped<TaxCrudHandler>();
-            services.AddScoped<PaymentTermRepository>();
-            services.AddScoped<PaymentTermCrudHandler>();
-            services.AddScoped<BankAccountTypeRepository>();
-            services.AddScoped<BankAccountRepository>();
-            services.AddScoped<BankAccountCrudHandler>();
-            services.AddScoped<BankAccountTypeCrudHandler>();
-            services.AddScoped<DocumentNumberSequenceRepository>();
-            services.AddScoped<DocumentNumberSequenceHandler>();
+            services.ConfigureAppDb(Configuration);
 
-            //Db Related stuffs.
-            services.AddDbContext<_AppDbContext>(options =>
-                options
-                .UseLoggerFactory(_AppDbContext.GetLoggerFactory())
-                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.ConfigureMvcViews();
+            
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
 
-            services.AddMvc(o => o.Conventions.Add(new FeatureConvention()))
-           .AddRazorOptions(options =>
-               {
-                   // Replace normal view location entirely
-                   // {0} - Action Name
-                   // {1} - Controller Name
-                   // {2} - Area Name
-                   // {3} - Feature Name
-                   options.AreaViewLocationFormats.Clear();
-                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{1}/{0}.cshtml");
-                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{0}.cshtml");
-                   options.AreaViewLocationFormats.Add("/Areas/{2}/Features/Shared/{0}.cshtml");
-                   options.AreaViewLocationFormats.Add("/Areas/Shared/{0}.cshtml");
+            var authHtmlTemplate = Configuration
+                .GetSection("AuthTemplates")
+                .Get<AuthHtmlTemplateConfig>();
 
-                   // replace normal view location entirely
-                   options.ViewLocationFormats.Clear();
-                   options.ViewLocationFormats.Add("/Features/{3}/{1}/{0}.cshtml");
-                   options.ViewLocationFormats.Add("/Features/{3}/{0}.cshtml");
-                   options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
-                   options.ViewLocationExpanders.Add(new FeatureFoldersRazorViewEngine());
-               });
-            services.AddControllers();
+            services.AddSingleton(authHtmlTemplate);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(option =>
+            var emailConfig = Configuration
+                .GetSection("SendGrid")
+                .Get<SendGridConfiguration>();
+
+            emailConfig.Sender = Environment.GetEnvironmentVariable("email_sender") ?? string.Empty;
+            emailConfig.Key    = Environment.GetEnvironmentVariable("sendgrid_email_key") ?? string.Empty;
+
+            services
+               .AddFluentEmail(emailConfig.Sender)
+               .AddSendGridSender(emailConfig.Key)
+               .AddRazorRenderer();
+
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
+            //services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
+
+
+            services.AddScoped<IGetClaimsProvider, GetClaimsFromUser>();
+
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CompanyValidator>());
+
+            services.Configure<RouteOptions>(options =>
             {
-                option.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
+                options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
             });
+
+           
 
         }
 
@@ -118,18 +80,27 @@ namespace ProjectF.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
+            
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+            
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers().RequireAuthorization();
+                
                 endpoints.MapControllerRoute(name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}")
+                .RequireAuthorization();
             });
         }
     }

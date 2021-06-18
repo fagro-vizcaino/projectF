@@ -1,6 +1,10 @@
 ﻿using ProjectF.Application.Clients;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using ProjectF.Data.Entities.Clients;
+using static ProjectF.Application.Clients.ClientMapper;
+using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace ProjectF.Api.Features.ContactClient
 {
@@ -16,21 +20,21 @@ namespace ProjectF.Api.Features.ContactClient
         }
 
         [HttpPost]
-        public ActionResult CreateClient(ClientViewModel viewModel)
+        public ActionResult CreateClient(ClientDto model)
             => _clientCrudHandler
-                .Create(viewModel.ToDto())
+                .Create(model)
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: category => Ok(ClientViewModel.FromDto(category)));
+                    Right: c => Ok(FromEntity(c)));
 
 
         [HttpPut("{id}")]
-        public ActionResult UpdateClient(long id, ClientViewModel viewModel)
+        public ActionResult UpdateClient(long id, ClientDto model)
             => _clientCrudHandler
-                .Update(id, viewModel.ToDto())
+                .Update(id, model)
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(ClientViewModel.FromDto(c)));
+                    Right: c => Ok(FromEntity(c)));
 
 
         [HttpGet("{id}")]
@@ -39,18 +43,15 @@ namespace ProjectF.Api.Features.ContactClient
                 .Find(id)
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
-                    Right: c => Ok(ClientViewModel.FromDto(c)));
-
+                    Right: c => Ok(FromEntity(c)));
 
         [HttpGet]
-        public ActionResult GetClients()
-        {
-            var result = _clientCrudHandler.GetAll()
-                .Select(c => ClientViewModel.FromDto(c));
-            if (result.Any()) return Ok(result);
-
-            return NotFound();
-        }
+        public async Task<ActionResult> GetClients([FromQuery] ClientListParameters clientListParameters)
+        => (await _clientCrudHandler.GetClientList(clientListParameters))
+                .Match<ActionResult>(Left: err => NotFound(err.Message),
+                        Right: c => { Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(c.meta));
+                            return Ok(c.list); 
+                         });
 
 
         [HttpDelete("{id}")]
@@ -60,11 +61,5 @@ namespace ProjectF.Api.Features.ContactClient
              Left: err => BadRequest(err.Message),
              Right: c => NoContent());
 
-        //[HttpGet]
-        //public ActionResult GetAll([FromQuery] PaginationQuery paginationQuery )
-        //{
-        //    var result = _categoryOperations.GetAll()
-        //    return Ok();
-        //}
     }
 }

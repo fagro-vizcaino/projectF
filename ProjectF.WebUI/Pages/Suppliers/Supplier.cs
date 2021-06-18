@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjectF.WebUI.Models
 {
@@ -18,5 +15,15 @@ namespace ProjectF.WebUI.Models
         public int SelectedCountry { get; set; }
         public Country Country { get; set; }
         public bool IsIndependent { get; set; }
+        public SupplierGroup SupplierGroup { get; set; }
+        public int PaymentTermId { get; set; }
+        public PaymentTerm PaymentTerm { get; set;}
+        public string Notes { get; set; }
+    }
+
+    public enum SupplierGroup
+    {
+        National = 1,
+        International
     }
 }

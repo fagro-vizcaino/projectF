@@ -3,7 +3,7 @@ using ProjectF.Data.Entities.Common.ValueObjects;
 
 namespace ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType
 {
-    public class TaxRegimeType : Entity
+    public class TaxRegimeType : _BaseEntity
     {
         public Name Name { get; private set; }
         public GeneralText Description { get; private set; }

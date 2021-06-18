@@ -1,4 +1,6 @@
 ﻿using ProjectF.WebUI.Models;
+using ProjectF.WebUI.Pages.UnitOfMeasures;
+
 namespace ProjectF.WebUI.Pages.Products
 {
     public class Product : FEntity
@@ -8,10 +10,12 @@ namespace ProjectF.WebUI.Pages.Products
         public string Description { get; set; }
         public string Reference { get; set; }
         public Category Category { get; set; }
-        public long CategoryId { get; set; }
-        public long WerehouseId { get; set; }
-        public Werehouse Werehouse { get; set; }
-        public long TaxId { get; set; }
+        public int CategoryId { get; set; }
+        public int WarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; }
+        public  UnitOfMeasure UnitOfMeasure { get; set; }
+        public int UnitOfMeasureId { get; set; }
+        public int TaxId { get; set; }
         public Tax Tax { get; set; }
         public bool IsService { get; set; }
         public decimal Cost { get; set; }

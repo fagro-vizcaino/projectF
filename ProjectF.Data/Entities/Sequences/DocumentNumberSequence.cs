@@ -11,7 +11,7 @@ namespace ProjectF.Data.Entities.Sequences
     /// 1021032040 = sequence
     /// 9999999999 = final sequence is the limit of the sequence
     /// </summary>
-    public class DocumentNumberSequence : Entity
+    public class DocumentNumberSequence : _BaseEntity
     {
         public Name Name { get; private set; }
         public string Prefix { get; private set; }
@@ -19,7 +19,6 @@ namespace ProjectF.Data.Entities.Sequences
         public int NextSequence { get; private set; }
         public int FinalSequence { get; private set; }
         public DateTime ValidUntil { get; private set; }
-        public bool IsActive { get; private set; }
 
         protected DocumentNumberSequence() { }
 
@@ -29,7 +28,8 @@ namespace ProjectF.Data.Entities.Sequences
             int nextSequence,
             int finalSequence,
             DateTime validUntil,
-            bool isActive)
+            DateTime created,
+            EntityStatus status = EntityStatus.Active)
         {
             Name            = name;
             Prefix          = prefix;
@@ -37,7 +37,8 @@ namespace ProjectF.Data.Entities.Sequences
             NextSequence    = nextSequence;
             FinalSequence   = finalSequence;
             ValidUntil      = validUntil;
-            IsActive        = isActive;
+            Created         = DateTime.MinValue == created ? DateTime.Now : created;            
+            Status          = status;
         }
 
 
@@ -47,7 +48,7 @@ namespace ProjectF.Data.Entities.Sequences
             int nextSequence,
             int finalSequence,
             DateTime validUntil,
-            bool isActive)
+            EntityStatus status)
         {
             Name            = name;
             Prefix          = prefix;
@@ -55,18 +56,11 @@ namespace ProjectF.Data.Entities.Sequences
             NextSequence    = nextSequence;
             FinalSequence   = finalSequence;
             ValidUntil      = validUntil;
-            IsActive        = isActive;
+            Modified        = DateTime.Now;
+            Status          = status;
         }
 
-        public static implicit operator NumberSequenceDto(DocumentNumberSequence entity)
-          => new NumberSequenceDto(entity.Id,
-              entity.Name.Value,
-              entity.Prefix,
-              entity.InitialSequence,
-              entity.NextSequence,
-              entity.FinalSequence,
-              entity.ValidUntil,
-              entity.IsActive);
+       
 
     }
 }

@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProjectF.WebUI.Pages.Sales
@@ -21,7 +18,6 @@ namespace ProjectF.WebUI.Pages.Sales
 
         public string ActiveTab(SalesContainerTabs selected) 
             => TabSelected == selected ? "text-blue-500 border-b-2 font-medium border-blue-500" : "";
-
     }
 
     public enum SalesContainerTabs

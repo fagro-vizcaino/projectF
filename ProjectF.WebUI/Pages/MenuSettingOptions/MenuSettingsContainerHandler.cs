@@ -46,6 +46,41 @@ namespace ProjectF.WebUI.Pages.MenuSettingOptions
                     Icon = @"<i class='fas fa-stream'></i>",
                     Name = "Sequencia Númerica",
                     Description = "Defina la sequencia numerica para los documentos"
+                },
+                new ()
+                {
+                    Route = "/config/warehouses",
+                    Icon = @"<i class='fas fa-warehouse'></i>",
+                    Name = "Almacenes",
+                    Description = "Defina sus almancenes"
+                },
+                new ()
+                {
+                    Route = "/config/categories",
+                    Icon = @"<i class='fas fa-swatchbook'></i>",
+                    Name = "Categorias",
+                    Description = "Defina la categoria de sus productos"
+                },
+                new ()
+                {
+                    Route = "/config/company",
+                    Icon = @"<i class='far fa-building'></i>",
+                    Name = "Empresa",
+                    Description = "Registre los datos de su empresa"
+                },
+                new ()
+                {
+                    Route = "/config/unitofmeasure",
+                    Icon = @"<i class='far fa-building'></i>",
+                    Name = "Medidas",
+                    Description = "Define las medidas que utilizas en tus ventas"
+                },
+                  new ()
+                {
+                    Route = "config/paymentMethod",
+                    Icon = @"<i class='far fa-building'></i>",
+                    Name = "Método de pagos",
+                    Description = "Define los métodos de pago"
                 }
             };
             return base.OnInitializedAsync();

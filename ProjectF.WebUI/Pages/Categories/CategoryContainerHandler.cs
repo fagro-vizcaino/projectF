@@ -1,5 +1,4 @@
 ﻿using ProjectF.WebUI.Models;
-using System;
 using ProjectF.WebUI.Components.Common;
 
 namespace ProjectF.WebUI.Pages.Categories
@@ -29,7 +28,7 @@ namespace ProjectF.WebUI.Pages.Categories
                     Code = category.Code,
                     ShowOn = category.ShowOn
                 }
-                : new Category { Id = 0, Name = null, Code = GenerateCode, ShowOn = false };
+                : new Category { Id = 0, Name = string.Empty, Code = GenerateCode, ShowOn = false };
 
     }
 }

@@ -1,23 +1,20 @@
-﻿using ProjectF.Data.Entities.Common;
+﻿using System;
+using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
-using ProjectF.Data.Entities.Currencies;
-using ProjectF.Data.Entities.Taxes.BusinessTaxRegimeType;
 
 namespace ProjectF.Data.Entities
 {
-    public class Company : Entity
+    public class Company : _BaseEntity
     {
         public Name Name { get; private set; }
         public string Rnc { get; private set; }
         public string HomeOrApartment { get; private set; }
         public string City {get; private set;}
         public string Street { get; private set; }
-        public virtual Country Country { get; private set;}
+        public virtual Country Country { get; private set; }
         public Phone Phone { get; private set; }
         public string Website { get; private set; }
-        public virtual TaxRegimeType RegimeType { get; private set; }
-        public virtual Currency Currency {get; private set;}
 
         protected Company() { }
 
@@ -29,8 +26,9 @@ namespace ProjectF.Data.Entities
             , Country country
             , Phone phone
             , string website
-            , TaxRegimeType regimeType
-            , Currency currency)
+            , int companyId
+            , DateTime created
+            , EntityStatus status = EntityStatus.Active)
         {
             Name            = name;
             Rnc             = rnc;
@@ -40,8 +38,9 @@ namespace ProjectF.Data.Entities
             Country         = country;
             Phone           = phone;
             Website         = website;
-            RegimeType      = regimeType;
-            Currency        = currency;
+            CompanyId       = companyId;
+            Created         = created == DateTime.MinValue ? DateTime.Now : created;
+            Status          = status;
         }
 
         public void EditCompany(
@@ -53,8 +52,7 @@ namespace ProjectF.Data.Entities
             , Country country
             , Phone phone
             , string website
-            , TaxRegimeType regimeType
-            , Currency currency)
+            , EntityStatus status)
         {
             Name            = name;
             Rnc             = rnc;
@@ -64,10 +62,8 @@ namespace ProjectF.Data.Entities
             Country         = country;
             Phone           = phone;
             Website         = website;
-            RegimeType      = regimeType;
-            Currency        = currency;
+            Status          = status;
+            Modified        = DateTime.Now;
         }
-
-
     }
 }

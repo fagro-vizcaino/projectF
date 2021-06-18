@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace ProjectF.WebUI.Services
 {
-    public class PaymentTermDataService : _BaseDataService<PaymentTerm>
+    public class PaymentTermDataService : BaseDataService<PaymentTerm>
     {
         const string _baseUrl = "config/paymentterm";
         public PaymentTermDataService(HttpClient httpClient)

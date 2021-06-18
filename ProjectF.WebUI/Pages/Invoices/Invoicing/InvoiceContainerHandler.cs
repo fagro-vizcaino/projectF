@@ -1,16 +1,13 @@
-﻿using AntDesign;
-using LanguageExt;
+﻿using LanguageExt;
 using static LanguageExt.Prelude;
 using static System.Text.Json.JsonSerializer;
 using Microsoft.AspNetCore.Components;
-using OneOf;
 using ProjectF.WebUI.Components.Common;
 using ProjectF.WebUI.Models;
 using ProjectF.WebUI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using ProjectF.WebUI.Pages.Products;
 
@@ -34,84 +31,101 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public InvoiceLines InvoiceLinesRef { get; set; }
         public DiscountType SelectedDiscount { get; set; }
 
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
+        [Inject] public NavigationManager NavigationManager { get; set; }
 
-        [Inject]
-        public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
+        [Inject]public IBaseDataService<PaymentTerm> PaymentTermDataService { get; set; }
         public PaymentTerm[] PaymentTerms { get; set; } = System.Array.Empty<PaymentTerm>();
 
-        [Inject]
-        public IBaseDataService<Client> ClientDataService { get; set; }
+        [Inject]public IBaseDataService<Client> ClientDataService { get; set; }
         public Client[] Clients { get; set; } = System.Array.Empty<Client>();
 
-        [Inject]
-        public IBaseDataService<Product> ProductDataService { get; set; }
+        [Inject] public IBaseDataService<Product> ProductDataService { get; set; }
         public Product[] ProductsData { get; set; } = System.Array.Empty<Product>();
 
-        [Inject]
-        public IBaseDataService<Invoice> InvoiceService { get; set; }
+        [Inject] public IBaseDataService<NumberSequences.NumberSequence> NumberSequenceDataService { get; set; }
+        public NumberSequences.NumberSequence[] NumberSequences { get; set; } = System.Array.Empty<NumberSequences.NumberSequence>();
 
-        [Inject]
-        public IJSRuntime jSRuntime { get; set; }
+        [Inject] public IBaseDataService<Invoice> InvoiceService { get; set; }
+
+        [Inject] public IJSRuntime jSRuntime { get; set; }
 
         public List<InvoiceLine> Lines { get; private set; }
+
         protected override async Task OnInitializedAsync()
         {
             PaymentTerms = (await PaymentTermDataService.GetAll()).ToArray();
             Clients = (await ClientDataService.GetAll()).ToArray();
             ProductsData = (await ProductDataService.GetAll()).ToArray();
             Lines = new List<InvoiceLine> { InvoiceLinesRef.GetEmptyLine() };
-            if (Id > 0)
-            {
-                _model = await GetById(Id);
-                Lines = _model.InvoiceDetails.Map(i => new InvoiceLine
-                {
-                    Id = i.Id,
-                    Product = ProductsData.SingleOrDefault(p => p.Code == i.ProductCode),
-                    Index = i.Id,
-                    IsDelete = false,
-                    IsEmpty = false,
-                    OptionValue = ProductsData.SingleOrDefault(p => p.Code == i.ProductCode).Id.ToString(),
-                    Qty = i.Qty,
-                }).ToList();
-            }
+            NumberSequences = (await NumberSequenceDataService.GetAll()).ToArray();
+            await IsEditingInvoice();
         }
+
+        async Task IsEditingInvoice()
+        {
+            if (Id <= 0) return;
+
+            _model = await GetById(Id);
+            Lines = _model.InvoiceDetails.Map(i => new InvoiceLine
+            {
+                Id = i.Id,
+                Product = ProductsData.SingleOrDefault(p => p.Code == i.ProductCode),
+                Index = i.Id,
+                IsDelete = false,
+                IsEmpty = false,
+                OptionValue = ProductsData.SingleOrDefault(p => p.Code == i.ProductCode).Id.ToString(),
+                Qty = i.Qty,
+            }).ToList();
+        }
+
         public Invoice GetNewModelOrEdit(Invoice invoice = null)
             => invoice != null
             ? new Invoice
             {
-                Id = invoice.Id,
-                Code = invoice.Code,
-                Client = invoice.Client,
-                PaymentTerm = invoice.PaymentTerm,
-                PaymentTermId = invoice.PaymentTerm.Id,
-                Created = DateTime.Today,
+                Id             = invoice.Id,
+                Code           = invoice.Code,
+                Client         = invoice.Client,
+                PaymentTerm    = invoice.PaymentTerm,
+                PaymentTermId  = invoice.PaymentTerm.Id,
+                Created        = DateTime.Today,
                 InvoiceDetails = invoice.InvoiceDetails
             }
             : new Invoice
             {
-                Id = 0,
-                Code = GenerateCode,
-                Client = new Client(),
-                PaymentTerm = new PaymentTerm(),
-                Created = DateTime.Today,
+                Id             = 0,
+                Code           = GenerateCode,
+                Client         = new Client(),
+                PaymentTerm    = new PaymentTerm(),
+                Created        = DateTime.Today,
                 InvoiceDetails = new List<InvoiceDetail>()
             };
-        protected void OnChangeClient(OneOf<string, IEnumerable<string>,
-            LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
-        {
-            _model.Client = Clients
-                .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
-            _model.Rnc = _model.Client.Rnc;
-        }
-        protected void OnChangePaymentTerm(OneOf<string, IEnumerable<string>,
-            LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
-        {
-            _model.PaymentTerm = PaymentTerms
-                .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
-            _model.PaymentTermId = _model.PaymentTerm.Id;
-        }
+
+        //protected void OnChangeClient(OneOf<string, IEnumerable<string>,
+        //    LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
+        //{
+        //    _model.Client = Clients
+        //        .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
+        //    _model.Rnc = _model.Client.Rnc;
+        //    StateHasChanged();
+        //}
+        
+        //protected void OnChangePaymentTerm(OneOf<string, IEnumerable<string>,
+        //    LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
+        //{
+        //    _model.PaymentTerm = PaymentTerms
+        //        .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
+        //    _model.PaymentTermId = _model.PaymentTerm.Id;
+        //}
+
+        //protected void OnChangeNumberSequence(OneOf<string, IEnumerable<string>,
+        //  LabeledValue, IEnumerable<LabeledValue>> value, OneOf<SelectOption, IEnumerable<SelectOption>> option)
+        //{
+        //    var result = NumberSequences
+        //        .FirstOrDefault(c => c.Id == parseLong(value.Value.ToString()).Match(i => i, () => 0));
+        //    _model.Ncf = result.DisplaySequence;
+        //    _model.NumberSequenceId = parseInt(value.Value.ToString()).Match(i => i, () => 0);
+        //    StateHasChanged();
+        //}
 
         protected void ClearLines() => InvoiceLinesRef.ClearLines();
 
@@ -124,13 +138,14 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
 
         ImmutableList<InvoiceLine> GetValidInvoiceLine(List<InvoiceLine> lines)
             => lines.Filter(l => !l.IsDelete && l.Product.Code != null).ToImmutableList();
+
         public void OnLineChandedHandler(List<InvoiceLine> lines)
            => Calculate(GetValidInvoiceLine(lines));
 
         void Calculate(ImmutableList<InvoiceLine> lines)
         {
             _model.SubTotal = lines.Sum(i => i.Qty + i.Product.Price);
-            _model.TaxTotal = lines.Sum(i => (i.Qty + i.Product.Price) * i.Product.Tax.Percentvalue / 100);
+            _model.TaxTotal = lines.Sum(i => (i.Qty + i.Product.Price) * i.Product.Tax.PercentValue / 100);
             var discount = ApplyDiscount(_model, SelectedDiscount);
             _model.Total = (_model.SubTotal - discount) + _model.TaxTotal;
         }
@@ -141,6 +156,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             catch (Exception ex)
             {
                 setProperty(0);
+                Console.WriteLine(ex.Message);
             }
             Calculate(GetValidInvoiceLine(InvoiceLinesRef.InvoiceLines));
         }
@@ -149,17 +165,17 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         {
             var invoiceDetail = InvoiceLinesRef.InvoiceLines.Map(i => new InvoiceDetail
             {
-                Id = i.Id,
-                Amount = i.Product.Price,
-                ProductCode = i.Product.Code,
-                ProductDescription = i.Product.Name,
-                Qty = i.Qty,
-                TaxPercent = i.Product.Tax.Percentvalue
+                //Id                 = i.Id,
+                //Amount             = i.Product.Price,
+                //ProductCode        = i.Product.Code,
+                //ProductDescription = i.Product.Name,
+                //Qty                = i.Qty,
+                //TaxPercent         = i.Product.Tax.Percentvalue
 
             }).Filter(c => c.ProductCode != null).ToList();
 
-            _model.Rnc = _model.Client.Rnc;
-            _model.Rnc = string.Join("", Guid.NewGuid().ToString().Take(11));
+            _model.Rnc            = _model.Client.Rnc;
+            _model.Rnc            = string.Join("", Guid.NewGuid().ToString().Take(11));
             _model.InvoiceDetails = invoiceDetail;
 
             return _model;
@@ -180,7 +196,6 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
         public async Task SaveInvoice()
         {
             _model = ToDto();
-            _model.Ncf = $"b010000{new Random().Next(1000, 9999)}";
 
             Console.WriteLine($"saving.. {Serialize(_model)}");
             await DataService.Add(_model)
@@ -206,6 +221,7 @@ namespace ProjectF.WebUI.Pages.Invoices.Invoicing
             await jSRuntime.InvokeVoidAsync("open", $"http://localhost:5000/InvoicePrint/PrintInvoice", "_blank", 
                 "toolbar=no,top=800,left=300,width=1024,height=800");
         }
+
         public void GoToDashboard()
         {
             NavigationManager.NavigateTo("/");

@@ -1,12 +1,13 @@
-﻿using ProjectF.Data.Entities.Common;
+﻿using System;
+using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
+using ProjectF.Data.Entities.PaymentList;
 
 namespace ProjectF.Data.Entities.Suppliers
 {
-    public class Supplier : Entity
+    public class Supplier : _BaseEntity
     {
-
         public Code Code { get; private set; }
         public Name Name { get; private set; }
         public Email Email { get; private set; }
@@ -16,7 +17,10 @@ namespace ProjectF.Data.Entities.Suppliers
         public string City { get; private set; }
         public string Street { get; private set; }
         public virtual Country Country { get; private set; }
-        public bool IsIndependent { get; private set; }
+        public bool IsInformalSupplier { get; private set; }
+        public SupplierGroup SupplierGroup { get; private set; }
+        public virtual PaymentTerm PaymentTerm { get; private set; }
+        public GeneralText Notes { get; private set; }
 
         protected Supplier() { }
 
@@ -29,18 +33,30 @@ namespace ProjectF.Data.Entities.Suppliers
             , string city
             , string street
             , Country country
-            , bool IsIndependent)
+            , SupplierGroup supplierGroup
+            , PaymentTerm paymentTerm
+            , GeneralText notes
+            , bool isInformalSupplier
+            , DateTime created
+            , DateTime? modified = null
+            , EntityStatus status = EntityStatus.Active)
         {
-            Code = code;
-            Name = name;
-            Email = email;
-            Phone = phone;
-            Rnc = rnc;
-            HomeOrApartment = homeOrApartment;
-            City = city;
-            Street = street;
-            Country = country;
-            this.IsIndependent = IsIndependent;
+            Code                = code;
+            Name                = name;
+            Email               = email;
+            Phone               = phone;
+            Rnc                 = rnc;
+            HomeOrApartment     = homeOrApartment;
+            City                = city;
+            Street              = street;
+            Country             = country;
+            SupplierGroup       = supplierGroup;
+            PaymentTerm         = paymentTerm;
+            Notes               = notes;
+            IsInformalSupplier  = isInformalSupplier;
+            Created             = created == DateTime.MinValue ? DateTime.Now : created;
+            Modified            = modified;
+            Status              = status;
         }
 
         public void EditSupplier(
@@ -48,23 +64,38 @@ namespace ProjectF.Data.Entities.Suppliers
             , Name name
             , Email email
             , Phone phone
+            , SupplierGroup supplierGroup
+            , PaymentTerm paymentTerm
+            , GeneralText notes
+            , bool isInformalSupplier
             , string rnc
             , string homeOrApartment
             , string city
             , string street
             , Country country
-            , bool isIndependent)
+            , EntityStatus status)
         {
-            Code = code;
-            Name = name;
-            Email = email;
-            Phone = phone;
-            Rnc = rnc;
-            HomeOrApartment = homeOrApartment;
-            City = city;
-            Street = street;
-            IsIndependent = isIndependent;
-            Country = country;
+            Code                 = code;
+            Name                 = name;
+            Email                = email;
+            Phone                = phone;
+            Rnc                  = rnc;
+            HomeOrApartment      = homeOrApartment;
+            City                 = city;
+            Street               = street;
+            SupplierGroup        = supplierGroup;
+            PaymentTerm          = paymentTerm;
+            Notes                = notes;
+            IsInformalSupplier   = isInformalSupplier;
+            Country              = country;
+            Status               = status;
+            Modified             = DateTime.Now;
         }
+    }
+
+    public enum SupplierGroup
+    {
+        National = 1,
+        International
     }
 }

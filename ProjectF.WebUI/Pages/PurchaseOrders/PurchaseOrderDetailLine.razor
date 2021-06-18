@@ -1,0 +1,54 @@
+﻿@inherits PurchaseOrderDetailLineHandler
+
+<div class="flex space-x-1 mt-2">
+    <div class="w-1/3">
+        <FLabel Value="Item/Product" LabelFor="" />
+        
+        <Select DataSource="@Products"
+                @bind-Value="@SelectedProduct"
+                LabelName="Name" 
+                ValueName="Id"
+                Bordered="false"
+                Class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                Placeholder=""
+                DefaultActiveFirstItem="false"
+                EnableSearch
+                OnSelectedItemChanged="OnSelectProductChangedHandler">
+        </Select>
+    </div>
+    <div class="w-1/6">
+        <FLabel Value="Cant." LabelFor="Qty" />
+        <FInputDecimal @bind-Value="Line.Qty" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+        <FCustomValidationMessage For="@(() => Line.Qty)" Class="mt-2 font-semibold tWext-red-600" />
+    </div>
+    <div class="w-1/6">
+        <div class="inline-block relative w-full">
+            <FLabel Value="Imp." LabelFor="TaxPercent" />
+            <FInputSelect @bind-Value="Line.TaxPercent">
+                <option value="0">Selec.</option>
+                @foreach (var type in Taxes)
+                {
+                    <option value="@type.PercentValue">@type.PercentValue</option>
+                }
+            </FInputSelect>
+            <FCustomValidationMessage For="@(() => Line.Id)" Class="mt-2 font-semibold text-red-600" />
+        </div>
+
+    </div>
+    <div class="w-1/6">
+        <FLabel Value="Desc." LabelFor="DiscountValue" />
+        <FInputDecimal @bind-Value="Line.DiscountValue" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+        <FCustomValidationMessage For="@(() => Line.DiscountValue)" Class="mt-2 font-semibold tWext-red-600" />
+    </div>
+    <div class="w-1/6">
+        <FLabel Value="Costo" LabelFor="Cost" />
+        <FInputDecimal @bind-Value="Line.Cost" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+        <FCustomValidationMessage For="@(() => Line.Cost)" Class="mt-2 font-semibold tWext-red-600" />
+    </div>
+</div>
+<div class="px-1 py-1 text-right sm:px-1">
+    <button @onclick="OnSaveHandler" type="button"
+        class="ml-4 bg-white hover:bg-gray-100 text-indigo-700 font-semibold py-1 px-4 border border-gray-200 rounded shadow">
+        <i class="far fa-save"></i>
+    </button>
+</div>

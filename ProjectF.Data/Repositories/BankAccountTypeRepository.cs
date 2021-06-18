@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectF.Data.Repositories
 {
-    public class BankAccountTypeRepository : _BaseRepository<BankAccountType>
+    public class BankAccountTypeRepository : BaseRepository<BankAccountType>
     {
         readonly Context._AppDbContext _context;
 

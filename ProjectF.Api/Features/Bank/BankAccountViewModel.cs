@@ -1,4 +1,5 @@
 ﻿using ProjectF.Data.Entities.Banks;
+using ProjectF.Data.Entities.Common;
 using System;
 
 namespace ProjectF.Api.Features.Bank
@@ -11,23 +12,25 @@ namespace ProjectF.Api.Features.Bank
         public string Description { get; set; }
         public decimal InitialBalance { get; set; }
         public long BankAccountTypeId { get; set; }
-        public BankAccountTypeViewModel BankAccountType { get; set; }
+        public BankAccountTypeViewModel? BankAccountType { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Modified { get; set; }
-
+        public EntityStatus Status { get; set; }
+        
         public BankAccountDto ToDto()
-            => new BankAccountDto(Id,
-                AccountName,
-                AccountNumber,
-                Description,
-                InitialBalance,
-                BankAccountTypeId,
-                bankAccountType: null,
-                Created,
-                Modified);
+            => new BankAccountDto(AccountName, AccountNumber, Description, InitialBalance, BankAccountTypeId,
+                
+                new BankAccountTypeDto(BankAccountType.Name, 
+                    BankAccountType.Description)
+                {
+                    Id =  BankAccountType.Id,
+                    Created = BankAccountType.Created,
+                    Modified = BankAccountType.Modified,
+                    Status = BankAccountType.Status
+                });
 
         public static BankAccountViewModel FromDto(BankAccountDto accountDto)
-            => new BankAccountViewModel()
+            => new()
             {
                 Id                = accountDto.Id,
                 AccountName       = accountDto.AccountName,
@@ -36,8 +39,8 @@ namespace ProjectF.Api.Features.Bank
                 BankAccountType   = new BankAccountTypeViewModel()
                 {
                     Id          = accountDto.BankAccountType.Id,
-                    Description = accountDto.BankAccountType.Description.Value,
-                    Name        = accountDto.BankAccountType.Name.Value
+                    Description = accountDto.BankAccountType.Description,
+                    Name        = accountDto.BankAccountType.Name
                 },
                 Description     = accountDto.Description,
                 InitialBalance  = accountDto.InitialBalance,

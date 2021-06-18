@@ -18,11 +18,10 @@ namespace ProjectF.Data.EfConfiguration
               .IsRequired();
         }
 
-        public static List<Currency> InitialCountryData()
+        public static IEnumerable<Currency> InitialCurrencyData()
         {
             var currencies = new List<Currency> { new Currency(1,"DOP Peso Dominicano"),
-                new Currency(2, "US Dolar USA")
-                };
+                new Currency(2, "US Dolar USA")};
 
             return currencies;
         }

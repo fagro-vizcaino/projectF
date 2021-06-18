@@ -7,12 +7,11 @@ using ProjectF.Data.Entities.Invoices;
 using ProjectF.Data.Entities.RequestFeatures;
 using System.Linq;
 using System.Threading.Tasks;
-using LanguageExt.SomeHelp;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ProjectF.Data.Repositories
 {
-    public class InvoiceRepository : _BaseRepository<InvoiceHeader>
+    public class InvoiceRepository : BaseRepository<InvoiceHeader>
     {
         readonly _AppDbContext _context;
         public InvoiceRepository(_AppDbContext context) : base(context)
@@ -23,7 +22,7 @@ namespace ProjectF.Data.Repositories
         public async Task<Either<Error, InvoiceHeader>> FindByAsync(params object[] valuesKeys)
         {
             var result = await base.FindAsync(valuesKeys);
-            if (result == null) return Error.New("No Invoice Found");
+            if (result is null) return Error.New("No Invoice Found");
 
             _context.Entry(result).Reference(c => c.Client).Load();
             _context.Entry(result).Reference(c => c.PaymentTerm).Load();
@@ -47,7 +46,7 @@ namespace ProjectF.Data.Repositories
         {
             try
             {
-                var invoices = await FindByCondition(e => e.Created >= paramenters.DateFrom
+                var invoices = await FindByCondition(e => e.InvoiceDate >= paramenters.DateFrom
                 && e.DueDate <= paramenters.DateTo, trackChanges)
                 .Include(c => c.Client)
                 .OrderBy(e => e.Id)
@@ -60,7 +59,6 @@ namespace ProjectF.Data.Repositories
             {
                 return Error.New(ex.Message);
             }
-
         }
 
         public IDbContextTransaction BeginTransaction()

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ProjectF.Application.Banks;
+using static ProjectF.Application.Banks.BankAccountsMapper;
 using static ProjectF.Api.Features.Bank.BankAccountTypeViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace ProjectF.Api.Features.Bank
               .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
                     Right: bt => CreatedAtRoute(nameof(GetBankAccountType),
-                        new { id = bt.Id }, FromDto(bt)));
+                        new { id = bt.Id }, FromEntity(bt)));
 
 
         [HttpPut("{id}")]
@@ -32,23 +33,22 @@ namespace ProjectF.Api.Features.Bank
                 .Update(id, viewModel.ToDto())
                  .Match<ActionResult>(
                     Left: err => BadRequest(err.Message),
-                    Right: c => Ok(FromDto(c)));
+                    Right: c => Ok(FromEntity(c)));
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetBankAccountType")]
         public IActionResult GetBankAccountType(long id)
             => _bankAccountTypeCrudHandler
                 .Find(id)
                 .Match<ActionResult>(
-                    Succ: c => Ok(FromDto(c)),
+                    Succ: c => Ok(FromEntity(c)),
                     Fail: err => NotFound(string.Join("; ", err)));
 
 
         [HttpGet]
         public ActionResult GetBankAccountType()
         {
-            var result = _bankAccountTypeCrudHandler.GetAll()
-                .Select(c => FromDto(c));
+            var result = _bankAccountTypeCrudHandler.GetAll();
             if (result.Any()) return Ok(result);
 
             return NotFound();

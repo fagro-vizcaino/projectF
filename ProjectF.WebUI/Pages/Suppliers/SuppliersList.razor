@@ -7,11 +7,11 @@
     <Column @bind-Field="@context.Name" Title="Nombre" Sortable />
     <Column @bind-Field="@context.Email" Title="Email" />
     <Column @bind-Field="@context.Phone" Title="Télefono" />
-    <Column @bind-Field="@context.IsIndependent" Title="Es Formal">
+    <Column @bind-Field="@context.IsIndependent" Title="Es Independiente">
         @(context.IsIndependent ? "Si" : "No")
     </Column>
     <Column @bind-Field="@context.City" Title="Ciudad" />
-    <ActionColumn Title="Acción" Style="text-align: right">
+    <ActionColumn Title="Acción" Style="text-align =right">
         <Space>
             <SpaceItem>
                 <Button Shape="circle" Icon="edit" OnClick="()=> OnClickDrawerEdit.InvokeAsync(context)" />

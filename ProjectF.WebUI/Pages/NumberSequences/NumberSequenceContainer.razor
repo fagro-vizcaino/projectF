@@ -1,0 +1,69 @@
+﻿@page "/config/documentsequence"
+@inherits NumberSequenceContainerHandler
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<SectionTitle Title="Sequencia de Documentos"
+              Subtitle="Define las sequencias númericas de los documentos"
+              OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+<NumberSequenceList Elements="Elements"
+                    OnClickDrawerEdit="OpenDrawerForEdit"
+                    OnClickDelete="Delete" />
+
+<div>
+    <Drawer Closable="true" Width="425" Visible="IsDrawerVisible" Title='($"{(IsEditing ? "Editar Sequencia " : "Crear Sequencia")}")' OnClose="CloseDrawer">
+        <Template style="height:90%">
+            <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+
+                <FluentValidator></FluentValidator>
+
+                <div class="mb-4">
+                    <FLabel Value="Nombre" LabelFor="Name" />
+                    <FInputText @bind-Value="_model.Name" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Name)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Prefijo" LabelFor="Prefix" />
+                    <FInputText @bind-Value="_model.Prefix" AdditionalAttributes="@(new Dictionary<string, object> {{"Prefix", "Prefix" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Prefix)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Sequencia Inicial" LabelFor="InitialSequence" />
+                    <FInputInt @bind-Value="_model.InitialSequence" AdditionalAttributes="@(new Dictionary<string, object> {{"InitialSequence", "InitialSequence" }})" />
+                    <FCustomValidationMessage For="@(() => _model.FinalSequence)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Sequencia Final" LabelFor="FinalSequence" />
+                    <FInputInt @bind-Value="_model.FinalSequence" AdditionalAttributes="@(new Dictionary<string, object> {{"FinalSequence", "FinalSequence" }})" />
+                    <FCustomValidationMessage For="@(() => _model.FinalSequence)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+                <div class="mb-4">
+                    <FLabel Value="Valido Hasta" LabelFor="ValidUntil" />
+                    <DatePicker @bind-Value="_model.ValidUntil" />
+                    <FCustomValidationMessage For="@(() => _model.ValidUntil)" Class="mt-2 font-semibold text-red-600" />
+                </div>
+
+                <div class="mb-6">
+                    <FLabel Value="Habilitar" LabelFor="ShowOn" />
+                    <Switch @bind-Value="_model.IsActive" />
+                </div>
+
+                <FDivider />
+                <button @onclick:stopPropagation="true"
+                        type="submit"
+                        class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 shadow-xs rounded focus:outline-none focus:shadow-outline">
+                    @($"{(IsEditing ? "Editar" : "Guardar")}")
+                </button>
+            </EditForm>
+        </Template>
+
+    </Drawer>
+</div>
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 pt-1 pb-8 mb-2" } };
+
+}

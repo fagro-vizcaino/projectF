@@ -5,10 +5,11 @@ using System;
 
 namespace ProjectF.Data.Entities.Clients
 {
-    public class Client : Entity
+    public class Client : _BaseEntity
     {
         public Code Code { get; private set; }
-        public Name Name { get; private set; }
+        public Name Firstname { get; private set; }
+        public Name Lastname { get; private set; }
         public Email Email { get; private set; }
         public Phone Phone { get; private set; }
         public DateTime? Birthday { get; private set;}
@@ -16,12 +17,13 @@ namespace ProjectF.Data.Entities.Clients
         public string HomeOrApartment { get; private set; }
         public string City { get; private set; }
         public string Street { get; private set; }
-        public virtual Country Country { get; private set; }
+        public virtual Country? Country { get; private set; }
 
         protected Client() { }
 
         public Client(Code code
-            , Name name
+            , Name firstname
+            , Name lastname
             , Email email
             , Phone phone
             , DateTime? birthday
@@ -29,9 +31,13 @@ namespace ProjectF.Data.Entities.Clients
             , string homeOrApartment
             , string city
             , string street
-            , Country country) =>
-            (Code, Name, Email, Phone, Rnc, Birthday, HomeOrApartment, City, Street, Country)
-            = (code, name, email, phone, rnc, birthday, homeOrApartment, city, street, country);
+            , Country? country
+            , DateTime created
+            , EntityStatus status = EntityStatus.Active) =>
+             (Code, Firstname, Lastname, Email, Phone, Rnc, Birthday
+            , HomeOrApartment, City, Street, Country, Created, Status)
+            = (code, firstname, lastname, email, phone, rnc, birthday
+            , homeOrApartment, city, street, country, created == DateTime.MinValue ? DateTime.Now : created, status);
 
 
         public void Deconstruct(out Code dcode
@@ -43,10 +49,13 @@ namespace ProjectF.Data.Entities.Clients
             , out string dhomeOrApartment
             , out string dcity
             , out string dstreet
-            , out Country dcountry)
+            , out Country dcountry
+            , out DateTime dcreated
+            , out DateTime? dmodified
+            , out EntityStatus dstatus)
         {
             dcode            = Code;
-            dname            = Name;
+            dname            = Firstname;
             demail           = Email;
             dphone           = Phone;
             drnc             = Rnc;
@@ -55,12 +64,16 @@ namespace ProjectF.Data.Entities.Clients
             dcity            = City;
             dstreet          = Street;
             dcountry         = Country;
+            dcreated         = Created;
+            dmodified        = Modified;
+            dstatus          = Status;
 
         }
 
         public void EditUserClient(
              Code code
-            , Name name
+            , Name firstname
+            , Name lastname
             , Email email
             , Phone phone
             , string rnc
@@ -68,10 +81,12 @@ namespace ProjectF.Data.Entities.Clients
             , string homeOrApartment
             , string city
             , string street
-            , Country country)
+            , Country country
+            , EntityStatus status)
         {
             Code            = code;
-            Name            = name;
+            Firstname       = firstname;
+            Lastname        = lastname;
             Email           = email;
             Phone           = phone;
             Rnc             = rnc;
@@ -80,20 +95,8 @@ namespace ProjectF.Data.Entities.Clients
             City            = city;
             Street          = street;
             Country         = country;
+            Modified        = DateTime.Now;
+            Status          = status;
         }
-
-        public static implicit operator ClientDto(Client client)
-            => new ClientDto(client.Id,
-                client.Code.Value,
-                client.Name.Value,
-                client.Email,
-                client.Phone.Value,
-                client.Rnc,
-                client.Birthday,
-                client.HomeOrApartment,
-                client.City,
-                client.City,
-                client.Country?.Id ?? 0,
-                client.Country);
     }
 }

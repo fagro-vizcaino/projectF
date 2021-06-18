@@ -17,31 +17,35 @@ namespace ProjectF.WebUI.Components.Common
     {
         private readonly string _entityName;
 
+        /// <summary>
+        /// Injected service of type T
+        /// </summary>
         [Inject]
-        public IBaseDataService<T> DataService { get; set; }   
-        [Inject]
-        public IFMessage FMessage { get; set; }
+        protected IBaseDataService<T> DataService { get; set; }   
+        [Inject] protected IFMessage FMessage { get; set; }
+        /// <summary>
+        /// Array of items of type T
+        /// </summary>
         public T[] Elements { get; set; }
-        public Func<T, T> NewOrEditOperation { get; set;}
 
-        public bool IsDrawerVisible { get; set; } = false;
-        public bool IsEditing { get; private set; } = false;
-        public string GenerateCode => Guid.NewGuid().ToString().Substring(0, 6);
-        
-        public T _model = null;
-        
-        public BaseContainerBasicCrud(string entityName, 
+        protected Func<T, T> NewOrEditOperation { get; set;}
+
+        protected bool IsDrawerVisible { get; set; }
+        protected bool IsEditing { get; set; }
+        protected string GenerateCode => Guid.NewGuid().ToString().Substring(0, 6);
+
+        protected BaseContainerBasicCrud(string entityName, 
             T[] entities = null)
             => (_entityName, Elements) = (entityName, entities ?? Array.Empty<T>());
 
+        protected T _model = null;
         protected T InitModel(T model) => _model = model;
 
-        protected (bool isDrawervisible, bool isEdition) GetDrawerState(T entity)
+        private (bool isDrawervisible, bool isEdition) GetDrawerState(T entity)
             => (true, entity.Id > 0);
 
         protected void OpenDrawerForAdd(T entity)
         {
-            _model = entity;
             var (isDrawerVisible, isEdition) = GetDrawerState(entity);
             IsEditing = isEdition;
             IsDrawerVisible = isDrawerVisible;
@@ -49,11 +53,11 @@ namespace ProjectF.WebUI.Components.Common
 
         protected void OpenDrawerForEdit(T entity)
         {
-            var newCategory = NewOrEditOperation(entity);
             var (isDrawerVisible, isEdition) = GetDrawerState(entity);
             IsDrawerVisible = isDrawerVisible;
             IsEditing = isEdition;
-            _model = newCategory;
+            //TODO: should remove state changes from this method
+            _model = NewOrEditOperation(entity);
         }
 
         protected void CloseDrawer()
@@ -67,11 +71,10 @@ namespace ProjectF.WebUI.Components.Common
             if (id > 0)
             {
                 await Edit(id, (T)editContext.Model);
+                return;
             }
-            else
-            {
-                await Add((T)editContext.Model);
-            }
+            await Add((T)editContext.Model);
+            
         }
 
         public virtual void OnFinishFailed(EditContext editContext)
@@ -86,15 +89,15 @@ namespace ProjectF.WebUI.Components.Common
             Elements = result;
         }
 
-        public virtual async Task<T> GetById(int id)
+        protected virtual async Task<T> GetById(int id)
         {
             var entity = (await DataService.GetDetails(id));
-            Console.WriteLine($"Get detail :{JsonSerializer.Serialize(entity)}");
+            //Console.WriteLine($"Get detail :{JsonSerializer.Serialize(entity)}");
             return entity;
         }
         public virtual async Task<Either<Error, Unit>> Edit(long id, T entity)
         {
-            Console.WriteLine($"Success editing:{JsonSerializer.Serialize(entity)}");
+            //Console.WriteLine($"Success editing:{JsonSerializer.Serialize(entity)}");
             return
                 await DataService.Update(id, entity)
                 .Match(
@@ -106,14 +109,13 @@ namespace ProjectF.WebUI.Components.Common
                         .ToArray();
                         CloseDrawer();
                         await FMessage.Success($"{_entityName} editado", 3);
-
                     },
                    None: () => Error.New("Error while updating"));
         }
 
         public virtual async Task<Either<Error, Unit>> Add(T entity)
         {
-            Console.WriteLine($"Success add:{JsonSerializer.Serialize(entity)}");
+            Console.WriteLine($"About to add:{JsonSerializer.Serialize(entity)}");
             return await DataService.Add(entity)
                 .Match(async c =>
                 {

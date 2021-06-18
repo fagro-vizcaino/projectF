@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using ProjectF.Data.Entities.PaymentList;
+using static ProjectF.Application.PaymentTerms.PaymentTermMapper;
 
 namespace ProjectF.Api.Features.PaymentTerms
 {
@@ -13,7 +14,6 @@ namespace ProjectF.Api.Features.PaymentTerms
 
         public PaymentTermController(PaymentTermCrudHandler paymentTermOperation)
             => _paymentTermOperation = paymentTermOperation;
-
 
         [HttpPost]
         public ActionResult CreatePaymentTerm(PaymentTermDto dto)
@@ -41,8 +41,7 @@ namespace ProjectF.Api.Features.PaymentTerms
                 .Find(id)
                 .Match<ActionResult>(
                     Left: err => NotFound(err.Message),
-                    Right: c => Ok((PaymentTermDto)c));
-
+                    Right: c => Ok(FromEntity(c)));
 
         [HttpGet]
         public ActionResult GetPaymentTerms()

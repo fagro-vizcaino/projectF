@@ -19,11 +19,15 @@ namespace ProjectF.WebUI.Pages.Products
             RuleFor(p => p.CategoryId).NotEmpty()
                 .WithMessage("Categoria es requerida");
 
-            RuleFor(p => p.WerehouseId).NotEmpty()
+            RuleFor(p => p.WarehouseId).NotEmpty()
                 .WithMessage("Almacen es requerida");
 
             RuleFor(p => p.TaxId).NotEmpty()
                 .WithMessage("Impuesto es requerida");
+
+            RuleFor(p => p.UnitOfMeasureId).NotEmpty()
+                .WithMessage("Unidad es requerida");
+
         }
     }
 }

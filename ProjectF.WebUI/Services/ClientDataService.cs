@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjectF.WebUI.Services
 {
-    public class ClientDataService : _BaseDataService<Client>
+    public class ClientDataService : BaseDataService<Client>
     {
         const string serviceUrl = "contact/client";
         public ClientDataService(HttpClient httpClient) 

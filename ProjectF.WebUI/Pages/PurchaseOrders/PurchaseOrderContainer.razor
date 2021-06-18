@@ -1,0 +1,206 @@
+﻿@page "/purchaseorder"
+@inherits PurchaseOrderContainerHandler
+@using Models
+@using AntDesign.core
+@using ProjectF.WebUI.Components.Common
+
+<div class="mt-10">
+    <SectionTitle Title="Orden de compra"
+                  Subtitle="Define tus ordenes de compra."
+                  OnClickAddButton="() => OpenDrawerForAdd(GetNewModelOrEdit())" />
+
+    <Drawer Width="780"
+            Visible="IsDrawerVisible"
+            Closable="true"
+            BodyStyle="background-color:rgba(243, 244, 246, 1)">
+        <SectionTitle Title="Crear una orden de compra"
+                      BTypes="@ButtonTypes.Close"
+                      Subtitle="detalla tus orderes de compra"
+                      OnClickAddButton="() => CloseDrawer()" />
+
+        <EditForm Model="_model" OnValidSubmit="@((context) => OnFinish(context, _model.Id))" @attributes="formcss" OnInvalidSubmit="OnFinishFailed">
+            <FluentValidator></FluentValidator>
+
+            <div class="flex space-x-2 mt-2">
+                <div class="w-1/2">
+                    <div class="mb-1">
+                        <FLabel Value="Suplidor" LabelFor="Suplidor" />
+                        <div class="inline-block relative w-full">
+                            <FInputSelect ValueExpression="@(()=>_model.SupplierId)"
+                                          Value="@_model.SupplierId"
+                                          ValueChanged="@((int value) => OnSelectSupplierChangedHandler(value))">
+                                <option value="0">Seleccione</option>
+                                @foreach (var type in Suppliers)
+                                {
+                                    <option value="@type.Id">@type.Name</option>
+                                }
+                            </FInputSelect>
+                            @*<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>*@
+                            <FCustomValidationMessage For="@(() => _model.SupplierId)" Class="mt-2 font-semibold text-red-600" />
+                        </div>
+                    </div>
+                    <FLabel Value="Rnc" LabelFor="Rnc" />
+                    <FInputText @bind-Value="_model.Rnc" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.Rnc)" Class="mt-2 font-semibold tWext-red-600" />
+                </div>
+
+                <div class="w-1/2">
+                    <div class="mb-1">
+                        <FLabel Value="Fecha" LabelFor="Created" />
+                        <DatePicker @bind-Value="_model.Created" ClassName="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                        <FCustomValidationMessage For="@(() => _model.Created)" Class="mt-2 font-semibold tWext-red-600" />
+                    </div>
+
+                    <FLabel Value="Fecha Entrega" LabelFor="DeliverDate" />
+                    <DatePicker @bind-Value="_model.DeliverDate" ClassName="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 shadow-sm py-2 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                    <FCustomValidationMessage For="@(() => _model.DeliverDate)" Class="mt-2 font-semibold tWext-red-600" />
+                </div>
+            </div>
+            <div class="flex space-x-1 mt-2">
+                <div class="w-1/2">
+                    <div class="mb-1">
+                        <FLabel Value="Termino de Pago" LabelFor="PaymentTermId" />
+                        <div class="inline-block relative w-full">
+                            <FInputSelect @bind-Value="_model.PaymentTermId">
+                                <option value="0">Seleccione</option>
+                                @foreach (var type in PaymentTerms)
+                                {
+                                    <option value="@type.Id">@type.Description</option>
+                                }
+                            </FInputSelect>
+                            @*<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>*@
+                            <FCustomValidationMessage For="@(() => _model.PaymentTermId)" Class="mt-2 font-semibold text-red-600" />
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <div class="mb-1">
+                        <FLabel Value="Almacen" LabelFor="WarehouseId" />
+                        <div class="inline-block relative w-full">
+                            <FInputSelect @bind-Value="_model.WarehouseId">
+                                <option value="0">Seleccione un Almacen</option>
+                                @foreach (var type in Warehouses)
+                                {
+                                    <option value="@type.Id">@type.Name</option>
+                                }
+                            </FInputSelect>
+                            @*<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>*@
+                            <FCustomValidationMessage For="@(() => _model.WarehouseId)" Class="mt-2 font-semibold text-red-600" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2">
+                <FLabel Value="Dirección" LabelFor="Address" />
+                <FTextArea @bind-Value="_model.Address" Rows="2" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                <FCustomValidationMessage For="@(() => _model.Address)" Class="mt-2 font-semibold text-red-600" />
+            </div>
+            <FDivider />
+            <PurchaseOrderDetailLine Products="Products" Taxes="Taxes" OnSaveDetailClick="SavePurchaseOrderDetail" />
+            <div class="flex space-x-1 mt-4">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-left text-xs leading-4 text-gray-800 uppercase tracking-wider">
+                            <th class="px-7 py-3 text-left font-medium w-4/12">
+                                Item/Producto
+                            </th>
+                            <th class="px-3 py-3 text-right font-medium w-11/12">
+                                Cant.
+                            </th>
+                            <th class="px-3 py-3 text-right font-medium w-8/12">
+                                Imp.
+                            </th>
+                            <th class="px-3 py-3 text-right font-medium w-11/12">
+                                Descuento
+                            </th>
+                            <th class="px-3 py-3 text-right font-medium w-11/12">
+                                Costo
+                            </th>
+                            <th class="px-3 py-3 text-right font-medium w-10/12">
+                                Acción
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                        @foreach (var item in Details)
+                        {
+                            <tr>
+                                <td class="px-7 py-3 whitespace-no-wrap border-b border-gray-200 text-left">
+                                    <div class="text-sm leading-5 text-gray-900 overflow-ellipsis">
+                                        @item.Description
+                                    </div>
+                                </td>
+                                <td class="px-3 py-3 whitespace-no-wrap border-b border-gray-200 text-right">
+                                    <span class="text-sm leading-5 font-medium text-gray-900">
+                                        @item.Qty
+                                    </span>
+                                </td>
+                                <td class="px-3 py-3 whitespace-no-wrap border-b border-gray-200 text-right">
+                                    <div class="text-sm leading-5 text-gray-900">
+                                        @item.TaxPercent
+                                    </div>
+                                </td>
+                                <td class="px-3 py-3 whitespace-no-wrap border-b border-gray-200 text-right">
+                                    <span class="inline-flex text-sm leading-5 font-semibold rounded-full proportional-nums">
+                                        @item.DiscountValue
+                                    </span>
+                                </td>
+                                <td class="px-3 py-3 whitespace-no-wrap border-b border-gray-200 text-right">
+                                    <span class="inline-flex text-sm leading-5 font-semibold rounded-full proportional-nums">
+                                        @item.Cost
+                                    </span>
+                                </td>
+                                <td class="px-3 py-3 whitespace-no-wrap border-b border-gray-200 flex justify-between">
+                                    <button class="rounded-full h-8 w-8 flex items-center justify-center text-gray-400 hover:bg-indigo-200 hover:text-indigo-600"
+                                            @onclick="() => null"
+                                            @onclick:preventDefault="true"
+                                            @onclick:stopPropagation="true">
+                                        <i class="far fa-edit"></i>
+                                    </button>
+                                    <button class="rounded-full h-8 w-8 flex items-center justify-center text-gray-400 hover:bg-red-200 hover:text-red-600"
+                                            @onclick="() => RemovePurchaseOrderDetail(item)"
+                                            @onclick:preventDefault="true"
+                                            @onclick:stopPropagation="true">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-2">
+                <FLabel Value="Notas" LabelFor="Notes" />
+                <FTextArea @bind-Value="_model.Notes" Rows="2" AdditionalAttributes="@(new Dictionary<string, object> {{"name", "Name" }})" />
+                <FCustomValidationMessage For="@(() => _model.Address)" Class="mt-2 font-semibold text-red-600" />
+            </div>
+            <FFormFooterAction CancelBtnName="Cancelar"
+                               CancelBtnType="button"
+                               OnClickCancelBtn="() => CloseDrawer()"
+                               ActionBtnName="@((IsEditing ? "Editar" : "Guardar"))"
+                               ActionBtnType="submit"/>
+        </EditForm>
+    </Drawer>
+
+</div>
+
+
+
+@code{
+    public Dictionary<string, object> formcss =
+         new Dictionary<string, object> { { "class", "bg-white px-4 py-4 mt-2 border border-gray-200 rounded" } };
+
+}

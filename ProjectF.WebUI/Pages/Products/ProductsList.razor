@@ -9,8 +9,8 @@
     <Column @bind-Field="@context.CategoryId" Title="Categoría" >
        @(context.Category?.Name)    
     </Column>
-    <Column @bind-Field="@context.WerehouseId" Title="Almacen">
-        @(context.Werehouse?.Name)
+    <Column @bind-Field="@context.WarehouseId" Title="Almacen">
+        @(context.Warehouse?.Name)
     </Column>
     <Column @bind-Field="@context.IsService" Title="Servicio">
         @(context.IsService ? "Si" : "No")
@@ -25,7 +25,7 @@
         <Space>
             <SpaceItem>
                 <Popconfirm Placement="@PlacementType.Top"
-                            Title="@("Estas seguro de borrar este impuesto")"
+                            Title="@("Estas seguro de borrar este producto")"
                             OkText="Sí"
                             CancelText="No"
                             OnConfirm="()=> OnClickDelete.InvokeAsync(context.Id)">

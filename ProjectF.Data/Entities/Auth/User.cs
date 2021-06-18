@@ -1,44 +1,46 @@
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 using ProjectF.Data.Entities.Common;
 using ProjectF.Data.Entities.Common.ValueObjects;
 using ProjectF.Data.Entities.Countries;
 
 namespace ProjectF.Data.Entities.Auth
 {
-  public class User : Entity
-  {
-    public string Fullname { get; set; }
-    public Email Email { get; set; }
-    public byte[] PasswordHash { get; set; }
-    public byte[] PasswordSalt { get; set; }
-    public virtual Country Country { get; set; }
-
-
-    protected User() { }
-
-    public User(string fullname
-      , Email email
-      , Country country
-      , byte[] PasswordHash
-      , byte[] PasswordSalt)
+    public class User : IdentityUser
     {
-      this.Fullname = fullname;
-      this.Email = email;
-      this.Country = country;
-      this.PasswordHash = PasswordHash;
-      this.PasswordSalt = PasswordSalt;
-    }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public virtual Country Country { get; set; }
+        public int? CompanyId { get; protected set; }
+        
+        protected User() { }
 
-    public void EditUser(string fullname
-      , Email email
-      , Country country
-      , byte[] passwordHash
-      , byte[] passwordSalt)
-    {
-      Fullname = fullname;
-      Email = email;
-      PasswordHash = passwordHash;
-      PasswordSalt = passwordSalt;
-    }
+        public User(string firstname
+            , string lastname
+            , string username
+            , string passwordhash
+            , string email
+            , string phoneNumber
+            , Country country)
+        {
+            Firstname         = firstname;
+            Lastname          = lastname;
+            UserName          = username;
+            PasswordHash      = passwordhash;
+            Email             = email;
+            PhoneNumber       = phoneNumber;
+            Country           = country;
+            
+        }
 
-  }
+        public void EditUser(string firstname
+          , string lastname
+          , int companyId)
+        {
+            Firstname = firstname;
+            Lastname  = lastname;
+            CompanyId = companyId;
+        }
+
+    }
 }

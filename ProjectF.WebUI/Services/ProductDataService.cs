@@ -1,17 +1,12 @@
-﻿using ProjectF.WebUI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
 using ProjectF.WebUI.Pages.Products;
 
 namespace ProjectF.WebUI.Services
 {
-    public class ProductDataService : _BaseDataService<Product>
+    public class ProductDataService : BaseDataService<Product>
     {
-        const string baseUrl = "inventory/product";
+        private const string BaseUrl = "inventory/product";
         public ProductDataService(HttpClient httpClient) 
-            : base(baseUrl, httpClient) {}
+            : base(BaseUrl, httpClient) {}
     }
 }
