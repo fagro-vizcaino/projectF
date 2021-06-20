@@ -4,96 +4,96 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
- branches:
-   include:
-     - master
- paths:
-   include:
-     - ProjectF.Api/ProjectF.Api.csproj
-   exclude:
-     - ProjectF.WebUI/ProjectF.WebUI.csproj
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - ProjectF.Api/*
+    exclude:
+      - ProjectF.WebUI/ProjectF.WebUI.csproj
 stages:
-- stage: build_webapi
-  jobs:
-  - job: build
-    pool:
-      vmImage: 'ubuntu-latest'
+  - stage: build_webapi
+    jobs:
+      - job: build
+        pool:
+          vmImage: "ubuntu-latest"
 
+        variables:
+          buildConfiguration: "Release"
+
+        steps:
+          - task: UseDotNet@2
+            displayName: "Use .NET sdk 5.x"
+            inputs:
+              packageType: "sdk"
+              version: "5.0.101"
+              includePreviewVersions: true
+
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: "build"
+              projects: "**/ProjectF.Api.csproj"
+              arguments: "--configuration $(BuildConfiguration)"
+
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)"
+            inputs:
+              command: "publish"
+              publishWebProjects: false
+              projects: "**/ProjectF.Api.csproj"
+              arguments: "-r linux-x64 -c Release --output $(build.artifactstagingdirectory)"
+              zipAfterPublish: true
+
+          - task: efcore-migration-script-generator-task@0
+            displayName: "Ef Core Migrations"
+            inputs:
+              installDependencies: true # required for net 3.1+
+              projectPath: "$(Build.SourcesDirectory)/ProjectF.Data/ProjectF.Data.csproj" # path to project that has your DbContext
+              databaseContexts: "_AppDbContext"
+              startupprojectpath: "$(Build.SourcesDirectory)/ProjectF.Api/ProjectF.Api.csproj"
+              targetfolder: "$(build.ArtifactStagingDirectory)/migrations"
+
+          - task: PublishBuildArtifacts@1
+            displayName: "publish web api artifacts"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: project-f.webapi
+
+          - task: PublishPipelineArtifact@1
+            displayName: "Publish  ef core migrations"
+            inputs:
+              targetPath: "$(build.ArtifactStagingDirectory)/migrations"
+              artifact: "migrations"
+
+  - stage: release_SQL_migration_prod
+    displayName: "Deploy sql to Prod"
+    dependsOn: build_webapi
     variables:
-      buildConfiguration: 'Release'
-
-    steps:
-    - task: UseDotNet@2
-      displayName: 'Use .NET sdk 5.x'
-      inputs:
-        packageType: 'sdk'
-        version: '5.0.101'
-        includePreviewVersions: true
-
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'build'
-        projects: '**/ProjectF.Api.csproj'
-        arguments: '--configuration $(BuildConfiguration)'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-      inputs:
-        command: 'publish'
-        publishWebProjects: false
-        projects: '**/ProjectF.Api.csproj' 
-        arguments: '-r linux-x64 -c Release --output $(build.artifactstagingdirectory)'
-        zipAfterPublish: true
-
-    - task: efcore-migration-script-generator-task@0
-      displayName: 'Ef Core Migrations'
-      inputs:
-        installDependencies: true # required for net 3.1+
-        projectPath: '$(Build.SourcesDirectory)/ProjectF.Data/ProjectF.Data.csproj' # path to project that has your DbContext
-        databaseContexts: '_AppDbContext'
-        startupprojectpath: '$(Build.SourcesDirectory)/ProjectF.Api/ProjectF.Api.csproj' 
-        targetfolder: '$(build.ArtifactStagingDirectory)/migrations'
-
-    - task: PublishBuildArtifacts@1
-      displayName: 'publish web api artifacts'
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: project-f.webapi
-
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish  ef core migrations'
-      inputs:
-        targetPath: '$(build.ArtifactStagingDirectory)/migrations'
-        artifact: 'migrations'
-
-- stage: release_SQL_migration_prod
-  displayName: 'Deploy sql to Prod'
-  dependsOn: build_webapi
-  variables:
-    - group: AzureSqlConnection #1: pull in DB connection from library
-  jobs:
-  - deployment: MigrateDatabase
-    environment: 'prod' #2: you'll need to define an env
-    displayName: Migrate Database
-    variables:
-     namespace: prod # define some variables
-    pool:
-     vmImage: windows-latest # this task only works in windows
-    strategy:
-     runOnce:
-      deploy:
-       steps:
-        - task: DownloadPipelineArtifact@2
-          displayName: download migration script
-          inputs:
-            artifactName: 'migrations'
-            downloadPath: '$(System.ArtifactsDirectory)/migrations'
-        - task: SqlAzureDacpacDeployment@1
-          displayName: run sql migrations
-          inputs:
-            azureConnectionType: connectedServiceNameARM
-            azureSubscription: 'Azure subscription (6fc9dca7-98eb-4b8b-ab95-f0c82a30943e)' #3: name of your Service Connection to azure ARM
-            authenticationType: connectionString
-            connectionString: $(azuresqlsecret) #4: this variable is fed by #1 above so you don't commit sensitive strings
-            deployType: sqlTask
-            sqlFile: $(System.ArtifactsDirectory)/migrations/_AppDbContext.sql
+      - group: AzureSqlConnection #1: pull in DB connection from library
+    jobs:
+      - deployment: MigrateDatabase
+        environment: "prod" #2: you'll need to define an env
+        displayName: Migrate Database
+        variables:
+          namespace: prod # define some variables
+        pool:
+          vmImage: windows-latest # this task only works in windows
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2
+                  displayName: download migration script
+                  inputs:
+                    artifactName: "migrations"
+                    downloadPath: "$(System.ArtifactsDirectory)/migrations"
+                - task: SqlAzureDacpacDeployment@1
+                  displayName: run sql migrations
+                  inputs:
+                    azureConnectionType: connectedServiceNameARM
+                    azureSubscription: "Azure subscription (6fc9dca7-98eb-4b8b-ab95-f0c82a30943e)" #3: name of your Service Connection to azure ARM
+                    authenticationType: connectionString
+                    connectionString: $(azuresqlsecret) #4: this variable is fed by #1 above so you don't commit sensitive strings
+                    deployType: sqlTask
+                    sqlFile: $(System.ArtifactsDirectory)/migrations/_AppDbContext.sql
