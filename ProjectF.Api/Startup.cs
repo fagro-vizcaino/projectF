@@ -87,10 +87,10 @@ namespace ProjectF.Api
 
             app.UseHttpsRedirection();
 
-            app.UseCors("CorsPolicy");
 
             app.UseRouting();
             
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             
